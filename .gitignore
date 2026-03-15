@@ -27,9 +27,10 @@ sync.ffs_db
 !.idea/shared-intellij-idea-settings.zip
 
 /build/
+/app/**/build/
 /libs/**/build/
-/release/
-/releases/
+/app/release/
+/app/releases/
 
 /local.properties
 /sign.properties
