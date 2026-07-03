@@ -11,6 +11,10 @@
             android:name="org.autojs.plugin.WAKE_ACTIVITY"
             android:value=".WakeActivity" />
 
+        <meta-data
+            android:name="org.autojs.plugin.info.AUTHOR"
+            android:value="TonyJiangWJ" />
+
         <activity
             android:name=".WakeActivity"
             android:exported="true"

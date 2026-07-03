@@ -6,6 +6,7 @@
 *.log
 *.ffs_db
 *.patch
+*.hprof
 
 .DS_Store
 .externalNativeBuild
