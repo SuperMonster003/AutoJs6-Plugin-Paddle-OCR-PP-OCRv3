@@ -1,0 +1,23 @@
+{
+  "changelog_label_hint": "ملاحظة",
+  "changelog_label_feature": "اضافة",
+  "changelog_label_fix": "اصلاح",
+  "changelog_label_improvement": "تحسين",
+  "changelog_label_dependency": "اعتماد",
+  "$data": {
+    "v1.0.0": {
+      "released_date": "2026/07/03",
+      "feature": [
+        "خدمة مكون Paddle OCR (PP-OCRv3), مع معرف المكون `paddle-ocr-pp-ocrv3`, والمحرك `paddle-ocr`, والمتغير `v3`",
+        "دعم اكتشاف المكون واستدعائه عبر `org.autojs.plugin.PADDLE_OCR`",
+        "دعم التعرف على النص `ocr.paddle.recognizeText(image)` واكتشاف النص `ocr.paddle.detect(image)` للقطات الشاشة, وملفات الصور المحلية, وإدخال صور ARGB_8888 الخام",
+        "تضمين نماذج PaddleOCR PP-OCRv3 CPU, تعمل عبر Paddle Lite و OpenCV 4.8.0",
+        "موارد متعددة اللغات لمعلومات المكون, والتعليمات, و README, و CHANGELOG: الاسبانية/الفرنسية/الروسية/العربية/اليابانية/الكورية/الانجليزية/الصينية المبسطة/الصينية التقليدية في هونغ كونغ/الصينية التقليدية في تايوان"
+      ],
+      "improvement": [
+        "دعم بناء APK حسب ABI, بما في ذلك `arm64-v8a`/`armeabi-v7a` وحزم `universal`",
+        "تتضمن اسماء ملفات APK المنشورة اسم المشروع, ورقم الاصدار, ومتغير ABI"
+      ]
+    }
+  }
+}

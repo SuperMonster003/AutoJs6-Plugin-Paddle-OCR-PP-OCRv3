@@ -32,5 +32,5 @@ ocr.paddle.recognizeText("test.png");
 ocr.paddle("test.png");
 ```
 
-لمزيد من طرق الاستخدام، راجع قسم [التعرف الضوئي على الحروف (OCR)](https://docs.autojs6.com/#/ocr)
+لمزيد من طرق الاستخدام, راجع قسم [التعرف الضوئي على الحروف (OCR)](https://docs.autojs6.com/#/ocr)
 في وثائق AutoJs6.

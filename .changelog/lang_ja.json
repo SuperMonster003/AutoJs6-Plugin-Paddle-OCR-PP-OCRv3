@@ -1,0 +1,23 @@
+{
+  "changelog_label_hint": "注意",
+  "changelog_label_feature": "追加",
+  "changelog_label_fix": "修正",
+  "changelog_label_improvement": "改善",
+  "changelog_label_dependency": "依存関係",
+  "$data": {
+    "v1.0.0": {
+      "released_date": "2026/07/03",
+      "feature": [
+        "Paddle OCR (PP-OCRv3) プラグインサービス, プラグイン ID `paddle-ocr-pp-ocrv3`, エンジン `paddle-ocr`, バリアント `v3`",
+        "`org.autojs.plugin.PADDLE_OCR` によるプラグインの検出と呼び出しをサポート",
+        "スクリーンショット, ローカル画像ファイル, RAW ARGB_8888 画像入力に対する `ocr.paddle.recognizeText(image)` テキスト認識と `ocr.paddle.detect(image)` テキスト検出をサポート",
+        "PaddleOCR PP-OCRv3 CPU モデルを同梱し, Paddle Lite と OpenCV 4.8.0 で実行",
+        "プラグイン情報, 使用手順, README, CHANGELOG の多言語リソース: スペイン語/フランス語/ロシア語/アラビア語/日本語/韓国語/英語/簡体中国語/香港繁体中国語/台湾繁体中国語"
+      ],
+      "improvement": [
+        "`arm64-v8a`/`armeabi-v7a` と `universal` パッケージを含む ABI 別 APK ビルドをサポート",
+        "リリース APK ファイル名にプロジェクト名, バージョン番号, ABI バリアントを含める"
+      ]
+    }
+  }
+}

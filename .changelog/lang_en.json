@@ -1,0 +1,23 @@
+{
+  "changelog_label_hint": "Hint",
+  "changelog_label_feature": "Feature",
+  "changelog_label_fix": "Fix",
+  "changelog_label_improvement": "Improvement",
+  "changelog_label_dependency": "Dependency",
+  "$data": {
+    "v1.0.0": {
+      "released_date": "2026/07/03",
+      "feature": [
+        "Paddle OCR (PP-OCRv3) plugin service, with plugin ID `paddle-ocr-pp-ocrv3`, engine `paddle-ocr`, and variant `v3`",
+        "Support discovering and invoking the plugin through `org.autojs.plugin.PADDLE_OCR`",
+        "Support `ocr.paddle.recognizeText(image)` text recognition and `ocr.paddle.detect(image)` text detection for screenshots, local image files, and raw ARGB_8888 image input",
+        "Bundle PaddleOCR PP-OCRv3 CPU models, running on Paddle Lite and OpenCV 4.8.0",
+        "Multilingual resources for plugin information, instructions, README, and CHANGELOG: Spanish/French/Russian/Arabic/Japanese/Korean/English/Simplified Chinese/Hong Kong Traditional Chinese/Taiwan Traditional Chinese"
+      ],
+      "improvement": [
+        "Support ABI APK builds, including `arm64-v8a`/`armeabi-v7a` and `universal` packages",
+        "Release APK filenames include project name, version number, and ABI variant"
+      ]
+    }
+  }
+}
