@@ -6,7 +6,7 @@
   "changelog_label_dependency": "依存関係",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/03",
+      "released_date": "2026/07/17",
       "feature": [
         "Paddle OCR (PP-OCRv3) プラグインサービス, プラグイン ID `paddle-ocr-pp-ocrv3`, エンジン `paddle-ocr`, バリアント `v3`",
         "`org.autojs.plugin.PADDLE_OCR` によるプラグインの検出と呼び出しをサポート",

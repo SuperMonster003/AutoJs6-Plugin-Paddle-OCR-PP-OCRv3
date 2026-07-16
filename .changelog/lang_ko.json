@@ -6,7 +6,7 @@
   "changelog_label_dependency": "의존성",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/03",
+      "released_date": "2026/07/17",
       "feature": [
         "Paddle OCR (PP-OCRv3) 플러그인 서비스, 플러그인 ID `paddle-ocr-pp-ocrv3`, 엔진 `paddle-ocr`, 변형 `v3`",
         "`org.autojs.plugin.PADDLE_OCR` 를 통한 플러그인 발견 및 호출 지원",

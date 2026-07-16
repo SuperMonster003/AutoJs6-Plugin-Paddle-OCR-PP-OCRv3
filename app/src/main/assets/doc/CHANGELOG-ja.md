@@ -1,6 +1,6 @@
 # v1.0.0
 
-###### 2026/07/03
+###### 2026/07/17
 
 * `追加` Paddle OCR (PP-OCRv3) プラグインサービス, プラグイン ID `paddle-ocr-pp-ocrv3`, エンジン `paddle-ocr`, バリアント `v3`
 * `追加` `org.autojs.plugin.PADDLE_OCR` によるプラグインの検出と呼び出しをサポート

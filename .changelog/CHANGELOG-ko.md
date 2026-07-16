@@ -6,7 +6,7 @@
 
 # v1.0.0
 
-###### 2026/07/03
+###### 2026/07/17
 
 * `추가` Paddle OCR (PP-OCRv3) 플러그인 서비스, 플러그인 ID `paddle-ocr-pp-ocrv3`, 엔진 `paddle-ocr`, 변형 `v3`
 * `추가` `org.autojs.plugin.PADDLE_OCR` 를 통한 플러그인 발견 및 호출 지원

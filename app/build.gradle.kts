@@ -34,6 +34,12 @@ android {
         multiDexKeepProguard = file("multidex-keep.pro")
 
         buildConfigField("String", "VERSION_DATE", "\"${utils.getDateString("MMM d, yyyy", "GMT+08:00")}\"")
+        resValue("string", "app_name", "Paddle OCR (PP-OCRv3)")
+        resValue("string", "plugin_author", "TonyJiangWJ")
+        resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3")
+        resValue("string", "plugin_engine", "paddle-ocr")
+        resValue("string", "plugin_variant", "v3")
+        resValue("string", "plugin_version_date", utils.getDateString("MMM d, yyyy", "GMT+08:00"))
 
         ndk {
             // noinspection ChromeOsAbiSupport
@@ -79,6 +85,7 @@ android {
     buildFeatures {
         aidl = true
         buildConfig = true
+        resValues = true
     }
 
     // @Hint by SuperMonster003 on Sep 25, 2024.

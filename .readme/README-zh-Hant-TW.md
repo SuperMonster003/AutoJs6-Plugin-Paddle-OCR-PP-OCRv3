@@ -114,7 +114,7 @@ ocr.paddle()
 
 # v1.0.0
 
-###### 2026/07/03
+###### 2026/07/17
 
 * `新增` Paddle OCR (PP-OCRv3) 外掛服務, 外掛 ID 為 `paddle-ocr-pp-ocrv3`, 引擎為 `paddle-ocr`, 變體為 `v3`
 * `新增` 支援透過 `org.autojs.plugin.PADDLE_OCR` 發現並呼叫外掛

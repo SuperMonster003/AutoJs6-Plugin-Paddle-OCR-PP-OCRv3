@@ -6,7 +6,7 @@
   "changelog_label_dependency": "依赖",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/03",
+      "released_date": "2026/07/17",
       "feature": [
         "Paddle OCR (PP-OCRv3) 插件服务, 插件 ID 为 `paddle-ocr-pp-ocrv3`, 引擎为 `paddle-ocr`, 变体为 `v3`",
         "支持通过 `org.autojs.plugin.PADDLE_OCR` 发现并调用插件",

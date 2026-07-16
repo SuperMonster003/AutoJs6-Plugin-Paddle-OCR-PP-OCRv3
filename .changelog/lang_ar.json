@@ -6,7 +6,7 @@
   "changelog_label_dependency": "اعتماد",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/03",
+      "released_date": "2026/07/17",
       "feature": [
         "خدمة مكون Paddle OCR (PP-OCRv3), مع معرف المكون `paddle-ocr-pp-ocrv3`, والمحرك `paddle-ocr`, والمتغير `v3`",
         "دعم اكتشاف المكون واستدعائه عبر `org.autojs.plugin.PADDLE_OCR`",

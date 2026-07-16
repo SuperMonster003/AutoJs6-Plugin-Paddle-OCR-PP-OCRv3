@@ -6,7 +6,7 @@
   "changelog_label_dependency": "Dependance",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/03",
+      "released_date": "2026/07/17",
       "feature": [
         "Service de plugin Paddle OCR (PP-OCRv3), avec ID de plugin `paddle-ocr-pp-ocrv3`, moteur `paddle-ocr` et variante `v3`",
         "Prise en charge de la decouverte et de l'appel du plugin via `org.autojs.plugin.PADDLE_OCR`",

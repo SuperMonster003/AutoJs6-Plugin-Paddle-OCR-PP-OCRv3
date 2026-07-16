@@ -114,7 +114,7 @@ ocr.paddle()
 
 # v1.0.0
 
-###### 2026/07/03
+###### 2026/07/17
 
 * `Feature` Paddle OCR (PP-OCRv3) plugin service, with plugin ID `paddle-ocr-pp-ocrv3`, engine `paddle-ocr`, and variant `v3`
 * `Feature` Support discovering and invoking the plugin through `org.autojs.plugin.PADDLE_OCR`

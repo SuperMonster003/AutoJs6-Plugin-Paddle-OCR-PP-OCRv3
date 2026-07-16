@@ -6,7 +6,7 @@
   "changelog_label_dependency": "Зависимость",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/03",
+      "released_date": "2026/07/17",
       "feature": [
         "Сервис плагина Paddle OCR (PP-OCRv3), с ID плагина `paddle-ocr-pp-ocrv3`, движком `paddle-ocr` и вариантом `v3`",
         "Поддержка обнаружения и вызова плагина через `org.autojs.plugin.PADDLE_OCR`",

@@ -1,6 +1,6 @@
 # v1.0.0
 
-###### 2026/07/03
+###### 2026/07/17
 
 * `新增` Paddle OCR (PP-OCRv3) 插件服務, 插件 ID 為 `paddle-ocr-pp-ocrv3`, 引擎為 `paddle-ocr`, 變體為 `v3`
 * `新增` 支援通過 `org.autojs.plugin.PADDLE_OCR` 發現並調用插件

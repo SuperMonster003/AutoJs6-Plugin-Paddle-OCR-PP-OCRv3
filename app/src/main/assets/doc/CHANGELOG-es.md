@@ -1,6 +1,6 @@
 # v1.0.0
 
-###### 2026/07/03
+###### 2026/07/17
 
 * `Nuevo` Servicio de complemento Paddle OCR (PP-OCRv3), con ID de complemento `paddle-ocr-pp-ocrv3`, motor `paddle-ocr` y variante `v3`
 * `Nuevo` Soporte para descubrir e invocar el complemento mediante `org.autojs.plugin.PADDLE_OCR`
