@@ -1,6 +1,12 @@
+******
+
+### Release History
+
+******
+
 # v1.0.0
 
-###### 2026/07/17
+###### 2026/09/01
 
 * `Feature` Paddle OCR (PP-OCRv3) plugin service, with plugin ID `paddle-ocr-pp-ocrv3`, engine `paddle-ocr`, and variant `v3`
 * `Feature` Support discovering and invoking the plugin through `org.autojs.plugin.PADDLE_OCR`
@@ -9,3 +15,4 @@
 * `Feature` Multilingual resources for plugin information, instructions, README, and CHANGELOG: Spanish/French/Russian/Arabic/Japanese/Korean/English/Simplified Chinese/Hong Kong Traditional Chinese/Taiwan Traditional Chinese
 * `Improvement` Support ABI APK builds, including `arm64-v8a`/`armeabi-v7a` and `universal` packages
 * `Improvement` Release APK filenames include project name, version number, and ABI variant
+* `Improvement` Standardize the README layout and Gradle platform version management

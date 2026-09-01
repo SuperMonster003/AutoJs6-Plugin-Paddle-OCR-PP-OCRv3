@@ -6,7 +6,7 @@
   "changelog_label_dependency": "依赖",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/17",
+      "released_date": "2026/09/01",
       "feature": [
         "Paddle OCR (PP-OCRv3) 插件服务, 插件 ID 为 `paddle-ocr-pp-ocrv3`, 引擎为 `paddle-ocr`, 变体为 `v3`",
         "支持通过 `org.autojs.plugin.PADDLE_OCR` 发现并调用插件",
@@ -16,7 +16,8 @@
       ],
       "improvement": [
         "支持按 ABI 构建 APK, 包括 `arm64-v8a`/`armeabi-v7a` 以及 `universal` 通用包",
-        "发布 APK 文件名包含项目名, 版本号和 ABI 变体"
+        "发布 APK 文件名包含项目名, 版本号和 ABI 变体",
+        "统一 README 版式与 Gradle 平台版本管理方式"
       ]
     }
   }

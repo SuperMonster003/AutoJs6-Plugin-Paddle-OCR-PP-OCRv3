@@ -1,6 +1,12 @@
+******
+
+### 发行历史
+
+******
+
 # v1.0.0
 
-###### 2026/07/17
+###### 2026/09/01
 
 * `新增` Paddle OCR (PP-OCRv3) 插件服务, 插件 ID 为 `paddle-ocr-pp-ocrv3`, 引擎为 `paddle-ocr`, 变体为 `v3`
 * `新增` 支持通过 `org.autojs.plugin.PADDLE_OCR` 发现并调用插件
@@ -9,3 +15,4 @@
 * `新增` 插件信息, 使用说明, README 与 CHANGELOG 的多语言资源: 西班牙语/法语/俄语/阿拉伯语/日语/韩语/英语/简体中文/香港繁体/台湾繁体
 * `优化` 支持按 ABI 构建 APK, 包括 `arm64-v8a`/`armeabi-v7a` 以及 `universal` 通用包
 * `优化` 发布 APK 文件名包含项目名, 版本号和 ABI 变体
+* `优化` 统一 README 版式与 Gradle 平台版本管理方式

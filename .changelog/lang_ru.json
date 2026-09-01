@@ -6,7 +6,7 @@
   "changelog_label_dependency": "Зависимость",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/17",
+      "released_date": "2026/09/01",
       "feature": [
         "Сервис плагина Paddle OCR (PP-OCRv3), с ID плагина `paddle-ocr-pp-ocrv3`, движком `paddle-ocr` и вариантом `v3`",
         "Поддержка обнаружения и вызова плагина через `org.autojs.plugin.PADDLE_OCR`",
@@ -16,7 +16,8 @@
       ],
       "improvement": [
         "Поддержка сборок APK по ABI, включая `arm64-v8a`/`armeabi-v7a` и пакеты `universal`",
-        "Имена файлов APK выпуска включают имя проекта, номер версии и вариант ABI"
+        "Имена файлов APK выпуска включают имя проекта, номер версии и вариант ABI",
+        "Унифицировать оформление README и управление версиями платформы Gradle"
       ]
     }
   }

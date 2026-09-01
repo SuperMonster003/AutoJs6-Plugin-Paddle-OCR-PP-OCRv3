@@ -12,10 +12,6 @@
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3?label=Release"/></a>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/issues"><img alt="GitHub closed issues" src="https://img.shields.io/github/issues/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3?color=A24232&label=Issues"/></a>
-    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/commit/6c83d3092ae569a4e84fad3a5e8cec99b5c65856"><img alt="Created" src="https://img.shields.io/date/1773538952?color=2e7d32&label=Created"/></a>
-    <br>
-    <a href="https://developer.android.com/studio/archive"><img alt="Android Studio" src="https://img.shields.io/badge/Android%20Studio-2023.3+-B64FC8"/></a>
-    <a href="https://www.jetbrains.com/idea/download/other.html"><img alt="IntelliJ IDEA" src="https://img.shields.io/badge/IntelliJ%20IDEA-2023.3+-EE4677"/></a>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3?color=534BAE&label=License"/></a>
   </p>
 </div>
@@ -114,7 +110,7 @@ ocr.paddle()
 
 # v1.0.0
 
-###### 2026/07/17
+###### 2026/09/01
 
 * `Добавлено` Сервис плагина Paddle OCR (PP-OCRv3), с ID плагина `paddle-ocr-pp-ocrv3`, движком `paddle-ocr` и вариантом `v3`
 * `Добавлено` Поддержка обнаружения и вызова плагина через `org.autojs.plugin.PADDLE_OCR`
@@ -123,10 +119,11 @@ ocr.paddle()
 * `Добавлено` Многоязычные ресурсы для информации о плагине, инструкций, README и CHANGELOG: испанский/французский/русский/арабский/японский/корейский/английский/упрощенный китайский/традиционный китайский Гонконга/традиционный китайский Тайваня
 * `Улучшено` Поддержка сборок APK по ABI, включая `arm64-v8a`/`armeabi-v7a` и пакеты `universal`
 * `Улучшено` Имена файлов APK выпуска включают имя проекта, номер версии и вариант ABI
+* `Улучшено` Унифицировать оформление README и управление версиями платформы Gradle
 
 ##### Дополнительную историю выпусков см.
 
-* [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/.changelog/CHANGELOG-ru.md)
+* [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/app/src/main/assets/doc/CHANGELOG-ru.md)
 
 ******
 

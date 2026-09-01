@@ -6,7 +6,7 @@
   "changelog_label_dependency": "Dependencia",
   "$data": {
     "v1.0.0": {
-      "released_date": "2026/07/17",
+      "released_date": "2026/09/01",
       "feature": [
         "Servicio de complemento Paddle OCR (PP-OCRv3), con ID de complemento `paddle-ocr-pp-ocrv3`, motor `paddle-ocr` y variante `v3`",
         "Soporte para descubrir e invocar el complemento mediante `org.autojs.plugin.PADDLE_OCR`",
@@ -16,7 +16,8 @@
       ],
       "improvement": [
         "Soporte para compilaciones APK por ABI, incluidos `arm64-v8a`/`armeabi-v7a` y paquetes `universal`",
-        "Los nombres de archivo APK de publicacion incluyen nombre del proyecto, numero de version y variante ABI"
+        "Los nombres de archivo APK de publicacion incluyen nombre del proyecto, numero de version y variante ABI",
+        "Unificar el diseño del README y la gestión de versiones de la plataforma Gradle"
       ]
     }
   }

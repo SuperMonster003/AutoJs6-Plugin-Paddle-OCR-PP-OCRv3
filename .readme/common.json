@@ -1,5 +1,8 @@
 {
   "repo_url": "https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3",
+  "repo_slug": "SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3",
+  "icon_alt": "autojs6-plugin-paddle-ocr-pp-ocrv3-ic-launcher",
+  "license_url": "{{ repo_url }}/blob/master/LICENSE",
   "created_commit_hash": "6c83d3092ae569a4e84fad3a5e8cec99b5c65856",
   "created_timestamp": "1773538952",
   "docs_ocr_url": "https://docs.autojs6.com/#/ocr",
