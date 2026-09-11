@@ -108,6 +108,12 @@ ocr.paddle()
 
 ******
 
+# v1.0.2
+
+###### 2026/09/12
+
+* `改善` OpenCV 4.8.0 ネイティブライブラリを NDK r28c (Clang 19.0.1) 再ビルド版に同期 (donor: AutoJs6-Plugin-OpenCV); 4 つの ABI の `libopencv_java4.so` は 16 KB `PT_LOAD` アラインメントを維持し provenance マニフェストを同梱
+
 # v1.0.1
 
 ###### 2026/09/11

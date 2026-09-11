@@ -4,6 +4,12 @@
 
 ******
 
+# v1.0.2
+
+###### 2026/09/12
+
+* `優化` 同步 OpenCV 4.8.0 原生庫至 NDK r28c (Clang 19.0.1) 重編版本 (donor: AutoJs6-Plugin-OpenCV), 4 個 ABI 的 `libopencv_java4.so` 保持 16 KB `PT_LOAD` 對齊並附帶 provenance 清單
+
 # v1.0.1
 
 ###### 2026/09/11

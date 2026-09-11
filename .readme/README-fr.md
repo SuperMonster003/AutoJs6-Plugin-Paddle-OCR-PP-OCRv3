@@ -108,6 +108,12 @@ ocr.paddle()
 
 ******
 
+# v1.0.2
+
+###### 2026/09/12
+
+* `Amelioration` Bibliothèque native OpenCV 4.8.0 synchronisée avec la recompilation NDK r28c (Clang 19.0.1) (donneur : AutoJs6-Plugin-OpenCV) ; `libopencv_java4.so` des 4 ABI conserve l'alignement `PT_LOAD` de 16 Ko et embarque un manifeste de provenance
+
 # v1.0.1
 
 ###### 2026/09/11
