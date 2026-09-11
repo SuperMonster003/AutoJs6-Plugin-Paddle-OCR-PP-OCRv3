@@ -108,6 +108,12 @@ ocr.paddle()
 
 ******
 
+# v1.0.1
+
+###### 2026/09/11
+
+* `改善` 64 ビットのネイティブライブラリの 16 KB ページアラインメントをビルド時に検証, manifest 契約の検査と JSON レポートに対応
+
 # v1.0.0
 
 ###### 2026/09/01
@@ -170,3 +176,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - PaddleOCR 公式プロジェクト: https://github.com/PaddlePaddle/PaddleOCR
 - Paddle Lite 公式プロジェクト: https://github.com/PaddlePaddle/Paddle-Lite
 - OpenCV 公式サイト: https://opencv.org/
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/docs/16kb.md)

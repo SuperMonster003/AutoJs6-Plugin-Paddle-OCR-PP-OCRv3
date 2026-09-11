@@ -3,7 +3,7 @@
 
 # Sets the minimum version of CMake required to build the native library.
 
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.22.1)
 
 # Creates and names a library, sets it as either STATIC or SHARED, and provides
 # the relative paths to its source code. You can define multiple libraries, and
@@ -92,3 +92,5 @@ add_custom_command(
         ${CMAKE_COMMAND} -E copy
         ${PaddleLite_DIR}/cxx/libs/${ANDROID_ABI}/libpaddle_light_api_shared.so
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libpaddle_light_api_shared.so)
+
+target_link_options(Native PRIVATE -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384)

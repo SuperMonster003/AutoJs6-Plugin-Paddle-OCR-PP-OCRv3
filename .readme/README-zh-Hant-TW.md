@@ -108,6 +108,12 @@ ocr.paddle()
 
 ******
 
+# v1.0.1
+
+###### 2026/09/11
+
+* `最佳化` 建置階段校驗 64 位原生函式庫的 16 KB 頁面大小對齊, 檢查 manifest 契約並輸出 JSON 報告
+
 # v1.0.0
 
 ###### 2026/09/01
@@ -170,3 +176,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - PaddleOCR 官方專案: https://github.com/PaddlePaddle/PaddleOCR
 - Paddle Lite 官方專案: https://github.com/PaddlePaddle/Paddle-Lite
 - OpenCV 官方網站: https://opencv.org/
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/docs/16kb.md)

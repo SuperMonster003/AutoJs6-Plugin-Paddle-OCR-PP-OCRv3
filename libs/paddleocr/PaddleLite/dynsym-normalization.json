@@ -1,0 +1,23 @@
+{
+  "beforeSha256": "7d83c3ee78648d2bdeb5b354707b3f1389bd644de17dcbd359f1199b1b5e4ba7",
+  "afterSha256": "ec28aaa86d23bee2968068ed8444b4fb71b44071dc6e9918d6d2e165169db37d",
+  "changes": [
+    {
+      "fileOffset": 3826164,
+      "before": 3,
+      "after": 10
+    }
+  ],
+  "unchangedLoadSegments": [
+    {
+      "offset": 0,
+      "size": 3615208,
+      "sha256": "7a03046ed51a2a3abfd30f7863edc78289b1a2d2164e7ec68e13cfd86dae8e3b"
+    },
+    {
+      "offset": 3616752,
+      "size": 208644,
+      "sha256": "9c0ac5a6a6c3a527ee7fd6169a39539fac663fba4f487b874baca479f9e9d87c"
+    }
+  ]
+}

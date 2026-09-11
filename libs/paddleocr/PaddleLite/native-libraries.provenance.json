@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-11",
+  "libraries": [
+    {
+      "path": "cxx/libs/arm64-v8a/libc++_shared.so",
+      "sha256": "ab4e6c71b96b851de45a8a9bd86369e7dbc2130a44b3b4520564be94847910f2",
+      "minLoadAlign": 16384,
+      "source": "Android NDK 28.2.13676358"
+    },
+    {
+      "path": "cxx/libs/arm64-v8a/libpaddle_light_api_shared.so",
+      "sha256": "ec28aaa86d23bee2968068ed8444b4fb71b44071dc6e9918d6d2e165169db37d",
+      "minLoadAlign": 65536,
+      "source": "Existing repository binary; upstream version and source not recorded"
+    },
+    {
+      "path": "cxx/libs/armeabi-v7a/libc++_shared.so",
+      "sha256": "10ee48131d6742899619f7cfb3b8df150ad787d723c766a3fb80d4bb275711ff",
+      "minLoadAlign": 4096,
+      "source": "Android NDK 28.2.13676358"
+    },
+    {
+      "path": "cxx/libs/armeabi-v7a/libpaddle_light_api_shared.so",
+      "sha256": "972aeb587351c5478419118e578405a7190747eecff74248867c0c51a578b87d",
+      "minLoadAlign": 4096,
+      "source": "Existing repository binary; upstream version and source not recorded"
+    }
+  ]
+}

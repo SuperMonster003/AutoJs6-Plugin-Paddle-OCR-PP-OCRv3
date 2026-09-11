@@ -142,3 +142,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - {{ text_link_paddle_ocr }}: {{ paddle_ocr_url }}
 - {{ text_link_paddle_lite }}: {{ paddle_lite_url }}
 - {{ text_link_opencv }}: {{ opencv_url }}
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/docs/16kb.md)
