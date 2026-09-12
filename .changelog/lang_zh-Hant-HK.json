@@ -5,6 +5,12 @@
   "changelog_label_improvement": "優化",
   "changelog_label_dependency": "依賴",
   "$data": {
+    "v1.0.3": {
+      "released_date": "2026/09/12",
+      "fix": [
+        "進程首次文字檢測使用較矮圖片 (如 1000 x 320) 時 Paddle Lite 崩潰 (SIGSEGV); 現在首次真實檢測前會先用 960 x 960 空白圖預熱檢測器一次"
+      ]
+    },
     "v1.0.2": {
       "released_date": "2026/09/12",
       "fix": [

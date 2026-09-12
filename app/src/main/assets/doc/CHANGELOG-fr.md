@@ -4,6 +4,12 @@
 
 ******
 
+# v1.0.3
+
+###### 2026/09/12
+
+* `Correction` Paddle Lite plantait (SIGSEGV) lorsque la première détection de texte d'un processus utilisait une image basse telle que 1000 x 320 ; le détecteur est désormais préchauffé une fois avec une image vierge de 960 x 960 avant la première détection réelle
+
 # v1.0.2
 
 ###### 2026/09/12

@@ -5,6 +5,12 @@
   "changelog_label_improvement": "Mejora",
   "changelog_label_dependency": "Dependencia",
   "$data": {
+    "v1.0.3": {
+      "released_date": "2026/09/12",
+      "fix": [
+        "Paddle Lite fallaba (SIGSEGV) cuando la primera detección de texto de un proceso usaba una imagen baja como 1000 x 320; ahora el detector se precalienta una vez con una imagen en blanco de 960 x 960 antes de la primera detección real"
+      ]
+    },
     "v1.0.2": {
       "released_date": "2026/09/12",
       "fix": [

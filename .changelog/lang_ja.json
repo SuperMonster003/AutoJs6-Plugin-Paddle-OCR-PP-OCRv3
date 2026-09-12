@@ -5,6 +5,12 @@
   "changelog_label_improvement": "改善",
   "changelog_label_dependency": "依存関係",
   "$data": {
+    "v1.0.3": {
+      "released_date": "2026/09/12",
+      "fix": [
+        "プロセス初回の文字検出で 1000 x 320 のような高さの小さい画像を使うと Paddle Lite がクラッシュ (SIGSEGV) していた問題を修正; 初回の実検出前に 960 x 960 の空白画像で検出器を一度ウォームアップするようにした"
+      ]
+    },
     "v1.0.2": {
       "released_date": "2026/09/12",
       "fix": [

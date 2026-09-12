@@ -5,6 +5,12 @@
   "changelog_label_improvement": "개선",
   "changelog_label_dependency": "의존성",
   "$data": {
+    "v1.0.3": {
+      "released_date": "2026/09/12",
+      "fix": [
+        "프로세스의 첫 문자 검출에 1000 x 320 같은 낮은 이미지를 사용하면 Paddle Lite 가 크래시 (SIGSEGV) 하던 문제를 수정; 이제 첫 실제 검출 전에 960 x 960 빈 이미지로 검출기를 한 번 워밍업함"
+      ]
+    },
     "v1.0.2": {
       "released_date": "2026/09/12",
       "fix": [

@@ -4,6 +4,12 @@
 
 ******
 
+# v1.0.3
+
+###### 2026/09/12
+
+* `Fix` Paddle Lite crashed (SIGSEGV) when the first text detection of a process used a short image such as 1000 x 320; the detector is now warmed up once with a 960 x 960 blank image before the first real detection
+
 # v1.0.2
 
 ###### 2026/09/12

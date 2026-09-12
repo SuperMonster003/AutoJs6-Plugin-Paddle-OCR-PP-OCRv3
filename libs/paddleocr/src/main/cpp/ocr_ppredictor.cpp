@@ -145,7 +145,23 @@ cv::Mat DetResizeImg(const cv::Mat img, int max_size_len,
   return resize_img;
 }
 
+// Largest detector input the bundled models are run with (DetResizeImg keeps a 960 x 960 image as is).
+// zh-CN: 检测器实际会遇到的最大输入 (DetResizeImg 对 960 x 960 的图保持原样).
+static const int kDetWarmUpSide = 960;
+
+void OCR_PPredictor::warm_up_det() {
+  if (_det_warmed_up) {
+    return;
+  }
+  _det_warmed_up = true;
+  cv::Mat blank(kDetWarmUpSide, kDetWarmUpSide, CV_8UC3, cv::Scalar(255, 255, 255));
+  std::vector<OCRPredictResult> ignored;
+  LOGI("ocr cpp det warm-up %d,%d", blank.rows, blank.cols);
+  infer_det(blank, kDetWarmUpSide, ignored);
+}
+
 void OCR_PPredictor::infer_det(cv::Mat &origin, int max_size_len, std::vector<OCRPredictResult> &ocr_results) {
+  warm_up_det();
   std::vector<float> mean = {0.485f, 0.456f, 0.406f};
   std::vector<float> scale = {1 / 0.229f, 1 / 0.224f, 1 / 0.225f};
 

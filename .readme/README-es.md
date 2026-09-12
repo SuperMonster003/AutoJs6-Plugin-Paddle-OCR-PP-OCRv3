@@ -108,6 +108,12 @@ ocr.paddle()
 
 ******
 
+# v1.0.3
+
+###### 2026/09/12
+
+* `Correccion` Paddle Lite fallaba (SIGSEGV) cuando la primera detección de texto de un proceso usaba una imagen baja como 1000 x 320; ahora el detector se precalienta una vez con una imagen en blanco de 960 x 960 antes de la primera detección real
+
 # v1.0.2
 
 ###### 2026/09/12
@@ -120,19 +126,6 @@ ocr.paddle()
 ###### 2026/09/11
 
 * `Mejora` Verificación de compilación de la alineación de páginas de 16 KB en bibliotecas nativas de 64 bits, con controles del contrato manifest e informes JSON
-
-# v1.0.0
-
-###### 2026/09/01
-
-* `Nuevo` Servicio de complemento Paddle OCR (PP-OCRv3), con ID de complemento `paddle-ocr-pp-ocrv3`, motor `paddle-ocr` y variante `v3`
-* `Nuevo` Soporte para descubrir e invocar el complemento mediante `org.autojs.plugin.PADDLE_OCR`
-* `Nuevo` Soporte para reconocimiento de texto `ocr.paddle.recognizeText(image)` y deteccion de texto `ocr.paddle.detect(image)` en capturas de pantalla, archivos de imagen locales y entrada de imagen ARGB_8888 sin procesar
-* `Nuevo` Modelos CPU PaddleOCR PP-OCRv3 integrados, ejecutados con Paddle Lite y OpenCV 4.8.0
-* `Nuevo` Recursos multilingues para informacion del complemento, instrucciones, README y CHANGELOG: espanol/frances/ruso/arabe/japones/coreano/ingles/chino simplificado/chino tradicional de Hong Kong/chino tradicional de Taiwan
-* `Mejora` Soporte para compilaciones APK por ABI, incluidos `arm64-v8a`/`armeabi-v7a` y paquetes `universal`
-* `Mejora` Los nombres de archivo APK de publicacion incluyen nombre del proyecto, numero de version y variante ABI
-* `Mejora` Unificar el diseño del README y la gestión de versiones de la plataforma Gradle
 
 ##### Para mas historial de versiones, consulta
 

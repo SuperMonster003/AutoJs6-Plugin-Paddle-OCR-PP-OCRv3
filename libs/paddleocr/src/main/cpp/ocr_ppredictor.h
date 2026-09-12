@@ -89,6 +89,17 @@ private:
 
   void
   infer_det(cv::Mat &origin, int max_side_len, std::vector<OCRPredictResult>& ocr_results);
+
+  /**
+   * Run the detector once on a blank image of the largest supported shape before the first real
+   * detection. The bundled Paddle-Lite crashes (SIGSEGV / SEGV_ACCERR inside a conv worker
+   * thread) when the very first detector run of a process uses a short input such as
+   * 256 x 960 or 320 x 640, while any later shape is fine once a large shape has run first.
+   * zh-CN: 在首次真实检测前用最大形状的空白图跑一次检测器. 自带的 Paddle-Lite 在进程首次检测
+   * 输入较矮 (如 256 x 960, 320 x 640) 时会在 conv 工作线程内 SIGSEGV, 而先跑过一次大形状后
+   * 任何形状都正常.
+   */
+  void warm_up_det();
   /**
    * infer for rec model
    *
@@ -126,5 +137,6 @@ private:
   std::unique_ptr<PPredictor> _rec_predictor;
   std::unique_ptr<PPredictor> _cls_predictor;
   OCR_Config _config;
+  bool _det_warmed_up = false;
 };
 }
