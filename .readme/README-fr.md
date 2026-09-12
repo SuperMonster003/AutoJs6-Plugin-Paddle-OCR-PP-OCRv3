@@ -112,6 +112,7 @@ ocr.paddle()
 
 ###### 2026/09/12
 
+* `Correction` Échec de la tâche `clean` lorsque l'option de nettoyage des dépendances natives de Paddle OCR n'était pas initialisée
 * `Amelioration` Bibliothèque native OpenCV 4.8.0 synchronisée avec la recompilation NDK r28c (Clang 19.0.1) (donneur : AutoJs6-Plugin-OpenCV) ; `libopencv_java4.so` des 4 ABI conserve l'alignement `PT_LOAD` de 16 Ko et embarque un manifeste de provenance
 
 # v1.0.1

@@ -7,6 +7,9 @@
   "$data": {
     "v1.0.2": {
       "released_date": "2026/09/12",
+      "fix": [
+        "فشل مهمة `clean` عندما لم تتم تهيئة خيار تنظيف التبعيات الأصلية لـ Paddle OCR"
+      ],
       "improvement": [
         "مزامنة مكتبة OpenCV 4.8.0 الأصلية مع إعادة بناء NDK r28c (Clang 19.0.1) (المصدر: AutoJs6-Plugin-OpenCV); تحافظ `libopencv_java4.so` لجميع ABI الأربعة على محاذاة `PT_LOAD` بحجم 16 كيلوبايت وتأتي مع بيان provenance"
       ]

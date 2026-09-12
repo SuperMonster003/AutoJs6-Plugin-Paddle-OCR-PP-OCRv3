@@ -8,6 +8,7 @@
 
 ###### 2026/09/12
 
+* `修復` Paddle OCR 原生依賴清理開關未初始化時 `clean` 任務執行失敗
 * `最佳化` 同步 OpenCV 4.8.0 原生程式庫至 NDK r28c (Clang 19.0.1) 重新建置版本 (donor: AutoJs6-Plugin-OpenCV), 4 個 ABI 的 `libopencv_java4.so` 保持 16 KB `PT_LOAD` 對齊並附帶 provenance 清單
 
 # v1.0.1

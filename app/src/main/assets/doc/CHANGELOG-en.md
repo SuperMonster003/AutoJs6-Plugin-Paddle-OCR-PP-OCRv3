@@ -8,6 +8,7 @@
 
 ###### 2026/09/12
 
+* `Fix` The `clean` task failed when the Paddle OCR native dependency cleanup flag was not initialized
 * `Improvement` Synced the OpenCV 4.8.0 native library to the NDK r28c (Clang 19.0.1) rebuild (donor: AutoJs6-Plugin-OpenCV); `libopencv_java4.so` for all 4 ABIs keeps 16 KB `PT_LOAD` alignment and ships with a provenance manifest
 
 # v1.0.1
