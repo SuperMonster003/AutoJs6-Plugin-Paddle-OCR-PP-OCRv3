@@ -54,6 +54,8 @@ The AutoJs6 Paddle OCR (PP-OCRv3) plugin adds optical character recognition powe
 - Supports screenshots, local image files, and raw ARGB_8888 image input.
 - Plugin information, instructions, README, and CHANGELOG support Spanish/French/Russian/Arabic/Japanese/Korean/English/Simplified Chinese/Hong Kong Traditional Chinese/Taiwan Traditional Chinese.
 - Based on PaddleOCR PP-OCRv3, Paddle Lite, and OpenCV 4.8.0.
+- Images may contain at most 16777216 pixels; raw image buffers are limited to 64 MiB
+- Encoded image input is limited to 64 MiB and supports file descriptors and pipes
 
 ******
 
@@ -108,6 +110,16 @@ ocr.paddle()
 
 ******
 
+# v1.0.4
+
+###### 2026/09/13
+
+* `Fix` Plugin center version and ABI information matches the installed plugin APK
+* `Fix` Encoded image input is limited to 64 MiB and supports file descriptors and pipes
+* `Fix` Version dates use a consistent English format
+* `Improvement` Validate release APK versions, signing and the complete variant set before creating download artifacts
+* `Improvement` Images may contain at most 16777216 pixels; raw image buffers are limited to 64 MiB
+
 # v1.0.3
 
 ###### 2026/09/12
@@ -120,12 +132,6 @@ ocr.paddle()
 
 * `Fix` The `clean` task failed when the Paddle OCR native dependency cleanup flag was not initialized
 * `Improvement` Synced the OpenCV 4.8.0 native library to the NDK r28c (Clang 19.0.1) rebuild (donor: AutoJs6-Plugin-OpenCV); `libopencv_java4.so` for all 4 ABIs keeps 16 KB `PT_LOAD` alignment and ships with a provenance manifest
-
-# v1.0.1
-
-###### 2026/09/11
-
-* `Improvement` Build verification of 16 KB page alignment for 64-bit native libraries, including manifest contract checks and JSON reports
 
 ##### For more release history, see
 

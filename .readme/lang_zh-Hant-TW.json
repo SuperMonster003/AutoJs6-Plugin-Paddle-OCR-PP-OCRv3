@@ -12,7 +12,9 @@
     "支援 AutoJs6 中的 `ocr.paddle.recognizeText(image)` 和 `ocr.paddle.detect(image)`.",
     "支援螢幕截圖, 本機影像檔案和原始 ARGB_8888 影像輸入.",
     "外掛資訊, 使用說明, README 與 CHANGELOG 均支援西班牙語/法語/俄語/阿拉伯語/日語/韓語/英語/簡體中文/香港繁體/台灣繁體.",
-    "基於 PaddleOCR PP-OCRv3, Paddle Lite 和 OpenCV 4.8.0."
+    "基於 PaddleOCR PP-OCRv3, Paddle Lite 和 OpenCV 4.8.0.",
+    "影像最多包含 16777216 個像素, 原始影像緩衝區上限為 64 MiB",
+    "編碼影像最大為 64 MiB, 支援檔案描述元和管線傳輸"
   ],
   "h3_usage": "使用範例",
   "p_usage_screenshot": "辨識螢幕截圖中的文字內容",

@@ -12,7 +12,9 @@
     "Supports `ocr.paddle.recognizeText(image)` and `ocr.paddle.detect(image)` in AutoJs6.",
     "Supports screenshots, local image files, and raw ARGB_8888 image input.",
     "Plugin information, instructions, README, and CHANGELOG support Spanish/French/Russian/Arabic/Japanese/Korean/English/Simplified Chinese/Hong Kong Traditional Chinese/Taiwan Traditional Chinese.",
-    "Based on PaddleOCR PP-OCRv3, Paddle Lite, and OpenCV 4.8.0."
+    "Based on PaddleOCR PP-OCRv3, Paddle Lite, and OpenCV 4.8.0.",
+    "Images may contain at most 16777216 pixels; raw image buffers are limited to 64 MiB",
+    "Encoded image input is limited to 64 MiB and supports file descriptors and pipes"
   ],
   "h3_usage": "Usage",
   "p_usage_screenshot": "Recognize text content in a screenshot",

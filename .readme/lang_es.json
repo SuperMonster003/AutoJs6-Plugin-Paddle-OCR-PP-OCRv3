@@ -12,7 +12,9 @@
     "Admite `ocr.paddle.recognizeText(image)` y `ocr.paddle.detect(image)` en AutoJs6.",
     "Admite capturas de pantalla, archivos de imagen locales y entrada de imagen ARGB_8888 sin procesar.",
     "La informacion del complemento, las instrucciones, README y CHANGELOG admiten espanol/frances/ruso/arabe/japones/coreano/ingles/chino simplificado/chino tradicional de Hong Kong/chino tradicional de Taiwan.",
-    "Basado en PaddleOCR PP-OCRv3, Paddle Lite y OpenCV 4.8.0."
+    "Basado en PaddleOCR PP-OCRv3, Paddle Lite y OpenCV 4.8.0.",
+    "Las imágenes admiten hasta 16777216 píxeles; los búferes de imagen sin procesar se limitan a 64 MiB",
+    "La imagen codificada admite hasta 64 MiB mediante descriptores de archivo y tuberías"
   ],
   "h3_usage": "Uso",
   "p_usage_screenshot": "Reconocer el contenido de texto en una captura de pantalla",
