@@ -12,7 +12,9 @@
     "Prend en charge `ocr.paddle.recognizeText(image)` et `ocr.paddle.detect(image)` dans AutoJs6.",
     "Prend en charge les captures d'ecran, les fichiers image locaux et les entrees image brutes ARGB_8888.",
     "Les informations du plugin, les instructions, le README et le CHANGELOG prennent en charge espagnol/francais/russe/arabe/japonais/coreen/anglais/chinois simplifie/chinois traditionnel de Hong Kong/chinois traditionnel de Taiwan.",
-    "Base sur PaddleOCR PP-OCRv3, Paddle Lite et OpenCV 4.8.0."
+    "Base sur PaddleOCR PP-OCRv3, Paddle Lite et OpenCV 4.8.0.",
+    "Les images peuvent contenir jusqu'à 16777216 pixels; les tampons bruts sont limités à 64 MiB",
+    "Les images encodées sont limitées à 64 MiB avec prise en charge des fichiers et des tubes"
   ],
   "h3_usage": "Utilisation",
   "p_usage_screenshot": "Reconnaitre le contenu texte d'une capture d'ecran",

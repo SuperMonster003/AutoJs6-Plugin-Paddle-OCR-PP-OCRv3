@@ -54,6 +54,8 @@ El complemento AutoJs6 Paddle OCR (PP-OCRv3) agrega reconocimiento optico de car
 - Admite capturas de pantalla, archivos de imagen locales y entrada de imagen ARGB_8888 sin procesar.
 - La informacion del complemento, las instrucciones, README y CHANGELOG admiten espanol/frances/ruso/arabe/japones/coreano/ingles/chino simplificado/chino tradicional de Hong Kong/chino tradicional de Taiwan.
 - Basado en PaddleOCR PP-OCRv3, Paddle Lite y OpenCV 4.8.0.
+- Las imágenes admiten hasta 16777216 píxeles; los búferes de imagen sin procesar se limitan a 64 MiB
+- La imagen codificada admite hasta 64 MiB mediante descriptores de archivo y tuberías
 
 ******
 
@@ -108,6 +110,16 @@ ocr.paddle()
 
 ******
 
+# v1.0.4
+
+###### 2026/09/13
+
+* `Correccion` La versión y las ABI del centro de complementos coinciden con el APK instalado
+* `Correccion` La imagen codificada admite hasta 64 MiB mediante descriptores de archivo y tuberías
+* `Correccion` Las fechas de versión mantienen un formato uniforme en inglés
+* `Mejora` Validación de las versiones, firmas y variantes completas de los APK antes de crear los archivos de descarga
+* `Mejora` Las imágenes admiten hasta 16777216 píxeles; los búferes de imagen sin procesar se limitan a 64 MiB
+
 # v1.0.3
 
 ###### 2026/09/12
@@ -120,12 +132,6 @@ ocr.paddle()
 
 * `Correccion` El comando `clean` fallaba cuando no se inicializaba la opción de limpieza de las dependencias nativas de Paddle OCR
 * `Mejora` Sincronizada la biblioteca nativa OpenCV 4.8.0 con la reconstrucción NDK r28c (Clang 19.0.1) (donante: AutoJs6-Plugin-OpenCV); `libopencv_java4.so` de las 4 ABI mantiene la alineación `PT_LOAD` de 16 KB e incluye un manifiesto de provenance
-
-# v1.0.1
-
-###### 2026/09/11
-
-* `Mejora` Verificación de compilación de la alineación de páginas de 16 KB en bibliotecas nativas de 64 bits, con controles del contrato manifest e informes JSON
 
 ##### Para mas historial de versiones, consulta
 

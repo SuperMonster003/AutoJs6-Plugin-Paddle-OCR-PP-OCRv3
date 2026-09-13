@@ -12,7 +12,9 @@
     "AutoJs6 의 `ocr.paddle.recognizeText(image)` 와 `ocr.paddle.detect(image)` 를 지원합니다.",
     "화면 캡처, 로컬 이미지 파일, 원시 ARGB_8888 이미지 입력을 지원합니다.",
     "플러그인 정보, 사용 설명, README, CHANGELOG 는 스페인어/프랑스어/러시아어/아랍어/일본어/한국어/영어/중국어 간체/홍콩 번체 중국어/대만 번체 중국어를 지원합니다.",
-    "PaddleOCR PP-OCRv3, Paddle Lite, OpenCV 4.8.0 기반입니다."
+    "PaddleOCR PP-OCRv3, Paddle Lite, OpenCV 4.8.0 기반입니다.",
+    "이미지는 최대 16777216픽셀, 원시 이미지 버퍼는 최대 64 MiB까지 지원",
+    "인코딩된 이미지는 최대 64 MiB이며 파일 디스크립터와 파이프를 지원합니다"
   ],
   "h3_usage": "사용 예",
   "p_usage_screenshot": "화면 캡처의 텍스트 내용을 인식합니다",
