@@ -8,6 +8,7 @@
 
 ###### 2026/09/13
 
+* `Correction` Nettoyage incomplet des références JNI temporaires lors de la conversion des chaînes pendant l'initialisation; celle-ci s'arrête désormais immédiatement en cas d'exception JNI _[`issue #575`](http://issues.autojs6.com/575)_
 * `Correction` Les informations de version et d'ABI du centre des plugins correspondent à l'APK installé
 * `Correction` Les images encodées sont limitées à 64 MiB avec prise en charge des fichiers et des tubes
 * `Correction` Les dates de version utilisent un format anglais uniforme

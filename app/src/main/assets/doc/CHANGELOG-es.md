@@ -8,6 +8,7 @@
 
 ###### 2026/09/13
 
+* `Correccion` Limpieza incompleta de referencias JNI temporales al convertir cadenas durante la inicialización; esta ahora se detiene de inmediato ante excepciones JNI _[`issue #575`](http://issues.autojs6.com/575)_
 * `Correccion` La versión y las ABI del centro de complementos coinciden con el APK instalado
 * `Correccion` La imagen codificada admite hasta 64 MiB mediante descriptores de archivo y tuberías
 * `Correccion` Las fechas de versión mantienen un formato uniforme en inglés

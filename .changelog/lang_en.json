@@ -7,14 +7,15 @@
   "$data": {
     "v1.0.4": {
       "released_date": "2026/09/13",
-      "improvement": [
-        "Validate release APK versions, signing and the complete variant set before creating download artifacts",
-        "Images may contain at most 16777216 pixels; raw image buffers are limited to 64 MiB"
-      ],
       "fix": [
+        "Incomplete cleanup of temporary JNI references during initialization string conversion; initialization now stops promptly on JNI exceptions _[`issue #575`](http://issues.autojs6.com/575)_",
         "Plugin center version and ABI information matches the installed plugin APK",
         "Encoded image input is limited to 64 MiB and supports file descriptors and pipes",
         "Version dates use a consistent English format"
+      ],
+      "improvement": [
+        "Validate release APK versions, signing and the complete variant set before creating download artifacts",
+        "Images may contain at most 16777216 pixels; raw image buffers are limited to 64 MiB"
       ]
     },
     "v1.0.3": {

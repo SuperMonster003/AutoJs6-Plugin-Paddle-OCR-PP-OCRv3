@@ -114,6 +114,7 @@ ocr.paddle()
 
 ###### 2026/09/13
 
+* `Fix` Incomplete cleanup of temporary JNI references during initialization string conversion; initialization now stops promptly on JNI exceptions _[`issue #575`](http://issues.autojs6.com/575)_
 * `Fix` Plugin center version and ABI information matches the installed plugin APK
 * `Fix` Encoded image input is limited to 64 MiB and supports file descriptors and pipes
 * `Fix` Version dates use a consistent English format

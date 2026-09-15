@@ -16,10 +16,14 @@ Java_com_baidu_paddle_lite_ocr_OCRPredictorNative_init(
     jstring j_rec_model_path, jstring j_cls_model_path, jint j_use_opencl, jint j_thread_num,
     jstring j_cpu_mode) {
   std::string det_model_path = jstring_to_cpp_string(env, j_det_model_path);
+  if (env->ExceptionCheck()) return 0;
   std::string rec_model_path = jstring_to_cpp_string(env, j_rec_model_path);
+  if (env->ExceptionCheck()) return 0;
   std::string cls_model_path = jstring_to_cpp_string(env, j_cls_model_path);
+  if (env->ExceptionCheck()) return 0;
   int thread_num = j_thread_num;
   std::string cpu_mode = jstring_to_cpp_string(env, j_cpu_mode);
+  if (env->ExceptionCheck()) return 0;
   ppredictor::OCR_Config conf;
   conf.use_opencl = j_use_opencl;
   conf.thread_num = thread_num;
