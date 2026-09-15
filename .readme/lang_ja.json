@@ -27,7 +27,7 @@
   "h5_for_more_release_history": "その他のリリース履歴は次を参照してください",
   "h3_build": "ビルド",
   "text_release_build": "Release ビルド",
-  "p_build_params": "ビルドパラメータは `version.properties` から取得され, 現在の最小 SDK は 24, ターゲット SDK は 36 です",
+  "p_build_params": "ビルドパラメータは `version.properties` から取得され, 現在の最小 SDK は 24, ターゲット SDK は 37 です",
   "h3_resource_layout": "リソース構成",
   "p_resource_layout": "`strings.xml` はローカライズされたプラグイン説明を提供します; `plugin_instruction.md` はホスト側に表示されるプラグイン使用手順を提供します. README と CHANGELOG は `.python/generate_markdown.py` により JSON ソースファイルから生成されます",
   "h3_links": "関連リンク",

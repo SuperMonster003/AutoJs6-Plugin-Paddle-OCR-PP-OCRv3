@@ -27,7 +27,7 @@
   "h5_for_more_release_history": "더 많은 릴리스 기록은 다음을 참조하세요",
   "h3_build": "빌드",
   "text_release_build": "Release 빌드",
-  "p_build_params": "빌드 매개변수는 `version.properties` 에서 가져오며, 현재 최소 SDK 는 24, 대상 SDK 는 36 입니다",
+  "p_build_params": "빌드 매개변수는 `version.properties` 에서 가져오며, 현재 최소 SDK 는 24, 대상 SDK 는 37 입니다",
   "h3_resource_layout": "리소스 구조",
   "p_resource_layout": "`strings.xml` 은 현지화된 플러그인 설명을 제공합니다; `plugin_instruction.md` 는 호스트에 표시되는 플러그인 사용 설명을 제공합니다. README 와 CHANGELOG 는 `.python/generate_markdown.py` 가 JSON 소스 파일에서 생성합니다",
   "h3_links": "관련 링크",
