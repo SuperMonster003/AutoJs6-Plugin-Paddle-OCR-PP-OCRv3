@@ -7,14 +7,15 @@
   "$data": {
     "v1.0.4": {
       "released_date": "2026/09/13",
-      "improvement": [
-        "Validation des versions, signatures et variantes complètes des APK avant la création des fichiers à télécharger",
-        "Les images peuvent contenir jusqu'à 16777216 pixels; les tampons bruts sont limités à 64 MiB"
-      ],
       "fix": [
+        "Nettoyage incomplet des références JNI temporaires lors de la conversion des chaînes pendant l'initialisation; celle-ci s'arrête désormais immédiatement en cas d'exception JNI _[`issue #575`](http://issues.autojs6.com/575)_",
         "Les informations de version et d'ABI du centre des plugins correspondent à l'APK installé",
         "Les images encodées sont limitées à 64 MiB avec prise en charge des fichiers et des tubes",
         "Les dates de version utilisent un format anglais uniforme"
+      ],
+      "improvement": [
+        "Validation des versions, signatures et variantes complètes des APK avant la création des fichiers à télécharger",
+        "Les images peuvent contenir jusqu'à 16777216 pixels; les tampons bruts sont limités à 64 MiB"
       ]
     },
     "v1.0.3": {
