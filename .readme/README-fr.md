@@ -110,6 +110,12 @@ ocr.paddle()
 
 ******
 
+# v1.0.5
+
+###### 2026/09/15
+
+* `Amelioration` compileSdk et targetSdk passent à 37 (Android 17) ; le comportement du plugin ne dépend pas de la nouvelle cible
+
 # v1.0.4
 
 ###### 2026/09/13
@@ -126,13 +132,6 @@ ocr.paddle()
 ###### 2026/09/12
 
 * `Correction` Paddle Lite plantait (SIGSEGV) lorsque la première détection de texte d'un processus utilisait une image basse telle que 1000 x 320 ; le détecteur est désormais préchauffé une fois avec une image vierge de 960 x 960 avant la première détection réelle
-
-# v1.0.2
-
-###### 2026/09/12
-
-* `Correction` Échec de la tâche `clean` lorsque l'option de nettoyage des dépendances natives de Paddle OCR n'était pas initialisée
-* `Amelioration` Bibliothèque native OpenCV 4.8.0 synchronisée avec la recompilation NDK r28c (Clang 19.0.1) (donneur : AutoJs6-Plugin-OpenCV) ; `libopencv_java4.so` des 4 ABI conserve l'alignement `PT_LOAD` de 16 Ko et embarque un manifeste de provenance
 
 ##### Pour plus d'historique des versions, voir
 
@@ -154,7 +153,7 @@ Compilation Release:
 .\gradlew.bat :app:assembleRelease
 ```
 
-Les parametres de compilation viennent de `version.properties`, avec le SDK minimum actuel 24 et le SDK cible 36.
+Les parametres de compilation viennent de `version.properties`, avec le SDK minimum actuel 24 et le SDK cible 37.
 
 ******
 

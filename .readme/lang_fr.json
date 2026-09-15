@@ -27,7 +27,7 @@
   "h5_for_more_release_history": "Pour plus d'historique des versions, voir",
   "h3_build": "Compilation",
   "text_release_build": "Compilation Release",
-  "p_build_params": "Les parametres de compilation viennent de `version.properties`, avec le SDK minimum actuel 24 et le SDK cible 36",
+  "p_build_params": "Les parametres de compilation viennent de `version.properties`, avec le SDK minimum actuel 24 et le SDK cible 37",
   "h3_resource_layout": "Structure des ressources",
   "p_resource_layout": "`strings.xml` fournit les descriptions localisees du plugin; `plugin_instruction.md` fournit les instructions du plugin affichees par l'hote. README et CHANGELOG sont generes par `.python/generate_markdown.py` depuis les fichiers source JSON",
   "h3_links": "Liens",

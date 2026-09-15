@@ -27,7 +27,7 @@
   "h5_for_more_release_history": "لمزيد من سجل الاصدارات, راجع",
   "h3_build": "البناء",
   "text_release_build": "بناء Release",
-  "p_build_params": "تأتي معلمات البناء من `version.properties`, مع حد SDK ادنى حالي 24 و SDK هدف 36",
+  "p_build_params": "تأتي معلمات البناء من `version.properties`, مع حد SDK ادنى حالي 24 و SDK هدف 37",
   "h3_resource_layout": "هيكل الموارد",
   "p_resource_layout": "يوفر `strings.xml` اوصاف المكون المترجمة; ويوفر `plugin_instruction.md` تعليمات المكون التي يعرضها المضيف. يتم توليد README و CHANGELOG بواسطة `.python/generate_markdown.py` من ملفات JSON المصدرية",
   "h3_links": "روابط",

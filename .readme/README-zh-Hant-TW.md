@@ -110,6 +110,12 @@ ocr.paddle()
 
 ******
 
+# v1.0.5
+
+###### 2026/09/15
+
+* `最佳化` 將 compileSdk 與 targetSdk 提升到 37 (Android 17), 外掛程式行為不受新目標版本影響
+
 # v1.0.4
 
 ###### 2026/09/13
@@ -126,13 +132,6 @@ ocr.paddle()
 ###### 2026/09/12
 
 * `修復` 進程首次文字檢測使用較矮圖片 (如 1000 x 320) 時 Paddle Lite 崩潰 (SIGSEGV); 現在首次真實檢測前會先用 960 x 960 空白圖預熱檢測器一次
-
-# v1.0.2
-
-###### 2026/09/12
-
-* `修復` Paddle OCR 原生依賴清理開關未初始化時 `clean` 任務執行失敗
-* `最佳化` 同步 OpenCV 4.8.0 原生程式庫至 NDK r28c (Clang 19.0.1) 重新建置版本 (donor: AutoJs6-Plugin-OpenCV), 4 個 ABI 的 `libopencv_java4.so` 保持 16 KB `PT_LOAD` 對齊並附帶 provenance 清單
 
 ##### 更多發行歷史可參閱
 
@@ -154,7 +153,7 @@ Release 建置:
 .\gradlew.bat :app:assembleRelease
 ```
 
-建置參數來自 `version.properties`, 目前最低 SDK 為 24, 目標 SDK 為 36.
+建置參數來自 `version.properties`, 目前最低 SDK 為 24, 目標 SDK 為 37.
 
 ******
 

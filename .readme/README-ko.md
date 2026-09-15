@@ -110,6 +110,12 @@ ocr.paddle()
 
 ******
 
+# v1.0.5
+
+###### 2026/09/15
+
+* `개선` compileSdk 와 targetSdk 를 37 (Android 17) 로 올리며, 플러그인 동작은 새 대상 버전의 영향을 받지 않음
+
 # v1.0.4
 
 ###### 2026/09/13
@@ -126,13 +132,6 @@ ocr.paddle()
 ###### 2026/09/12
 
 * `수정` 프로세스의 첫 문자 검출에 1000 x 320 같은 낮은 이미지를 사용하면 Paddle Lite 가 크래시 (SIGSEGV) 하던 문제를 수정; 이제 첫 실제 검출 전에 960 x 960 빈 이미지로 검출기를 한 번 워밍업함
-
-# v1.0.2
-
-###### 2026/09/12
-
-* `수정` Paddle OCR 네이티브 종속성 정리 설정이 초기화되지 않으면 `clean` 작업이 실패하는 문제
-* `개선` OpenCV 4.8.0 네이티브 라이브러리를 NDK r28c (Clang 19.0.1) 재빌드 버전으로 동기화 (donor: AutoJs6-Plugin-OpenCV); 4개 ABI의 `libopencv_java4.so`는 16 KB `PT_LOAD` 정렬을 유지하며 provenance 매니페스트를 포함
 
 ##### 더 많은 릴리스 기록은 다음을 참조하세요
 
@@ -154,7 +153,7 @@ Release 빌드:
 .\gradlew.bat :app:assembleRelease
 ```
 
-빌드 매개변수는 `version.properties` 에서 가져오며, 현재 최소 SDK 는 24, 대상 SDK 는 36 입니다.
+빌드 매개변수는 `version.properties` 에서 가져오며, 현재 최소 SDK 는 24, 대상 SDK 는 37 입니다.
 
 ******
 

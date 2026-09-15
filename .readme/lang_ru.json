@@ -27,7 +27,7 @@
   "h5_for_more_release_history": "Дополнительную историю выпусков см.",
   "h3_build": "Сборка",
   "text_release_build": "Сборка Release",
-  "p_build_params": "Параметры сборки берутся из `version.properties`, текущий min SDK 24 и target SDK 36",
+  "p_build_params": "Параметры сборки берутся из `version.properties`, текущий min SDK 24 и target SDK 37",
   "h3_resource_layout": "Структура ресурсов",
   "p_resource_layout": "`strings.xml` предоставляет локализованные описания плагина; `plugin_instruction.md` предоставляет инструкции плагина, отображаемые хостом. README и CHANGELOG генерируются `.python/generate_markdown.py` из исходных файлов JSON",
   "h3_links": "Ссылки",
