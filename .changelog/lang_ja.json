@@ -5,6 +5,21 @@
   "changelog_label_improvement": "改善",
   "changelog_label_dependency": "依存関係",
   "$data": {
+    "v1.0.6": {
+      "released_date": "2026/10/10",
+      "hint": [
+        "本バージョンをパッケージ化されたアプリで使用するには, ホストに AutoJs6 6.8.0 以降が必要 (古いホストでは OpenCV も同時に選択した場合のみパッケージ化可能)"
+      ],
+      "fix": [
+        "モデルの読み込みや推論でネイティブ例外が発生するとプラグインプロセスが異常終了する問題 (ホストにエラーとして返すように変更)"
+      ],
+      "improvement": [
+        "libNative.so が OpenCV のシンボルをエクスポートしなくなり, APK に libopencv_java4.so を同梱しなくなってサイズが縮小し, パッケージ化されたアプリで別バージョンの OpenCV と併用可能"
+      ],
+      "dependency": [
+        "OpenCV Android AAR 4.8.0 を削除し, 静的リンクする OpenCV Android SDK 4.8.0 のみを使用 (ダウンロード時に SHA-256 を検証)"
+      ]
+    },
     "v1.0.5": {
       "released_date": "2026/10/05",
       "improvement": [

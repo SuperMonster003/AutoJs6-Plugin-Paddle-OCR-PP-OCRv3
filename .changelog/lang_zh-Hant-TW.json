@@ -5,6 +5,21 @@
   "changelog_label_improvement": "最佳化",
   "changelog_label_dependency": "依賴",
   "$data": {
+    "v1.0.6": {
+      "released_date": "2026/10/10",
+      "hint": [
+        "打包的應用程式使用本版本時, 宿主需為 AutoJs6 6.8.0 或更高版本; 舊版宿主只有同時勾選 OpenCV 才能打包"
+      ],
+      "fix": [
+        "模型載入或推論發生原生例外時外掛行程直接當機的問題, 現改為向宿主回傳錯誤"
+      ],
+      "improvement": [
+        "libNative.so 不再匯出 OpenCV 符號, APK 不再附帶 libopencv_java4.so 且體積更小, 打包的應用程式中可與其他版本的 OpenCV 同時使用"
+      ],
+      "dependency": [
+        "移除 OpenCV Android AAR 4.8.0, 僅保留靜態連結的 OpenCV Android SDK 4.8.0 (下載時驗證 SHA-256)"
+      ]
+    },
     "v1.0.5": {
       "released_date": "2026/10/05",
       "improvement": [

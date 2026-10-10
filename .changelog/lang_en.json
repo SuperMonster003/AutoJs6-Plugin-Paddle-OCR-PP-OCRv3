@@ -5,6 +5,21 @@
   "changelog_label_improvement": "Improvement",
   "changelog_label_dependency": "Dependency",
   "$data": {
+    "v1.0.6": {
+      "released_date": "2026/10/10",
+      "hint": [
+        "Packaged apps that use this version need AutoJs6 6.8.0 or later as the host; older hosts can package it only together with OpenCV"
+      ],
+      "fix": [
+        "Native failures during model loading or inference aborted the plugin process; they are now reported to the host as errors"
+      ],
+      "improvement": [
+        "libNative.so no longer exports OpenCV symbols and the APK no longer ships libopencv_java4.so, so it is smaller and packaged apps can use it alongside another OpenCV version"
+      ],
+      "dependency": [
+        "Remove the OpenCV Android AAR 4.8.0; only the statically linked OpenCV Android SDK 4.8.0 remains, verified by SHA-256 when downloaded"
+      ]
+    },
     "v1.0.5": {
       "released_date": "2026/10/05",
       "improvement": [

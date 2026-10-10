@@ -5,10 +5,24 @@
 #include "native.h"
 #include "ocr_ppredictor.h"
 #include <algorithm>
+#include <exception>
+#include <memory>
 #include <paddle_api.h>
 #include <string>
 
 static paddle::lite_api::PowerMode str_to_cpu_mode(const std::string &cpu_mode);
+
+// A C++ exception that leaves a JNI method aborts the whole process, including a packaged app.
+// Report OpenCV, Paddle Lite and allocation failures to Java instead.
+static void throw_native_failure(JNIEnv *env, const char *stage, const char *detail) {
+  LOGE("%s failed: %s", stage, detail);
+  if (env->ExceptionCheck()) return;
+  jclass type = env->FindClass("java/lang/IllegalStateException");
+  if (type == nullptr) return;
+  std::string message = std::string("Paddle OCR ") + stage + " failed: " + detail;
+  env->ThrowNew(type, message.c_str());
+  env->DeleteLocalRef(type);
+}
 
 extern "C" JNIEXPORT jlong JNICALL
 Java_com_baidu_paddle_lite_ocr_OCRPredictorNative_init(
@@ -24,14 +38,21 @@ Java_com_baidu_paddle_lite_ocr_OCRPredictorNative_init(
   int thread_num = j_thread_num;
   std::string cpu_mode = jstring_to_cpp_string(env, j_cpu_mode);
   if (env->ExceptionCheck()) return 0;
-  ppredictor::OCR_Config conf;
-  conf.use_opencl = j_use_opencl;
-  conf.thread_num = thread_num;
-  conf.mode = str_to_cpu_mode(cpu_mode);
-  ppredictor::OCR_PPredictor *orc_predictor =
-      new ppredictor::OCR_PPredictor{conf};
-  orc_predictor->init_from_file(det_model_path, rec_model_path, cls_model_path);
-  return reinterpret_cast<jlong>(orc_predictor);
+  try {
+    ppredictor::OCR_Config conf;
+    conf.use_opencl = j_use_opencl;
+    conf.thread_num = thread_num;
+    conf.mode = str_to_cpu_mode(cpu_mode);
+    std::unique_ptr<ppredictor::OCR_PPredictor> orc_predictor{
+        new ppredictor::OCR_PPredictor{conf}};
+    orc_predictor->init_from_file(det_model_path, rec_model_path, cls_model_path);
+    return reinterpret_cast<jlong>(orc_predictor.release());
+  } catch (const std::exception &e) {
+    throw_native_failure(env, "model initialization", e.what());
+  } catch (...) {
+    throw_native_failure(env, "model initialization", "unknown native exception");
+  }
+  return 0;
 }
 
 /**
@@ -66,9 +87,8 @@ str_to_cpu_mode(const std::string &cpu_mode) {
   }
 }
 
-extern "C" JNIEXPORT jfloatArray JNICALL
-Java_com_baidu_paddle_lite_ocr_OCRPredictorNative_forward(
-        JNIEnv *env, jobject thiz, jlong java_pointer,
+static jfloatArray forward_locked(
+        JNIEnv *env, jlong java_pointer,
         jobject original_image,jint j_max_size_len, jint j_run_det, jint j_run_cls,
         jint j_run_rec) {
   LOGI("begin to run native forward");
@@ -116,6 +136,21 @@ Java_com_baidu_paddle_lite_ocr_OCRPredictorNative_forward(
     float_arr.push_back(r.cls_score);
   }
   return cpp_array_to_jfloatarray(env, float_arr.data(), float_arr.size());
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_baidu_paddle_lite_ocr_OCRPredictorNative_forward(
+        JNIEnv *env, jobject thiz, jlong java_pointer,
+        jobject original_image,jint j_max_size_len, jint j_run_det, jint j_run_cls,
+        jint j_run_rec) {
+  try {
+    return forward_locked(env, java_pointer, original_image, j_max_size_len, j_run_det, j_run_cls, j_run_rec);
+  } catch (const std::exception &e) {
+    throw_native_failure(env, "inference", e.what());
+  } catch (...) {
+    throw_native_failure(env, "inference", "unknown native exception");
+  }
+  return nullptr;
 }
 
 extern "C" JNIEXPORT void JNICALL

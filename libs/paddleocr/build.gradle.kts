@@ -7,6 +7,10 @@
  * Transformed by SuperMonster003 on Sep 30, 2025.
  */
 
+import groovy.json.JsonSlurper
+import java.net.URI
+import java.security.MessageDigest
+
 plugins {
     id("org.autojs.build.utils")
     id("org.autojs.build.properties")
@@ -34,24 +38,107 @@ val nameMap = mapOf(
     "CMAKE" to "Cmake",
 )
 
-val libsToDeploy = listOf(
-    // @Hint by TonyJiangWJ (https://github.com/TonyJiangWJ) on Aug 7, 2023.
-    //  ! 下载 OpenCV 源码包 (默认为 4.2.0).
-    //  ! 和 Auto.js 中的版本 (如 4.8.0) 不匹配会产生冲突,
-    //  ! 可按需修改 version.properties 中对应内容.
-    //  ! en-US (translated by SuperMonster003 on Oct 22, 2024):
-    //  ! Download the archive for source code of OpenCV (defaults to 4.2.0).
-    //  ! Not matching the version in Auto.js (e.g., 4.8.0) will cause conflicts.
-    //  ! Adjust the corresponding content in version.properties as needed.
-    utils.newLibDeployer(
-        project,
-        nameMap["OPENCV"] as String,
-        "https://github.com/opencv/opencv/releases/download/${versionMap["OPENCV"]}/opencv-${versionMap["OPENCV"]}-android-sdk.zip",
-    ).apply {
-        setSourceDir("/OpenCV-android-sdk/sdk/native/")
-        setDestDir("/src/sdk/native/")
+val paddleOcrAbis = listOf("arm64-v8a", "armeabi-v7a")
+
+fun File.sha256String(): String {
+    val digest = MessageDigest.getInstance("SHA-256")
+    inputStream().use { input ->
+        val buffer = ByteArray(1 shl 16)
+        while (true) {
+            val read = input.read(buffer)
+            if (read < 0) break
+            digest.update(buffer, 0, read)
+        }
     }
-)
+    return digest.digest().joinToString("") { "%02x".format(it.toInt() and 0xff) }
+}
+
+// Private OpenCV: libNative.so statically links the core, imgproc and imgcodecs libraries of the
+// official OpenCV Android SDK and exports only its JNI methods, so it never shares OpenCV with the
+// host or another plugin. The record pins the release archive and every static library per ABI;
+// tools/opencv/opencv_sdk_provenance.py regenerates it for an upgrade.
+// zh-CN: 私有 OpenCV: libNative.so 静态链接官方 OpenCV Android SDK 的 core, imgproc 与 imgcodecs,
+// 只导出 JNI 方法, 不与宿主或其他插件共享 OpenCV. 来源记录固定发布包及各 ABI 的静态库哈希.
+val openCvVersion = versionMap["OPENCV"] as String
+val openCvSdkProvenanceFile = rootProject.file("libs/opencv-android-sdk-$openCvVersion.provenance.json")
+
+@Suppress("UNCHECKED_CAST")
+val openCvSdkProvenance = JsonSlurper().parse(openCvSdkProvenanceFile) as Map<String, Any?>
+
+@Suppress("UNCHECKED_CAST")
+val openCvSdkUpstream = openCvSdkProvenance["upstream"] as Map<String, Any?>
+
+@Suppress("UNCHECKED_CAST")
+val openCvSdkStaticLibraries = openCvSdkProvenance["staticLibraries"] as Map<String, Map<String, String>>
+require(openCvSdkProvenance["opencvVersion"] == openCvVersion) {
+    "${openCvSdkProvenanceFile.name} does not describe OpenCV $openCvVersion"
+}
+require(paddleOcrAbis.all(openCvSdkStaticLibraries::containsKey)) {
+    "${openCvSdkProvenanceFile.name} must record the static libraries of every ABI: $paddleOcrAbis"
+}
+val openCvSdkArchive = layout.projectDirectory.file("cache/opencv-$openCvVersion-android-sdk.zip").asFile
+val openCvSdkDirectory = layout.buildDirectory.dir("opencv-android-sdk-$openCvVersion")
+
+val downloadOpenCvSdk by tasks.registering {
+    group = "paddleocr"
+    description = "Downloads and verifies the official OpenCV $openCvVersion Android SDK."
+    inputs.file(openCvSdkProvenanceFile)
+    outputs.file(openCvSdkArchive)
+    doLast {
+        val expected = openCvSdkUpstream["archiveSha256"] as String
+        if (!openCvSdkArchive.isFile || !openCvSdkArchive.sha256String().equals(expected, ignoreCase = true)) {
+            val url = openCvSdkUpstream["archive"] as String
+            val partial = File(openCvSdkArchive.path + ".part")
+            openCvSdkArchive.parentFile.mkdirs()
+            logger.lifecycle("Downloading OpenCV $openCvVersion Android SDK: $url")
+            URI(url).toURL().openStream().use { input -> partial.outputStream().use { output -> input.copyTo(output) } }
+            val actual = partial.sha256String()
+            if (!actual.equals(expected, ignoreCase = true)) {
+                partial.delete()
+                throw GradleException("SHA-256 mismatch for $url: expected=$expected actual=$actual")
+            }
+            openCvSdkArchive.delete()
+            check(partial.renameTo(openCvSdkArchive)) { "Unable to move ${partial.path} to ${openCvSdkArchive.path}" }
+        }
+    }
+}
+
+val extractOpenCvSdk by tasks.registering(Sync::class) {
+    group = "paddleocr"
+    description = "Extracts and verifies the static OpenCV $openCvVersion libraries for libNative.so."
+    dependsOn(downloadOpenCvSdk)
+    inputs.file(openCvSdkProvenanceFile)
+    from({ zipTree(openCvSdkArchive) }) {
+        include(
+            "OpenCV-android-sdk/sdk/native/jni/**",
+            "OpenCV-android-sdk/sdk/native/staticlibs/**",
+            "OpenCV-android-sdk/sdk/native/3rdparty/**",
+            // Only for the SDK's CMake export check; libNative.so never links or ships it.
+            "OpenCV-android-sdk/sdk/native/libs/**",
+        )
+        // Keep sdk/native: the SDK's CMake exports locate libraries relative to that layout.
+        eachFile { relativePath = RelativePath(true, *relativePath.segments.drop(1).toTypedArray()) }
+        includeEmptyDirs = false
+    }
+    into(openCvSdkDirectory)
+    doLast {
+        val nativeDir = openCvSdkDirectory.get().dir("sdk/native").asFile
+        paddleOcrAbis.forEach { abi ->
+            openCvSdkStaticLibraries.getValue(abi).forEach { (relative, expected) ->
+                val actual = nativeDir.resolve(relative).takeIf(File::isFile)?.sha256String()
+                if (!expected.equals(actual, ignoreCase = true)) {
+                    throw GradleException("OpenCV static library mismatch for $abi/$relative: expected=$expected actual=$actual")
+                }
+            }
+        }
+    }
+}
+
+tasks.configureEach {
+    if (name == "preBuild" || name.startsWith("configureCMake") || name.startsWith("buildCMake")) {
+        dependsOn(extractOpenCvSdk)
+    }
+}
 
 val argsMap = mapOf(
     // @Hint by LZX284 (https://github.com/LZX284) on Sep 30, 2023.
@@ -62,6 +149,7 @@ val argsMap = mapOf(
     "ANDROID_PLATFORM" to "android-${versionMap["MIN_SDK"]}",
     "ANDROID_STL" to "c++_shared",
     "ANDROID_ARM_NEON" to "TRUE",
+    "OPENCV_SDK_NATIVE_DIR" to openCvSdkDirectory.get().dir("sdk/native").asFile.invariantSeparatorsPath,
 )
 
 // @Hint by SuperMonster003 on Nov 12, 2023.
@@ -76,7 +164,7 @@ utils.configureLibraryLifecycleHooks(
     project,
     nameMap["PROJECT"] as String,
     listOf("OPENCV", "NDK", "CMAKE").map { "${nameMap[it]}: ${versionMap[it]}" },
-    libsToDeploy,
+    emptyList(),
     "isCleanupPaddleOcr",
     listOf(".cxx")
 )
@@ -133,7 +221,7 @@ android {
             //  ! https://github.com/PaddlePaddle/Paddle-Lite/blob/develop/lite/tools/build_android.sh#L7
             //  ! https://github.com/PaddlePaddle/Paddle-Lite/issues/80
             // noinspection ChromeOsAbiSupport
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+            abiFilters += paddleOcrAbis
             @Suppress("DEPRECATION")
             ldLibs?.add("jnigraphics")
         }
@@ -162,7 +250,6 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("include" to listOf("*.jar"), "dir" to "libs")))
-    implementation(project(mapOf("path" to ":libs:org-opencv-${versionMap["OPENCV"]}".replace(".", "_"))))
     implementation(libs.core.ktx)
     implementation(libs.preference.ktx)
 }

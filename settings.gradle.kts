@@ -32,7 +32,6 @@ includeBuild("build-logic")
 
 private val libs = listOf(
     "paddleocr",
-    "org-opencv-4_8_0",
 )
 
 include(

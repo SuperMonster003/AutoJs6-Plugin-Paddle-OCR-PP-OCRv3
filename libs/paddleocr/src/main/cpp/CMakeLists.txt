@@ -14,9 +14,17 @@ get_filename_component(MODULE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../.." ABSOLUTE)
 set(PaddleLite_DIR "${MODULE_DIR}/PaddleLite")
 include_directories(${PaddleLite_DIR}/cxx/include)
 
-set(OpenCV_DIR "${MODULE_DIR}/src/sdk/native/jni")
+# Private OpenCV: static libraries of the official OpenCV Android SDK (TBB backend, no OpenMP).
+# The version script below keeps every OpenCV symbol local to libNative.so.
+if (NOT DEFINED OPENCV_SDK_NATIVE_DIR)
+    message(FATAL_ERROR "OPENCV_SDK_NATIVE_DIR must point to sdk/native of the verified OpenCV Android SDK")
+endif ()
+set(OpenCV_DIR "${OPENCV_SDK_NATIVE_DIR}/jni")
 message(STATUS "opencv dir: ${OpenCV_DIR}")
-find_package(OpenCV REQUIRED)
+find_package(OpenCV REQUIRED COMPONENTS core imgproc imgcodecs)
+if (OpenCV_SHARED)
+    message(FATAL_ERROR "libNative.so must link the static OpenCV libraries")
+endif ()
 message(STATUS "OpenCV libraries: ${OpenCV_LIBS}")
 include_directories(${OpenCV_INCLUDE_DIRS})
 aux_source_directory(. SOURCES)
@@ -93,4 +101,11 @@ add_custom_command(
         ${PaddleLite_DIR}/cxx/libs/${ANDROID_ABI}/libpaddle_light_api_shared.so
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libpaddle_light_api_shared.so)
 
-target_link_options(Native PRIVATE -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384)
+# Export only the JNI methods; OpenCV, TBB and the other static archives stay local.
+set(NATIVE_EXPORTS "${CMAKE_CURRENT_LIST_DIR}/Native.map")
+set_target_properties(Native PROPERTIES LINK_DEPENDS "${NATIVE_EXPORTS}")
+target_link_options(Native PRIVATE
+        -Wl,--exclude-libs,ALL
+        "-Wl,--version-script=${NATIVE_EXPORTS}"
+        -Wl,-z,max-page-size=16384
+        -Wl,-z,common-page-size=16384)

@@ -4,6 +4,15 @@
 
 ******
 
+# v1.0.6
+
+###### 2026/10/10
+
+* `Note` Les applications empaquetées qui utilisent cette version nécessitent AutoJs6 6.8.0 ou une version ultérieure comme hôte ; les hôtes plus anciens ne peuvent l'empaqueter qu'avec OpenCV
+* `Correction` Les erreurs natives lors du chargement du modèle ou de l'inférence arrêtaient le processus du plugin ; elles sont désormais renvoyées à l'hôte comme erreurs
+* `Amelioration` libNative.so n'exporte plus les symboles OpenCV et l'APK n'inclut plus libopencv_java4.so ; il est plus léger et les applications empaquetées peuvent l'utiliser avec une autre version d'OpenCV
+* `Dependance` Suppression de l'AAR OpenCV pour Android 4.8.0 ; seul le SDK Android OpenCV 4.8.0 lié statiquement subsiste, vérifié par SHA-256 au téléchargement
+
 # v1.0.5
 
 ###### 2026/10/05

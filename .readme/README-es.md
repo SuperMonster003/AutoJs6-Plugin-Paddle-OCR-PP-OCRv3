@@ -110,6 +110,15 @@ ocr.paddle()
 
 ******
 
+# v1.0.6
+
+###### 2026/10/10
+
+* `Nota` Las aplicaciones empaquetadas que usan esta versión necesitan AutoJs6 6.8.0 o posterior como host; los hosts anteriores solo pueden empaquetarla junto con OpenCV
+* `Correccion` Los fallos nativos durante la carga del modelo o la inferencia cerraban el proceso del plugin; ahora se devuelven al host como errores
+* `Mejora` libNative.so ya no exporta símbolos de OpenCV y el APK ya no incluye libopencv_java4.so, por lo que es más pequeño y las aplicaciones empaquetadas pueden usarlo junto con otra versión de OpenCV
+* `Dependencia` Eliminado el AAR de OpenCV para Android 4.8.0; solo queda el SDK de OpenCV para Android 4.8.0 enlazado estáticamente y verificado con SHA-256 al descargarse
+
 # v1.0.5
 
 ###### 2026/10/05
@@ -128,12 +137,6 @@ ocr.paddle()
 * `Correccion` Las fechas de versión mantienen un formato uniforme en inglés
 * `Mejora` Validación de las versiones, firmas y variantes completas de los APK antes de crear los archivos de descarga
 * `Mejora` Las imágenes admiten hasta 16777216 píxeles; los búferes de imagen sin procesar se limitan a 64 MiB
-
-# v1.0.3
-
-###### 2026/09/12
-
-* `Correccion` Paddle Lite fallaba (SIGSEGV) cuando la primera detección de texto de un proceso usaba una imagen baja como 1000 x 320; ahora el detector se precalienta una vez con una imagen en blanco de 960 x 960 antes de la primera detección real
 
 ##### Para mas historial de versiones, consulta
 
