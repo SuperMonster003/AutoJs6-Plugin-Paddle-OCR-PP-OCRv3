@@ -494,6 +494,7 @@ ocr.paddle(img, { useSlim: true });
 | Q21 - Q25 | 未使用 | 编号保留 | - |
 | Q26 | Node / Bun 的 ocr 结果是否也带 extras | (a) 暂不做 (推荐, 已先行; 矩阵 not-portable, 只有 Rhino 能读); (b) 现在做 (宿主 `toOcrResultsJson` 加字段含 `quad` 偏移, Node / Bun 声明, 矩阵与文档同步, 约 1-2 小时). 影响 P5 之后, 不阻塞发布. 来源 paddle-ocr-v3-p5-1 | 2026-10-30 已决 (b), 非推荐: 由 paddle-ocr-v3-q26 落实 |
 | Q27 | d.ts 与 Ace 本次加 `OcrResult.extras` 是否升版本号 | (a) 随下次发版一起升 (推荐, 已先行; 沿用 api-coverage "version unchanged" 惯例); (b) 现在升到 4.86.0 / 2.48.0 (约 30 分钟, 含 10 语言 changelog). 影响 d.ts 87fc1eb, Ace 2136195. 来源 paddle-ocr-v3-p5-1 | 2026-10-30 已决 (a), 已实施 |
+| Q28 | Node / Bun 的 ocr 是否补齐 Rhino 的其余识别选项. 桥此前只转发 engineId / engine / variant / profile (含 lang, model) / useRaw / imageQuality / imageFormat; Q26 (b) 为验收补了 `useOpenCL`. 仍未转发 `useSlim` (Rhino 缺省 true, Node / Bun 走契约缺省 false, 同一张图可能跑不同模型), `cpuThreadNum`, `detLongSize`, `scoreThreshold` (Rhino 缺省 -1, 桥为 0), `useCls`, `detLimitSideLen`, Rapid 的 `maxSideLen` / `boxScoreThresh`, 也没有 `mergeLine` (Q26 任务写的 "mergeLine 规则相同" 无从适用, 文档已写明 mergeLine 仅 Rhino) | (a) 保持现状 (推荐, 已实施; 不扩大本次范围, 零返工); (b) 补齐转发的 8 项, 不含 mergeLine (宿主 `buildOcrPluginOptions` 约 20 行, 两仓库 d.ts 与文档, Pad 复测, 约 1-2 小时; 缺省值向 Rhino 对齐会改变现有 Node / Bun 脚本的识别结果); (c) 8 项加 mergeLine (另需把 `OcrPaddle.mergeByLine` 改成不依赖 Rhino 对象, 约半天). 影响: 无条目阻塞. 来源 paddle-ocr-v3-q26 | 待维护者拍板 |
 
 ---
 
