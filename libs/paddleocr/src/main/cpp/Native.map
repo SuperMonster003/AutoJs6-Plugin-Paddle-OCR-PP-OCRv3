@@ -1,7 +1,0 @@
-/* The JNI methods are the only public symbols of libNative.so. */
-{
-  global:
-    Java_*;
-  local:
-    *;
-};

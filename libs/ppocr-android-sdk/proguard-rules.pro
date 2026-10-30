@@ -1,0 +1,2 @@
+-keep class io.github.supermonster003.autojs6.plugin.paddleocr.v3.sdk.** { *; }
+-keep class ai.onnxruntime.** { *; }

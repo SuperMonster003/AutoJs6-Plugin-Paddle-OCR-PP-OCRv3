@@ -23,15 +23,12 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention")
 }
 
-// Native dependency cleanup stays disabled unless explicitly configured.
-if (!gradle.extra.has("isCleanupPaddleOcr")) {
-    gradle.extra["isCleanupPaddleOcr"] = false
-}
-
 includeBuild("build-logic")
 
 private val libs = listOf(
-    "paddleocr",
+    "org-opencv-4_8_0",
+    "ppocr-android-sdk",
+    "ppocrv3-plugin-runtime",
 )
 
 include(
