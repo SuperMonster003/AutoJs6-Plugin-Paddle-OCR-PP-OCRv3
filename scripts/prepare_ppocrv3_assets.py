@@ -62,6 +62,13 @@ MODELS = {
     "chinese_cht_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/chinese_cht_PP-OCRv3_rec_infer.tar",
     "japan_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/japan_PP-OCRv3_rec_infer.tar",
     "korean_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/korean_PP-OCRv3_rec_infer.tar",
+    "latin_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/latin_PP-OCRv3_rec_infer.tar",
+    "arabic_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/arabic_PP-OCRv3_rec_infer.tar",
+    "cyrillic_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/cyrillic_PP-OCRv3_rec_infer.tar",
+    "devanagari_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/devanagari_PP-OCRv3_rec_infer.tar",
+    "te_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/te_PP-OCRv3_rec_infer.tar",
+    "ka_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/ka_PP-OCRv3_rec_infer.tar",
+    "ta_PP-OCRv3_rec": f"{PADDLEOCR_BOS_BASE}/PP-OCRv3/multilingual/ta_PP-OCRv3_rec_infer.tar",
     "ch_ppocr_mobile_v2.0_cls": f"{PADDLEOCR_BOS_BASE}/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_infer.tar",
 }
 
@@ -71,18 +78,33 @@ DICTS = {
     "chinese_cht_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/chinese_cht_dict.txt",
     "japan_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/japan_dict.txt",
     "korean_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/korean_dict.txt",
+    "latin_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/latin_dict.txt",
+    "arabic_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/arabic_dict.txt",
+    "cyrillic_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/cyrillic_dict.txt",
+    "devanagari_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/devanagari_dict.txt",
+    "te_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/te_dict.txt",
+    "ka_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/ka_dict.txt",
+    "ta_dict": f"{PADDLEOCR_RAW_BASE}/ppocr/utils/dict/ta_dict.txt",
 }
 
 CLS_MODEL = "ch_ppocr_mobile_v2.0_cls"
 DET_MODELS = {name for name in MODELS if name.endswith("_det")}
 
 # Keys are the Gradle flavor names; modelProfile is the capability value the plugin declares.
+# reverse marks a recognizer that reads right-to-left scripts in visual order, see write_inference_yml.
 PROFILES = {
     "zh": {"modelProfile": "zh", "det": "ch_PP-OCRv3_det", "rec": "ch_PP-OCRv3_rec", "dict": "ppocr_keys_v1"},
     "en": {"modelProfile": "en", "det": "en_PP-OCRv3_det", "rec": "en_PP-OCRv3_rec", "dict": "en_dict"},
     "zhHant": {"modelProfile": "zh-hant", "det": "Multilingual_PP-OCRv3_det", "rec": "chinese_cht_PP-OCRv3_rec", "dict": "chinese_cht_dict"},
     "ja": {"modelProfile": "ja", "det": "Multilingual_PP-OCRv3_det", "rec": "japan_PP-OCRv3_rec", "dict": "japan_dict"},
     "ko": {"modelProfile": "ko", "det": "Multilingual_PP-OCRv3_det", "rec": "korean_PP-OCRv3_rec", "dict": "korean_dict"},
+    "latin": {"modelProfile": "latin", "det": "Multilingual_PP-OCRv3_det", "rec": "latin_PP-OCRv3_rec", "dict": "latin_dict"},
+    "arabic": {"modelProfile": "arabic", "det": "Multilingual_PP-OCRv3_det", "rec": "arabic_PP-OCRv3_rec", "dict": "arabic_dict", "reverse": True},
+    "cyrillic": {"modelProfile": "cyrillic", "det": "Multilingual_PP-OCRv3_det", "rec": "cyrillic_PP-OCRv3_rec", "dict": "cyrillic_dict"},
+    "devanagari": {"modelProfile": "devanagari", "det": "Multilingual_PP-OCRv3_det", "rec": "devanagari_PP-OCRv3_rec", "dict": "devanagari_dict"},
+    "te": {"modelProfile": "te", "det": "Multilingual_PP-OCRv3_det", "rec": "te_PP-OCRv3_rec", "dict": "te_dict"},
+    "ka": {"modelProfile": "ka", "det": "Multilingual_PP-OCRv3_det", "rec": "ka_PP-OCRv3_rec", "dict": "ka_dict"},
+    "ta": {"modelProfile": "ta", "det": "Multilingual_PP-OCRv3_det", "rec": "ta_PP-OCRv3_rec", "dict": "ta_dict"},
 }
 
 ASSET_DIR = "models/ppocrv3"
@@ -323,12 +345,13 @@ def yaml_quote(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
 
 
-def write_inference_yml(chars: list[str], target: Path) -> None:
-    lines = [
-        "PostProcess:",
-        "  name: CTCLabelDecode",
-        "  character_dict:",
-    ]
+def write_inference_yml(chars: list[str], target: Path, reverse: bool = False) -> None:
+    lines = ["PostProcess:", "  name: CTCLabelDecode"]
+    if reverse:
+        # PaddleOCR's decoder turns the output of its arabic dictionary back into logical order
+        # (BaseRecLabelDecode.pred_reverse); this key carries that switch to the Android decoder.
+        lines.append("  reverse: true")
+    lines.append("  character_dict:")
     lines.extend(f"    - {yaml_quote(ch)}" for ch in chars)
     target.write_text("\n".join(lines) + "\n", "utf-8", newline="\n")
 
@@ -364,7 +387,7 @@ def prepare_profile(
     install(models[spec["det"]]["fp32"], base / "det" / "inference.onnx")
     install(models[spec["rec"]]["fp32"], base / "rec" / "inference.onnx")
     install(models[CLS_MODEL]["fp32"], base / "cls" / "inference.onnx")
-    write_inference_yml(chars, base / "rec" / "inference.yml")
+    write_inference_yml(chars, base / "rec" / "inference.yml", spec.get("reverse", False))
 
     slim_root = flavor_assets / SLIM_ASSET_DIR
     if slim:
@@ -403,8 +426,9 @@ def build_provenance(previous: dict, recorder: Recorder, converter: Converter, s
     return {
         "project": "PaddlePaddle/PaddleOCR",
         "scope": (
-            "PP-OCRv3 mobile detection and recognition models of the zh, en, zh-hant, ja and ko "
-            "flavors, the PP-OCR mobile v2.0 text line orientation classifier and the recognition "
+            "PP-OCRv3 mobile detection and recognition models of the zh, en, zh-hant, ja, ko, latin, "
+            "arabic, cyrillic, devanagari, te, ka and ta flavors, the PP-OCR mobile v2.0 text line "
+            "orientation classifier and the recognition "
             "dictionaries, converted from the official Paddle inference archives to ONNX and "
             "bundled as Android assets under app/src/<flavor>/assets/models/."
         ),
@@ -437,6 +461,7 @@ def build_provenance(previous: dict, recorder: Recorder, converter: Converter, s
             "paddle2onnx raises --opset_version 7 to the lowest opset the graph needs; the actual opset of every model is recorded below.",
             "Det inputs with a fixed height and width (Multilingual_PP-OCRv3_det declares 960 x 960) are made dynamic by ppocrv3_onnx_tools.py dynamic-hw.",
             "Every det Conv has fewer weights than the quantization threshold, so the slim det is the fp32 det with BatchNormalization folded.",
+            "The arabic inference.yml sets reverse: true, the switch PaddleOCR derives from the arabic dictionary path to return logical order.",
         ],
         **merged,
     }

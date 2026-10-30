@@ -8,7 +8,14 @@
     "io.github.supermonster003.autojs6.plugin.paddleocr.v3.en",
     "io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant",
     "io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja",
-    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko"
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.latin",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.arabic",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.cyrillic",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.devanagari",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.te",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.ka",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.ta"
   ],
   "launcher": false,
   "params": {

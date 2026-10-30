@@ -4,6 +4,14 @@
 
 ******
 
+# v2.1.0
+
+###### 2026/10/31
+
+* `Nota` Los modelos de devanagari, telugu, canarés y tamil leen bien las palabras sencillas, pero las letras conjuntas y los signos vocálicos escritos antes de la consonante pueden salir mal o desordenados
+* `Nuevo` Se agregan siete paquetes de idioma: idiomas de alfabeto latino (`latin`), árabe (`arabic`), idiomas de alfabeto cirílico (`cyrillic`), devanagari (`devanagari`), telugu (`te`), canarés (`ka`) y tamil (`ta`). Cada uno es un APK independiente, puede instalarse junto con los demás paquetes y se elige con el `profile` indicado entre paréntesis
+* `Nuevo` El paquete de árabe devuelve el texto en orden de lectura y ordena las palabras de cada línea de derecha a izquierda
+
 # v2.0.0
 
 ###### 2026/10/30

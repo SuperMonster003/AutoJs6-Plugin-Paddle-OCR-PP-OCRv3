@@ -102,7 +102,7 @@ public class OcrEndToEndTest {
             }
             String run = sample + (useSlim ? " slim" : " fp32") + (useOpenCL ? "/nnapi" : "/cpu") + (useCls ? " cls" : "");
             assertFalse(run + ": nothing recognized", results.isEmpty());
-            List<String> lines = lines(results);
+            List<String> lines = lines(results, "arabic".equals(profile));
             JSONArray expected = entry.getJSONArray("lines");
             double lowest = 1;
             for (int index = 0; index < expected.length(); index++) {
@@ -123,8 +123,8 @@ public class OcrEndToEndTest {
         }
     }
 
-    /** Joins boxes that share a row, so word-level detection (ko) still yields whole lines. */
-    private static List<String> lines(List<OcrResult> results) {
+    /** Joins boxes that share a row, so word-level detection (Multilingual det) still yields whole lines. */
+    private static List<String> lines(List<OcrResult> results, boolean rightToLeft) {
         List<OcrResult> sorted = new ArrayList<>(results);
         sorted.sort(Comparator.comparingInt(result -> result.bounds.centerY()));
         List<List<OcrResult>> rows = new ArrayList<>();
@@ -140,7 +140,7 @@ public class OcrEndToEndTest {
         }
         List<String> lines = new ArrayList<>();
         for (List<OcrResult> row : rows) {
-            row.sort(Comparator.comparingInt(result -> result.bounds.left));
+            row.sort(Comparator.comparingInt(result -> rightToLeft ? -result.bounds.right : result.bounds.left));
             StringBuilder text = new StringBuilder();
             for (OcrResult result : row) text.append(result.text == null ? "" : result.text);
             lines.add(text.toString().replace(" ", ""));

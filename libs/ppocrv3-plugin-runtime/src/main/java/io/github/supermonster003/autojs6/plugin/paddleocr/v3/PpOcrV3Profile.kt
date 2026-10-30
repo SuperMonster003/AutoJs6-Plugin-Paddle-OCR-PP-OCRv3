@@ -13,7 +13,14 @@ enum class PpOcrV3Profile(
     EN(value = "en", language = "en", recommendedForMobileDefault = false),
     ZH_HANT(value = "zh-hant", language = "zh-Hant", recommendedForMobileDefault = false),
     JA(value = "ja", language = "ja", recommendedForMobileDefault = false),
-    KO(value = "ko", language = "ko", recommendedForMobileDefault = false);
+    KO(value = "ko", language = "ko", recommendedForMobileDefault = false),
+    LATIN(value = "latin", language = "Latn", recommendedForMobileDefault = false),
+    ARABIC(value = "arabic", language = "Arab", recommendedForMobileDefault = false),
+    CYRILLIC(value = "cyrillic", language = "Cyrl", recommendedForMobileDefault = false),
+    DEVANAGARI(value = "devanagari", language = "Deva", recommendedForMobileDefault = false),
+    TE(value = "te", language = "te", recommendedForMobileDefault = false),
+    KA(value = "ka", language = "kn", recommendedForMobileDefault = false),
+    TA(value = "ta", language = "ta", recommendedForMobileDefault = false);
 
     companion object {
         fun fromValue(value: String): PpOcrV3Profile {

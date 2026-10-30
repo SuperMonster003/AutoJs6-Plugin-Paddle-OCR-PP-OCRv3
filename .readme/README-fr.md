@@ -41,7 +41,7 @@ Le README.md actuel prend en charge les langues suivantes:
 
 ******
 
-Le plugin AutoJs6 Paddle OCR (PP-OCRv3) ajoute une reconnaissance optique de caractères basée sur PaddleOCR PP-OCRv3 et ONNX Runtime, avec prise en charge des captures d'écran, des fichiers image locaux et des entrées image brutes. Depuis la version 2.0.0, il fonctionne avec ONNX Runtime au lieu de Paddle Lite, prend en charge quatre ABI et se décline en cinq paquets de langue.
+Le plugin AutoJs6 Paddle OCR (PP-OCRv3) ajoute une reconnaissance optique de caractères basée sur PaddleOCR PP-OCRv3 et ONNX Runtime, avec prise en charge des captures d'écran, des fichiers image locaux et des entrées image brutes. Depuis la version 2.0.0, il fonctionne avec ONNX Runtime au lieu de Paddle Lite, prend en charge quatre ABI et se décline en douze paquets de langue.
 
 > **Édition Paddle Lite**: l'implémentation Paddle Lite de 1.0.x est désormais publiée séparément sous le nom [Paddle OCR (PP-OCRv3 Paddle Lite)](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite) (ID de plugin `paddle-ocr-pp-ocrv3-paddle-lite`, variante `v3-paddle-lite`). Elle ne prend en charge que arm64-v8a et armeabi-v7a et peut être installée à côté de ce plugin.
 
@@ -51,7 +51,8 @@ Le plugin AutoJs6 Paddle OCR (PP-OCRv3) ajoute une reconnaissance optique de car
 
 ******
 
-- Se décline en cinq paquets de langue (chinois simplifié, anglais, chinois traditionnel, japonais et coréen). Le paquet chinois simplifié conserve le nom de paquet et l'ID de plugin `paddle-ocr-pp-ocrv3` de 1.0.x; tous les paquets utilisent le moteur `paddle-ocr` et la variante `v3`.
+- Se décline en douze paquets de langue (chinois simplifié, anglais, chinois traditionnel, japonais, coréen, langues en alphabet latin, arabe, langues en alphabet cyrillique, devanagari, télougou, kannada et tamoul). Le paquet chinois simplifié conserve le nom de paquet et l'ID de plugin `paddle-ocr-pp-ocrv3` de 1.0.x; tous les paquets utilisent le moteur `paddle-ocr` et la variante `v3`.
+- Le paquet arabe renvoie le texte dans l'ordre de lecture et classe les mots de chaque ligne de droite à gauche.
 - Prend en charge `ocr.paddle.recognizeText(image)` et `ocr.paddle.detect(image)` dans AutoJs6.
 - Prend en charge les captures d'ecran, les fichiers image locaux et les entrees image brutes ARGB_8888.
 - Les informations du plugin, les instructions, le README et le CHANGELOG prennent en charge espagnol/francais/russe/arabe/japonais/coreen/anglais/chinois simplifie/chinois traditionnel de Hong Kong/chinois traditionnel de Taiwan.
@@ -77,8 +78,15 @@ Chaque paquet de langue est un APK distinct, et plusieurs peuvent être install�
 | Chinois traditionnel | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zh-hant-<ABI>-*.apk` |
 | Japonais | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
 | Coréen | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
+| Langues en alphabet latin | `latin` | `paddle-ocr-pp-ocrv3-latin` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.latin` | `*-latin-<ABI>-*.apk` |
+| Arabe | `arabic` | `paddle-ocr-pp-ocrv3-arabic` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.arabic` | `*-arabic-<ABI>-*.apk` |
+| Langues en alphabet cyrillique | `cyrillic` | `paddle-ocr-pp-ocrv3-cyrillic` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.cyrillic` | `*-cyrillic-<ABI>-*.apk` |
+| Devanagari | `devanagari` | `paddle-ocr-pp-ocrv3-devanagari` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.devanagari` | `*-devanagari-<ABI>-*.apk` |
+| Télougou | `te` | `paddle-ocr-pp-ocrv3-te` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.te` | `*-te-<ABI>-*.apk` |
+| Kannada | `ka` | `paddle-ocr-pp-ocrv3-ka` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ka` | `*-ka-<ABI>-*.apk` |
+| Tamoul | `ta` | `paddle-ocr-pp-ocrv3-ta` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ta` | `*-ta-<ABI>-*.apk` |
 
-Choisissez le paquet selon le texte à lire. Le paquet chinois simplifié lit aussi les lettres latines et les chiffres et constitue la recommandation par défaut. Pour du texte en chinois traditionnel, en japonais ou en coréen, installez le paquet correspondant; pour du texte uniquement en anglais, vous pouvez aussi installer le paquet anglais. Chaque paquet existe en cinq APK selon l'ABI (`arm64-v8a` pour la plupart des téléphones, `armeabi-v7a`, `x86_64`, `x86` et `universal`, qui contient les quatre ABI et est le plus volumineux). N'installez que celui qui correspond à votre appareil.
+Choisissez le paquet selon le texte à lire. Le paquet chinois simplifié lit aussi les lettres latines et les chiffres et constitue la recommandation par défaut. Pour du texte en chinois traditionnel, en japonais, en coréen, en arabe, en télougou, en kannada ou en tamoul, installez le paquet correspondant; le paquet latin sert à des langues comme le français, l'allemand et l'espagnol, le paquet cyrillique à des langues comme le russe et l'ukrainien, et le paquet devanagari à des langues comme le hindi et le marathi; pour du texte uniquement en anglais, vous pouvez aussi installer le paquet anglais. Les modèles devanagari, télougou, kannada et tamoul lisent bien les mots simples, mais les ligatures et les signes vocaliques écrits avant la consonne peuvent être mal lus ou dans le désordre. Chaque paquet existe en cinq APK selon l'ABI (`arm64-v8a` pour la plupart des téléphones, `armeabi-v7a`, `x86_64`, `x86` et `universal`, qui contient les quatre ABI et est le plus volumineux). N'installez que celui qui correspond à votre appareil.
 
 ******
 
@@ -152,6 +160,14 @@ ocr.paddle()
 
 ******
 
+# v2.1.0
+
+###### 2026/10/31
+
+* `Note` Les modèles devanagari, télougou, kannada et tamoul lisent bien les mots simples, mais les ligatures et les signes vocaliques écrits avant la consonne peuvent être mal lus ou dans le désordre
+* `Ajout` Ajout de sept paquets de langue: langues en alphabet latin (`latin`), arabe (`arabic`), langues en alphabet cyrillique (`cyrillic`), devanagari (`devanagari`), télougou (`te`), kannada (`ka`) et tamoul (`ta`). Chacun est un APK distinct, peut être installé à côté des autres paquets et se choisit avec le `profile` indiqué entre parenthèses
+* `Ajout` Le paquet arabe renvoie le texte dans l'ordre de lecture et classe les mots de chaque ligne de droite à gauche
+
 # v2.0.0
 
 ###### 2026/10/30
@@ -177,14 +193,6 @@ ocr.paddle()
 * `Amelioration` libNative.so n'exporte plus les symboles OpenCV et l'APK n'inclut plus libopencv_java4.so ; il est plus léger et les applications empaquetées peuvent l'utiliser avec une autre version d'OpenCV
 * `Dependance` Suppression de l'AAR OpenCV pour Android 4.8.0 ; seul le SDK Android OpenCV 4.8.0 lié statiquement subsiste, vérifié par SHA-256 au téléchargement
 
-# v1.0.5
-
-###### 2026/10/05
-
-* `Correction` Avertissements de lecture SDK XML v4 avec AGP 9.1 et contrôles d'alignement natif des APK déclenchés par erreur lors de l'assemblage des tests unitaires JVM, avec les plugins de compilation partagés 1.8.3
-* `Amelioration` compileSdk et targetSdk passent à 37 (Android 17) ; le comportement du plugin ne dépend pas de la nouvelle cible
-* `Amelioration` Les icônes des informations d'application Android utilisent les illustrations et les fonds clairs et sombres d'Icon Studio, en conservant les images transparentes du centre de plugins et les choix du lanceur
-
 ##### Pour plus d'historique des versions, voir
 
 * [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/app/src/main/assets/doc/CHANGELOG-fr.md)
@@ -206,7 +214,7 @@ Compilation Release:
 .\gradlew.bat :app:appendDigestToReleasedFiles
 ```
 
-Les paramètres de compilation viennent de `version.properties`, avec le SDK minimum actuel 24 et le SDK cible 37. Les modèles ONNX ne sont pas versionnés: avant de compiler, exécutez `prepare_ppocrv3_assets.py` comme ci-dessus. Il télécharge les modèles officiels de PaddleOCR, les convertit en ONNX et les vérifie avec `libs/ppocr-android-sdk/models.provenance.json`; `--profile` accepte `zh`, `en`, `zhHant`, `ja`, `ko` ou `all`. Les composants tiers et leurs licences sont listés dans [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
+Les paramètres de compilation viennent de `version.properties`, avec le SDK minimum actuel 24 et le SDK cible 37. Les modèles ONNX ne sont pas versionnés: avant de compiler, exécutez `prepare_ppocrv3_assets.py` comme ci-dessus. Il télécharge les modèles officiels de PaddleOCR, les convertit en ONNX et les vérifie avec `libs/ppocr-android-sdk/models.provenance.json`; `--profile` accepte `zh`, `en`, `zhHant`, `ja`, `ko`, `latin`, `arabic`, `cyrillic`, `devanagari`, `te`, `ka`, `ta` ou `all`. Les composants tiers et leurs licences sont listés dans [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
 
 ******
 

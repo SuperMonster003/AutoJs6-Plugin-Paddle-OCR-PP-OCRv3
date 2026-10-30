@@ -118,6 +118,83 @@ android {
             resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3-ko")
             resValue("string", "model_profile", "ko")
         }
+
+        create("latin") {
+            dimension = "language"
+            applicationIdSuffix = ".latin"
+            buildConfigField("String", "PLUGIN_ID", "\"paddle-ocr-pp-ocrv3-latin\"")
+            buildConfigField("String", "APP_NAME", "\"Paddle OCR (PP-OCRv3 Latin)\"")
+            buildConfigField("String", "MODEL_PROFILE", "\"latin\"")
+            resValue("string", "app_name", "Paddle OCR (PP-OCRv3 Latin)")
+            resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3-latin")
+            resValue("string", "model_profile", "latin")
+        }
+
+        create("arabic") {
+            dimension = "language"
+            applicationIdSuffix = ".arabic"
+            buildConfigField("String", "PLUGIN_ID", "\"paddle-ocr-pp-ocrv3-arabic\"")
+            buildConfigField("String", "APP_NAME", "\"Paddle OCR (PP-OCRv3 Arabic)\"")
+            buildConfigField("String", "MODEL_PROFILE", "\"arabic\"")
+            resValue("string", "app_name", "Paddle OCR (PP-OCRv3 Arabic)")
+            resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3-arabic")
+            resValue("string", "model_profile", "arabic")
+        }
+
+        create("cyrillic") {
+            dimension = "language"
+            applicationIdSuffix = ".cyrillic"
+            buildConfigField("String", "PLUGIN_ID", "\"paddle-ocr-pp-ocrv3-cyrillic\"")
+            buildConfigField("String", "APP_NAME", "\"Paddle OCR (PP-OCRv3 Cyrillic)\"")
+            buildConfigField("String", "MODEL_PROFILE", "\"cyrillic\"")
+            resValue("string", "app_name", "Paddle OCR (PP-OCRv3 Cyrillic)")
+            resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3-cyrillic")
+            resValue("string", "model_profile", "cyrillic")
+        }
+
+        create("devanagari") {
+            dimension = "language"
+            applicationIdSuffix = ".devanagari"
+            buildConfigField("String", "PLUGIN_ID", "\"paddle-ocr-pp-ocrv3-devanagari\"")
+            buildConfigField("String", "APP_NAME", "\"Paddle OCR (PP-OCRv3 Devanagari)\"")
+            buildConfigField("String", "MODEL_PROFILE", "\"devanagari\"")
+            resValue("string", "app_name", "Paddle OCR (PP-OCRv3 Devanagari)")
+            resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3-devanagari")
+            resValue("string", "model_profile", "devanagari")
+        }
+
+        create("te") {
+            dimension = "language"
+            applicationIdSuffix = ".te"
+            buildConfigField("String", "PLUGIN_ID", "\"paddle-ocr-pp-ocrv3-te\"")
+            buildConfigField("String", "APP_NAME", "\"Paddle OCR (PP-OCRv3 TE)\"")
+            buildConfigField("String", "MODEL_PROFILE", "\"te\"")
+            resValue("string", "app_name", "Paddle OCR (PP-OCRv3 TE)")
+            resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3-te")
+            resValue("string", "model_profile", "te")
+        }
+
+        create("ka") {
+            dimension = "language"
+            applicationIdSuffix = ".ka"
+            buildConfigField("String", "PLUGIN_ID", "\"paddle-ocr-pp-ocrv3-ka\"")
+            buildConfigField("String", "APP_NAME", "\"Paddle OCR (PP-OCRv3 KA)\"")
+            buildConfigField("String", "MODEL_PROFILE", "\"ka\"")
+            resValue("string", "app_name", "Paddle OCR (PP-OCRv3 KA)")
+            resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3-ka")
+            resValue("string", "model_profile", "ka")
+        }
+
+        create("ta") {
+            dimension = "language"
+            applicationIdSuffix = ".ta"
+            buildConfigField("String", "PLUGIN_ID", "\"paddle-ocr-pp-ocrv3-ta\"")
+            buildConfigField("String", "APP_NAME", "\"Paddle OCR (PP-OCRv3 TA)\"")
+            buildConfigField("String", "MODEL_PROFILE", "\"ta\"")
+            resValue("string", "app_name", "Paddle OCR (PP-OCRv3 TA)")
+            resValue("string", "plugin_id", "paddle-ocr-pp-ocrv3-ta")
+            resValue("string", "model_profile", "ta")
+        }
     }
 
     lint {

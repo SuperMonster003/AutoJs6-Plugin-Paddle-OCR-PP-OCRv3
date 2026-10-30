@@ -1,6 +1,6 @@
 {
   "project": "PaddlePaddle/PaddleOCR",
-  "scope": "PP-OCRv3 mobile detection and recognition models of the zh, en, zh-hant, ja and ko flavors, the PP-OCR mobile v2.0 text line orientation classifier and the recognition dictionaries, converted from the official Paddle inference archives to ONNX and bundled as Android assets under app/src/<flavor>/assets/models/.",
+  "scope": "PP-OCRv3 mobile detection and recognition models of the zh, en, zh-hant, ja, ko, latin, arabic, cyrillic, devanagari, te, ka and ta flavors, the PP-OCR mobile v2.0 text line orientation classifier and the recognition dictionaries, converted from the official Paddle inference archives to ONNX and bundled as Android assets under app/src/<flavor>/assets/models/.",
   "license": "Apache-2.0",
   "license_url": "https://github.com/PaddlePaddle/PaddleOCR/blob/v2.7.0/LICENSE",
   "dictionary_ref": "v2.7.0",
@@ -36,7 +36,8 @@
     "The classifier is shared by every flavor and is not quantized.",
     "paddle2onnx raises --opset_version 7 to the lowest opset the graph needs; the actual opset of every model is recorded below.",
     "Det inputs with a fixed height and width (Multilingual_PP-OCRv3_det declares 960 x 960) are made dynamic by ppocrv3_onnx_tools.py dynamic-hw.",
-    "Every det Conv has fewer weights than the quantization threshold, so the slim det is the fp32 det with BatchNormalization folded."
+    "Every det Conv has fewer weights than the quantization threshold, so the slim det is the fp32 det with BatchNormalization folded.",
+    "The arabic inference.yml sets reverse: true, the switch PaddleOCR derives from the arabic dictionary path to return logical order."
   ],
   "sources": {
     "Multilingual_PP-OCRv3_det": {
@@ -122,6 +123,90 @@
       "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/v2.7.0/ppocr/utils/ppocr_keys_v1.txt",
       "bytes": 26249,
       "sha256": "28b2362ad4ab2dc38769aa72feb535e3a9ddb3fd2a7585a05920e6393b1dc7f7"
+    },
+    "arabic_PP-OCRv3_rec": {
+      "file": "arabic_PP-OCRv3_rec_infer.tar",
+      "url": "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/arabic_PP-OCRv3_rec_infer.tar",
+      "bytes": 10332160,
+      "sha256": "1c81296d44430f9a58ef90b8166b089fd8ba56065757a480e6f9681b7a9d2c14"
+    },
+    "cyrillic_PP-OCRv3_rec": {
+      "file": "cyrillic_PP-OCRv3_rec_infer.tar",
+      "url": "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/cyrillic_PP-OCRv3_rec_infer.tar",
+      "bytes": 9984000,
+      "sha256": "7d5a229fb9717729396bb5c548412e43309d701467ee635c5f35b0e011a2ed14"
+    },
+    "devanagari_PP-OCRv3_rec": {
+      "file": "devanagari_PP-OCRv3_rec_infer.tar",
+      "url": "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/devanagari_PP-OCRv3_rec_infer.tar",
+      "bytes": 10280960,
+      "sha256": "b042ac3e65687839b292022678a78970593c65f22cfa9aa31f3fb7cf405b86b8"
+    },
+    "ka_PP-OCRv3_rec": {
+      "file": "ka_PP-OCRv3_rec_infer.tar",
+      "url": "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/ka_PP-OCRv3_rec_infer.tar",
+      "bytes": 10280960,
+      "sha256": "76f5b42f789cf97116e272d2042b3b901950f235afcf73abb66b6ec285db6958"
+    },
+    "latin_PP-OCRv3_rec": {
+      "file": "latin_PP-OCRv3_rec_infer.tar",
+      "url": "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/latin_PP-OCRv3_rec_infer.tar",
+      "bytes": 10168320,
+      "sha256": "b44b2bc42e98b2d9eac4253e1c4619b88ca06618e04701984db7736ae0578876"
+    },
+    "ta_PP-OCRv3_rec": {
+      "file": "ta_PP-OCRv3_rec_infer.tar",
+      "url": "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/ta_PP-OCRv3_rec_infer.tar",
+      "bytes": 10024960,
+      "sha256": "260fdda008c82db98e607b7a4d46717598ee70f47d8c23ecf558ae8efafe582b"
+    },
+    "te_PP-OCRv3_rec": {
+      "file": "te_PP-OCRv3_rec_infer.tar",
+      "url": "https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/te_PP-OCRv3_rec_infer.tar",
+      "bytes": 10024960,
+      "sha256": "c5c2f1afbc6b8e7d11f69df1dee1619e128f519df6dfc67e24aff74916c7d8f1"
+    },
+    "arabic_dict": {
+      "file": "arabic_dict.txt",
+      "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/v2.7.0/ppocr/utils/dict/arabic_dict.txt",
+      "bytes": 405,
+      "sha256": "637c27c88512c22089bef927b34ada08f748dc132ac70facd68d8202384c2726"
+    },
+    "cyrillic_dict": {
+      "file": "cyrillic_dict.txt",
+      "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/v2.7.0/ppocr/utils/dict/cyrillic_dict.txt",
+      "bytes": 410,
+      "sha256": "369a82c6c8c479784a5d726448b83b1eafb5fef0a4129a5eaa3929625ddcd132"
+    },
+    "devanagari_dict": {
+      "file": "devanagari_dict.txt",
+      "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/v2.7.0/ppocr/utils/dict/devanagari_dict.txt",
+      "bytes": 508,
+      "sha256": "b5f1be6d8bbff1a19fb96c5d4ca96a423380234bb7d2ce0e07b5838adb4d18ea"
+    },
+    "ka_dict": {
+      "file": "ka_dict.txt",
+      "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/v2.7.0/ppocr/utils/dict/ka_dict.txt",
+      "bytes": 452,
+      "sha256": "fad3f765943275eec2134a6fbc9b52785426641104d4e7db3a159dc73f341dde"
+    },
+    "latin_dict": {
+      "file": "latin_dict.txt",
+      "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/v2.7.0/ppocr/utils/dict/latin_dict.txt",
+      "bytes": 468,
+      "sha256": "8e6d4e3629788c35c31f7e530287d6147b549bb7a265bd6708bb281134429e2c"
+    },
+    "ta_dict": {
+      "file": "ta_dict.txt",
+      "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/v2.7.0/ppocr/utils/dict/ta_dict.txt",
+      "bytes": 352,
+      "sha256": "e93e694814afd9ff1e918b6f4bb4267fb4c65a9344ee5d7464f9135b90c0a270"
+    },
+    "te_dict": {
+      "file": "te_dict.txt",
+      "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/v2.7.0/ppocr/utils/dict/te_dict.txt",
+      "bytes": 429,
+      "sha256": "ee9946a60d7701977474e89883694a4ca20eaa3868a23334bf7940dcd008f0f9"
     }
   },
   "models": {
@@ -589,6 +674,384 @@
           }
         ]
       }
+    },
+    "arabic_PP-OCRv3_rec": {
+      "fp32": {
+        "bytes": 8971465,
+        "sha256": "1f0157a88c40164c626c494c43d1c86c0dd2c10b898f84a7c22c8a584e8d8380",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              163
+            ]
+          }
+        ]
+      },
+      "slim": {
+        "bytes": 4349264,
+        "sha256": "25c1cc0f16bc4abbe40c711f2705a1b1e6298da634440b975004c3cb6323449c",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              163
+            ]
+          }
+        ]
+      }
+    },
+    "cyrillic_PP-OCRv3_rec": {
+      "fp32": {
+        "bytes": 8971985,
+        "sha256": "d35f33a21833d065edf5720731b3b87579fb5901f0e2bef36fe0fd22ad16de0b",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              165
+            ]
+          }
+        ]
+      },
+      "slim": {
+        "bytes": 4349401,
+        "sha256": "0547043a588ba85053c7abd735cb951b0bd81fbc9f996732e490d02367dc4991",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              165
+            ]
+          }
+        ]
+      }
+    },
+    "devanagari_PP-OCRv3_rec": {
+      "fp32": {
+        "bytes": 8973025,
+        "sha256": "2ebf08bcc349590e080c3a55fb13d9686b7867037c4b57a929c691859958ab87",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              169
+            ]
+          }
+        ]
+      },
+      "slim": {
+        "bytes": 4349685,
+        "sha256": "22b4bac223f54d5fa5df63a2304dfce0aec0fa0728cc2788b037fef866ef29dd",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              169
+            ]
+          }
+        ]
+      }
+    },
+    "ka_PP-OCRv3_rec": {
+      "fp32": {
+        "bytes": 8969385,
+        "sha256": "b4da70365d5f6e9a98e931d648af86c859adb2f047458c6726c6814d1ee09981",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              155
+            ]
+          }
+        ]
+      },
+      "slim": {
+        "bytes": 4348733,
+        "sha256": "cacb74c244d766948e42d7047b267f6d8019f4cde359ae476078a9e395c68ed5",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              155
+            ]
+          }
+        ]
+      }
+    },
+    "latin_PP-OCRv3_rec": {
+      "fp32": {
+        "bytes": 8977705,
+        "sha256": "e986ac261c2fe3118879d76d68a00186540911838543da9a0a6e7dd096b965b2",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              187
+            ]
+          }
+        ]
+      },
+      "slim": {
+        "bytes": 4350899,
+        "sha256": "a38465853c2a2947f89eadda04ec9377d1305ec37c4136e3f24d5a76338f2bb8",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              187
+            ]
+          }
+        ]
+      }
+    },
+    "ta_PP-OCRv3_rec": {
+      "fp32": {
+        "bytes": 8962885,
+        "sha256": "3aa8eec8227ee1787fce213fe22ddabc677c1ad89c6c6b9a703b35487729d01b",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              130
+            ]
+          }
+        ]
+      },
+      "slim": {
+        "bytes": 4347020,
+        "sha256": "c106dd73018535cb74b189ee4648a8cf68a989083a9119b15454097e79d3e19c",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              130
+            ]
+          }
+        ]
+      }
+    },
+    "te_PP-OCRv3_rec": {
+      "fp32": {
+        "bytes": 8968865,
+        "sha256": "04b2eb4b74fc5f31936a25a7fe2d29b0d9a59160bc1d5ae4b4d9edf3042c3068",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              153
+            ]
+          }
+        ]
+      },
+      "slim": {
+        "bytes": 4348584,
+        "sha256": "7e5f1434d4114b15e847dc2bd61d953b2f080c680a39239bbe718a642a12a6a0",
+        "opset": 14,
+        "inputs": [
+          {
+            "name": "x",
+            "shape": [
+              "DynamicDimension.0",
+              3,
+              48,
+              "DynamicDimension.1"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "name": "softmax_2.tmp_0",
+            "shape": [
+              "DynamicDimension.2",
+              "DynamicDimension.3",
+              153
+            ]
+          }
+        ]
+      }
     }
   },
   "dictionaries": {
@@ -616,6 +1079,41 @@
       "source": "ppocr_keys_v1",
       "entries": 6623,
       "characterDict": 6624
+    },
+    "arabic_dict": {
+      "source": "arabic_dict",
+      "entries": 161,
+      "characterDict": 162
+    },
+    "cyrillic_dict": {
+      "source": "cyrillic_dict",
+      "entries": 163,
+      "characterDict": 164
+    },
+    "devanagari_dict": {
+      "source": "devanagari_dict",
+      "entries": 167,
+      "characterDict": 168
+    },
+    "ka_dict": {
+      "source": "ka_dict",
+      "entries": 153,
+      "characterDict": 154
+    },
+    "latin_dict": {
+      "source": "latin_dict",
+      "entries": 185,
+      "characterDict": 186
+    },
+    "ta_dict": {
+      "source": "ta_dict",
+      "entries": 128,
+      "characterDict": 129
+    },
+    "te_dict": {
+      "source": "te_dict",
+      "entries": 151,
+      "characterDict": 152
     }
   },
   "profiles": {
@@ -781,6 +1279,237 @@
         "models/ppocrv3-slim/rec/inference.onnx": {
           "bytes": 4589103,
           "sha256": "41861b7100edd931f1f2a26667cbb9040a6df5f133df40d7f2f9ed9873330cca"
+        }
+      }
+    },
+    "latin": {
+      "modelProfile": "latin",
+      "det": "Multilingual_PP-OCRv3_det",
+      "rec": "latin_PP-OCRv3_rec",
+      "cls": "ch_ppocr_mobile_v2.0_cls",
+      "dict": "latin_dict",
+      "assets": {
+        "models/ppocrv3/cls/inference.onnx": {
+          "bytes": 571423,
+          "sha256": "e263cad54b85e6dd6ce5aed66154785682a221be2216300ce321e58a9d022296"
+        },
+        "models/ppocrv3/det/inference.onnx": {
+          "bytes": 2421719,
+          "sha256": "3e6c067b1ef90aa330547f7ec012771c93435784e16704c46ff469876020d0a9"
+        },
+        "models/ppocrv3/rec/inference.onnx": {
+          "bytes": 8977705,
+          "sha256": "e986ac261c2fe3118879d76d68a00186540911838543da9a0a6e7dd096b965b2"
+        },
+        "models/ppocrv3/rec/inference.yml": {
+          "bytes": 2013,
+          "sha256": "25a39219802b794b53a0358106bcf4ca971f820fe498d9af3bfc8d8fcc65c1ce"
+        },
+        "models/ppocrv3-slim/det/inference.onnx": {
+          "bytes": 2343090,
+          "sha256": "d1c65f25596cf07ef85db125f8b8835f0b6db978f4b6b2d05d1da858a0760ec9"
+        },
+        "models/ppocrv3-slim/rec/inference.onnx": {
+          "bytes": 4350899,
+          "sha256": "a38465853c2a2947f89eadda04ec9377d1305ec37c4136e3f24d5a76338f2bb8"
+        }
+      }
+    },
+    "arabic": {
+      "modelProfile": "arabic",
+      "det": "Multilingual_PP-OCRv3_det",
+      "rec": "arabic_PP-OCRv3_rec",
+      "cls": "ch_ppocr_mobile_v2.0_cls",
+      "dict": "arabic_dict",
+      "assets": {
+        "models/ppocrv3/cls/inference.onnx": {
+          "bytes": 571423,
+          "sha256": "e263cad54b85e6dd6ce5aed66154785682a221be2216300ce321e58a9d022296"
+        },
+        "models/ppocrv3/det/inference.onnx": {
+          "bytes": 2421719,
+          "sha256": "3e6c067b1ef90aa330547f7ec012771c93435784e16704c46ff469876020d0a9"
+        },
+        "models/ppocrv3/rec/inference.onnx": {
+          "bytes": 8971465,
+          "sha256": "1f0157a88c40164c626c494c43d1c86c0dd2c10b898f84a7c22c8a584e8d8380"
+        },
+        "models/ppocrv3/rec/inference.yml": {
+          "bytes": 1774,
+          "sha256": "f12137e9b4688b39eb1b94d2f40a3fb0f75674866a4886e87607883b1e165cdd"
+        },
+        "models/ppocrv3-slim/det/inference.onnx": {
+          "bytes": 2343090,
+          "sha256": "d1c65f25596cf07ef85db125f8b8835f0b6db978f4b6b2d05d1da858a0760ec9"
+        },
+        "models/ppocrv3-slim/rec/inference.onnx": {
+          "bytes": 4349264,
+          "sha256": "25c1cc0f16bc4abbe40c711f2705a1b1e6298da634440b975004c3cb6323449c"
+        }
+      }
+    },
+    "cyrillic": {
+      "modelProfile": "cyrillic",
+      "det": "Multilingual_PP-OCRv3_det",
+      "rec": "cyrillic_PP-OCRv3_rec",
+      "cls": "ch_ppocr_mobile_v2.0_cls",
+      "dict": "cyrillic_dict",
+      "assets": {
+        "models/ppocrv3/cls/inference.onnx": {
+          "bytes": 571423,
+          "sha256": "e263cad54b85e6dd6ce5aed66154785682a221be2216300ce321e58a9d022296"
+        },
+        "models/ppocrv3/det/inference.onnx": {
+          "bytes": 2421719,
+          "sha256": "3e6c067b1ef90aa330547f7ec012771c93435784e16704c46ff469876020d0a9"
+        },
+        "models/ppocrv3/rec/inference.onnx": {
+          "bytes": 8971985,
+          "sha256": "d35f33a21833d065edf5720731b3b87579fb5901f0e2bef36fe0fd22ad16de0b"
+        },
+        "models/ppocrv3/rec/inference.yml": {
+          "bytes": 1779,
+          "sha256": "5ca9fd61087ad6c373bae9dfbad6331b15f53980b6e364f05c7ee70b43b45a0c"
+        },
+        "models/ppocrv3-slim/det/inference.onnx": {
+          "bytes": 2343090,
+          "sha256": "d1c65f25596cf07ef85db125f8b8835f0b6db978f4b6b2d05d1da858a0760ec9"
+        },
+        "models/ppocrv3-slim/rec/inference.onnx": {
+          "bytes": 4349401,
+          "sha256": "0547043a588ba85053c7abd735cb951b0bd81fbc9f996732e490d02367dc4991"
+        }
+      }
+    },
+    "devanagari": {
+      "modelProfile": "devanagari",
+      "det": "Multilingual_PP-OCRv3_det",
+      "rec": "devanagari_PP-OCRv3_rec",
+      "cls": "ch_ppocr_mobile_v2.0_cls",
+      "dict": "devanagari_dict",
+      "assets": {
+        "models/ppocrv3/cls/inference.onnx": {
+          "bytes": 571423,
+          "sha256": "e263cad54b85e6dd6ce5aed66154785682a221be2216300ce321e58a9d022296"
+        },
+        "models/ppocrv3/det/inference.onnx": {
+          "bytes": 2421719,
+          "sha256": "3e6c067b1ef90aa330547f7ec012771c93435784e16704c46ff469876020d0a9"
+        },
+        "models/ppocrv3/rec/inference.onnx": {
+          "bytes": 8973025,
+          "sha256": "2ebf08bcc349590e080c3a55fb13d9686b7867037c4b57a929c691859958ab87"
+        },
+        "models/ppocrv3/rec/inference.yml": {
+          "bytes": 1909,
+          "sha256": "86b1687b1e26b7472f08d992fa9f9e21232c4e33a02126c182d4442ebcd7ca5f"
+        },
+        "models/ppocrv3-slim/det/inference.onnx": {
+          "bytes": 2343090,
+          "sha256": "d1c65f25596cf07ef85db125f8b8835f0b6db978f4b6b2d05d1da858a0760ec9"
+        },
+        "models/ppocrv3-slim/rec/inference.onnx": {
+          "bytes": 4349685,
+          "sha256": "22b4bac223f54d5fa5df63a2304dfce0aec0fa0728cc2788b037fef866ef29dd"
+        }
+      }
+    },
+    "te": {
+      "modelProfile": "te",
+      "det": "Multilingual_PP-OCRv3_det",
+      "rec": "te_PP-OCRv3_rec",
+      "cls": "ch_ppocr_mobile_v2.0_cls",
+      "dict": "te_dict",
+      "assets": {
+        "models/ppocrv3/cls/inference.onnx": {
+          "bytes": 571423,
+          "sha256": "e263cad54b85e6dd6ce5aed66154785682a221be2216300ce321e58a9d022296"
+        },
+        "models/ppocrv3/det/inference.onnx": {
+          "bytes": 2421719,
+          "sha256": "3e6c067b1ef90aa330547f7ec012771c93435784e16704c46ff469876020d0a9"
+        },
+        "models/ppocrv3/rec/inference.onnx": {
+          "bytes": 8968865,
+          "sha256": "04b2eb4b74fc5f31936a25a7fe2d29b0d9a59160bc1d5ae4b4d9edf3042c3068"
+        },
+        "models/ppocrv3/rec/inference.yml": {
+          "bytes": 1702,
+          "sha256": "587d3c5543aee8d7f92b8ff5bfa64fe195455dd087526cd7c11844555cd43161"
+        },
+        "models/ppocrv3-slim/det/inference.onnx": {
+          "bytes": 2343090,
+          "sha256": "d1c65f25596cf07ef85db125f8b8835f0b6db978f4b6b2d05d1da858a0760ec9"
+        },
+        "models/ppocrv3-slim/rec/inference.onnx": {
+          "bytes": 4348584,
+          "sha256": "7e5f1434d4114b15e847dc2bd61d953b2f080c680a39239bbe718a642a12a6a0"
+        }
+      }
+    },
+    "ka": {
+      "modelProfile": "ka",
+      "det": "Multilingual_PP-OCRv3_det",
+      "rec": "ka_PP-OCRv3_rec",
+      "cls": "ch_ppocr_mobile_v2.0_cls",
+      "dict": "ka_dict",
+      "assets": {
+        "models/ppocrv3/cls/inference.onnx": {
+          "bytes": 571423,
+          "sha256": "e263cad54b85e6dd6ce5aed66154785682a221be2216300ce321e58a9d022296"
+        },
+        "models/ppocrv3/det/inference.onnx": {
+          "bytes": 2421719,
+          "sha256": "3e6c067b1ef90aa330547f7ec012771c93435784e16704c46ff469876020d0a9"
+        },
+        "models/ppocrv3/rec/inference.onnx": {
+          "bytes": 8969385,
+          "sha256": "b4da70365d5f6e9a98e931d648af86c859adb2f047458c6726c6814d1ee09981"
+        },
+        "models/ppocrv3/rec/inference.yml": {
+          "bytes": 1741,
+          "sha256": "76e3fe7cecaac9b63b74aefde699164f0a4794bf78df1cd1d4b73b7345f1d289"
+        },
+        "models/ppocrv3-slim/det/inference.onnx": {
+          "bytes": 2343090,
+          "sha256": "d1c65f25596cf07ef85db125f8b8835f0b6db978f4b6b2d05d1da858a0760ec9"
+        },
+        "models/ppocrv3-slim/rec/inference.onnx": {
+          "bytes": 4348733,
+          "sha256": "cacb74c244d766948e42d7047b267f6d8019f4cde359ae476078a9e395c68ed5"
+        }
+      }
+    },
+    "ta": {
+      "modelProfile": "ta",
+      "det": "Multilingual_PP-OCRv3_det",
+      "rec": "ta_PP-OCRv3_rec",
+      "cls": "ch_ppocr_mobile_v2.0_cls",
+      "dict": "ta_dict",
+      "assets": {
+        "models/ppocrv3/cls/inference.onnx": {
+          "bytes": 571423,
+          "sha256": "e263cad54b85e6dd6ce5aed66154785682a221be2216300ce321e58a9d022296"
+        },
+        "models/ppocrv3/det/inference.onnx": {
+          "bytes": 2421719,
+          "sha256": "3e6c067b1ef90aa330547f7ec012771c93435784e16704c46ff469876020d0a9"
+        },
+        "models/ppocrv3/rec/inference.onnx": {
+          "bytes": 8962885,
+          "sha256": "3aa8eec8227ee1787fce213fe22ddabc677c1ad89c6c6b9a703b35487729d01b"
+        },
+        "models/ppocrv3/rec/inference.yml": {
+          "bytes": 1441,
+          "sha256": "b35df57354e9cb1d429515f4e476295a8acf208d5e33f7fca8220335ef81ecd6"
+        },
+        "models/ppocrv3-slim/det/inference.onnx": {
+          "bytes": 2343090,
+          "sha256": "d1c65f25596cf07ef85db125f8b8835f0b6db978f4b6b2d05d1da858a0760ec9"
+        },
+        "models/ppocrv3-slim/rec/inference.onnx": {
+          "bytes": 4347020,
+          "sha256": "c106dd73018535cb74b189ee4648a8cf68a989083a9119b15454097e79d3e19c"
         }
       }
     }

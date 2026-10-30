@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="plugin_description">Plugin Paddle OCR (PP-OCRv3) de reconnaissance de texte sur ONNX Runtime, avec des paquets de langue chinois simplifié, anglais, chinois traditionnel, japonais et coréen</string>
+    <string name="plugin_description">Plugin Paddle OCR (PP-OCRv3) de reconnaissance de texte sur ONNX Runtime, avec 12 paquets de langue: chinois simplifié, anglais, chinois traditionnel, japonais, coréen, alphabet latin, arabe, alphabet cyrillique, devanagari, télougou, kannada et tamoul</string>
 </resources>

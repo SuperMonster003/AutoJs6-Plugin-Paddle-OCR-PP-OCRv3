@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="plugin_description">ONNX Runtime 기반 Paddle OCR (PP-OCRv3) 텍스트 인식 플러그인, 중국어 간체, 영어, 중국어 번체, 일본어, 한국어 언어 패키지 제공</string>
+    <string name="plugin_description">ONNX Runtime 기반 Paddle OCR (PP-OCRv3) 텍스트 인식 플러그인, 중국어 간체, 영어, 중국어 번체, 일본어, 한국어, 라틴 문자, 아랍어, 키릴 문자, 데바나가리 문자, 텔루구어, 칸나다어, 타밀어의 12 개 언어 패키지 제공</string>
 </resources>

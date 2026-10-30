@@ -41,7 +41,7 @@ Current README.md supports the following languages:
 
 ******
 
-The AutoJs6 Paddle OCR (PP-OCRv3) plugin adds optical character recognition powered by PaddleOCR PP-OCRv3 and ONNX Runtime, with support for screenshots, local image files, and raw image input. Since 2.0.0 it runs on ONNX Runtime instead of Paddle Lite, supports four ABIs, and comes as five language packages.
+The AutoJs6 Paddle OCR (PP-OCRv3) plugin adds optical character recognition powered by PaddleOCR PP-OCRv3 and ONNX Runtime, with support for screenshots, local image files, and raw image input. Since 2.0.0 it runs on ONNX Runtime instead of Paddle Lite, supports four ABIs, and comes as twelve language packages.
 
 > **Paddle Lite edition**: the Paddle Lite implementation of 1.0.x is now published separately as [Paddle OCR (PP-OCRv3 Paddle Lite)](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite) (plugin ID `paddle-ocr-pp-ocrv3-paddle-lite`, variant `v3-paddle-lite`). It supports only arm64-v8a and armeabi-v7a and can be installed alongside this plugin.
 
@@ -51,7 +51,8 @@ The AutoJs6 Paddle OCR (PP-OCRv3) plugin adds optical character recognition powe
 
 ******
 
-- Comes as five language packages: Simplified Chinese, English, Traditional Chinese, Japanese, and Korean. The Simplified Chinese package keeps the 1.0.x package name and plugin ID `paddle-ocr-pp-ocrv3`; every package uses engine `paddle-ocr` and variant `v3`.
+- Comes as twelve language packages: Simplified Chinese, English, Traditional Chinese, Japanese, Korean, Latin-alphabet languages, Arabic, Cyrillic-alphabet languages, Devanagari, Telugu, Kannada, and Tamil. The Simplified Chinese package keeps the 1.0.x package name and plugin ID `paddle-ocr-pp-ocrv3`; every package uses engine `paddle-ocr` and variant `v3`.
+- The Arabic package returns text in reading order and lists the words of each line from right to left.
 - Supports `ocr.paddle.recognizeText(image)` and `ocr.paddle.detect(image)` in AutoJs6.
 - Supports screenshots, local image files, and raw ARGB_8888 image input.
 - Plugin information, instructions, README, and CHANGELOG support Spanish/French/Russian/Arabic/Japanese/Korean/English/Simplified Chinese/Hong Kong Traditional Chinese/Taiwan Traditional Chinese.
@@ -77,8 +78,15 @@ Each language package is a separate APK, and several can be installed at the sam
 | Traditional Chinese | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zh-hant-<ABI>-*.apk` |
 | Japanese | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
 | Korean | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
+| Latin-alphabet languages | `latin` | `paddle-ocr-pp-ocrv3-latin` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.latin` | `*-latin-<ABI>-*.apk` |
+| Arabic | `arabic` | `paddle-ocr-pp-ocrv3-arabic` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.arabic` | `*-arabic-<ABI>-*.apk` |
+| Cyrillic-alphabet languages | `cyrillic` | `paddle-ocr-pp-ocrv3-cyrillic` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.cyrillic` | `*-cyrillic-<ABI>-*.apk` |
+| Devanagari | `devanagari` | `paddle-ocr-pp-ocrv3-devanagari` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.devanagari` | `*-devanagari-<ABI>-*.apk` |
+| Telugu | `te` | `paddle-ocr-pp-ocrv3-te` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.te` | `*-te-<ABI>-*.apk` |
+| Kannada | `ka` | `paddle-ocr-pp-ocrv3-ka` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ka` | `*-ka-<ABI>-*.apk` |
+| Tamil | `ta` | `paddle-ocr-pp-ocrv3-ta` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ta` | `*-ta-<ABI>-*.apk` |
 
-Pick the package for the text you want to read: the Simplified Chinese package also reads English letters and digits and is the default recommendation; for Traditional Chinese, Japanese, or Korean text, install the matching package; for English-only text you can also install the English package. Each package comes as five APKs by ABI: `arm64-v8a` (most phones), `armeabi-v7a`, `x86_64`, `x86`, and `universal` (all four ABIs, the largest). Install only the one that matches your device.
+Pick the package for the text you want to read: the Simplified Chinese package also reads English letters and digits and is the default recommendation; for Traditional Chinese, Japanese, Korean, Arabic, Telugu, Kannada, or Tamil text, install the matching package; the Latin package covers languages such as French, German, and Spanish, the Cyrillic package covers languages such as Russian and Ukrainian, and the Devanagari package covers languages such as Hindi and Marathi; for English-only text you can also install the English package. The Devanagari, Telugu, Kannada, and Tamil models read simple words well, but conjunct letters and vowel signs written before a consonant may be wrong or out of order. Each package comes as five APKs by ABI: `arm64-v8a` (most phones), `armeabi-v7a`, `x86_64`, `x86`, and `universal` (all four ABIs, the largest). Install only the one that matches your device.
 
 ******
 
@@ -152,6 +160,14 @@ ocr.paddle()
 
 ******
 
+# v2.1.0
+
+###### 2026/10/31
+
+* `Hint` The Devanagari, Telugu, Kannada, and Tamil models read simple words well, but conjunct letters and vowel signs written before a consonant may be wrong or out of order
+* `Feature` Add seven language packages: Latin-alphabet languages (`latin`), Arabic (`arabic`), Cyrillic-alphabet languages (`cyrillic`), Devanagari (`devanagari`), Telugu (`te`), Kannada (`ka`), and Tamil (`ta`). Each is a separate APK, can be installed alongside the other packages, and is chosen with the `profile` in parentheses
+* `Feature` The Arabic package returns text in reading order and lists the words of each line from right to left
+
 # v2.0.0
 
 ###### 2026/10/30
@@ -177,14 +193,6 @@ ocr.paddle()
 * `Improvement` libNative.so no longer exports OpenCV symbols and the APK no longer ships libopencv_java4.so, so it is smaller and packaged apps can use it alongside another OpenCV version
 * `Dependency` Remove the OpenCV Android AAR 4.8.0; only the statically linked OpenCV Android SDK 4.8.0 remains, verified by SHA-256 when downloaded
 
-# v1.0.5
-
-###### 2026/10/05
-
-* `Fix` SDK XML v4 parsing warnings with AGP 9.1 and APK native alignment checks incorrectly triggered by JVM unit-test assembly tasks, using shared build plugins 1.8.3
-* `Improvement` Raise compileSdk and targetSdk to 37 (Android 17); the plugin's behavior does not depend on the new target
-* `Improvement` Android App info icons share Icon Studio artwork and light/dark backgrounds while preserving transparent Plugin Center artwork and existing launcher choices
-
 ##### For more release history, see
 
 * [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/app/src/main/assets/doc/CHANGELOG-en.md)
@@ -206,7 +214,7 @@ Release build:
 .\gradlew.bat :app:appendDigestToReleasedFiles
 ```
 
-Build parameters come from `version.properties`, with current min SDK 24 and target SDK 37. ONNX models are not committed: before building, run `prepare_ppocrv3_assets.py` as shown above. It downloads the official PaddleOCR models, converts them to ONNX, and checks them against `libs/ppocr-android-sdk/models.provenance.json`; `--profile` accepts `zh`, `en`, `zhHant`, `ja`, `ko`, or `all`. Third-party components and licenses are listed in [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
+Build parameters come from `version.properties`, with current min SDK 24 and target SDK 37. ONNX models are not committed: before building, run `prepare_ppocrv3_assets.py` as shown above. It downloads the official PaddleOCR models, converts them to ONNX, and checks them against `libs/ppocr-android-sdk/models.provenance.json`; `--profile` accepts `zh`, `en`, `zhHant`, `ja`, `ko`, `latin`, `arabic`, `cyrillic`, `devanagari`, `te`, `ka`, `ta`, or `all`. Third-party components and licenses are listed in [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
 
 ******
 

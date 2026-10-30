@@ -49,6 +49,13 @@ FLAVORS = {
     'zhHant': ('.zhhant', '-zh-hant', 'Paddle OCR (PP-OCRv3 ZH-Hant)', 'zh-hant'),
     'ja': ('.ja', '-ja', 'Paddle OCR (PP-OCRv3 JA)', 'ja'),
     'ko': ('.ko', '-ko', 'Paddle OCR (PP-OCRv3 KO)', 'ko'),
+    'latin': ('.latin', '-latin', 'Paddle OCR (PP-OCRv3 Latin)', 'latin'),
+    'arabic': ('.arabic', '-arabic', 'Paddle OCR (PP-OCRv3 Arabic)', 'arabic'),
+    'cyrillic': ('.cyrillic', '-cyrillic', 'Paddle OCR (PP-OCRv3 Cyrillic)', 'cyrillic'),
+    'devanagari': ('.devanagari', '-devanagari', 'Paddle OCR (PP-OCRv3 Devanagari)', 'devanagari'),
+    'te': ('.te', '-te', 'Paddle OCR (PP-OCRv3 TE)', 'te'),
+    'ka': ('.ka', '-ka', 'Paddle OCR (PP-OCRv3 KA)', 'ka'),
+    'ta': ('.ta', '-ta', 'Paddle OCR (PP-OCRv3 TA)', 'ta'),
 }
 LITE_PACKAGE = BASE_PACKAGE + '.paddlelite'
 LITE_PLUGIN_ID = 'paddle-ocr-pp-ocrv3-paddle-lite'
@@ -119,8 +126,8 @@ new java.io.File(out + '.part').renameTo(new java.io.File(out));
 def line_similarity(expected, texts):
     """Best-match similarity of each expected line, spaces ignored.
 
-    The ko detector boxes words rather than lines, so up to 4 consecutive recognized texts joined
-    together also count as a candidate.
+    The Multilingual detector boxes words rather than lines, so up to 4 consecutive recognized texts
+    joined together also count as a candidate.
     """
     parts = [text.replace(' ', '') for text in texts]
     recognized = [''.join(parts[start:start + size]) for size in range(1, 5) for start in range(len(parts) - size + 1)]

@@ -175,7 +175,7 @@ app/src/main/java/org/autojs/autojs/core/plugin/center/wizard/PluginInstallWizar
 docs/dev/opencv-ocr-runtime-decoupling-roadmap.md (D10 加注), .changelog (zh-Hans), 单元测试 (ApkBuilderLibPolicyTest 等)
 ```
 
-### 5.4 身份派生表 (本仓库 5 个 flavor)
+### 5.4 身份派生表 (本仓库 12 个 flavor, 后 7 个为 2.1.0 新增)
 
 | flavor | `applicationIdSuffix` | 包名 | `plugin_id` | `app_name` | `modelProfile` | `recommendedForMobileDefault` | det 来源 | rec 来源 | 字典 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -184,8 +184,15 @@ docs/dev/opencv-ocr-runtime-decoupling-roadmap.md (D10 加注), .changelog (zh-H
 | `zhHant` | `.zhhant` | `...paddleocr.v3.zhhant` | `paddle-ocr-pp-ocrv3-zh-hant` | `Paddle OCR (PP-OCRv3 ZH-Hant)` | `zh-hant` | `false` | Multilingual_PP-OCRv3_det | chinese_cht_PP-OCRv3_rec | chinese_cht_dict |
 | `ja` | `.ja` | `...paddleocr.v3.ja` | `paddle-ocr-pp-ocrv3-ja` | `Paddle OCR (PP-OCRv3 JA)` | `ja` | `false` | Multilingual_PP-OCRv3_det | japan_PP-OCRv3_rec | japan_dict |
 | `ko` | `.ko` | `...paddleocr.v3.ko` | `paddle-ocr-pp-ocrv3-ko` | `Paddle OCR (PP-OCRv3 KO)` | `ko` | `false` | Multilingual_PP-OCRv3_det | korean_PP-OCRv3_rec | korean_dict |
+| `latin` | `.latin` | `...paddleocr.v3.latin` | `paddle-ocr-pp-ocrv3-latin` | `Paddle OCR (PP-OCRv3 Latin)` | `latin` | `false` | Multilingual_PP-OCRv3_det | latin_PP-OCRv3_rec | latin_dict |
+| `arabic` | `.arabic` | `...paddleocr.v3.arabic` | `paddle-ocr-pp-ocrv3-arabic` | `Paddle OCR (PP-OCRv3 Arabic)` | `arabic` | `false` | Multilingual_PP-OCRv3_det | arabic_PP-OCRv3_rec | arabic_dict (`inference.yml` 带 `reverse: true`) |
+| `cyrillic` | `.cyrillic` | `...paddleocr.v3.cyrillic` | `paddle-ocr-pp-ocrv3-cyrillic` | `Paddle OCR (PP-OCRv3 Cyrillic)` | `cyrillic` | `false` | Multilingual_PP-OCRv3_det | cyrillic_PP-OCRv3_rec | cyrillic_dict |
+| `devanagari` | `.devanagari` | `...paddleocr.v3.devanagari` | `paddle-ocr-pp-ocrv3-devanagari` | `Paddle OCR (PP-OCRv3 Devanagari)` | `devanagari` | `false` | Multilingual_PP-OCRv3_det | devanagari_PP-OCRv3_rec | devanagari_dict |
+| `te` | `.te` | `...paddleocr.v3.te` | `paddle-ocr-pp-ocrv3-te` | `Paddle OCR (PP-OCRv3 TE)` | `te` | `false` | Multilingual_PP-OCRv3_det | te_PP-OCRv3_rec | te_dict |
+| `ka` | `.ka` | `...paddleocr.v3.ka` | `paddle-ocr-pp-ocrv3-ka` | `Paddle OCR (PP-OCRv3 KA)` | `ka` | `false` | Multilingual_PP-OCRv3_det | ka_PP-OCRv3_rec | ka_dict |
+| `ta` | `.ta` | `...paddleocr.v3.ta` | `paddle-ocr-pp-ocrv3-ta` | `Paddle OCR (PP-OCRv3 TA)` | `ta` | `false` | Multilingual_PP-OCRv3_det | ta_PP-OCRv3_rec | ta_dict |
 
-共同项: `plugin_engine = paddle-ocr`, `plugin_variant = v3`, `plugin_author = SuperMonster003`, cls 共用 `ch_ppocr_mobile_v2.0_cls`, versionCode 相同 (D35), 向导只登记 `zh` (D30), `.icons/recipe.json` `packages` 列出 5 个包名, 索引清单 5 份.
+共同项: `plugin_engine = paddle-ocr`, `plugin_variant = v3`, `plugin_author = SuperMonster003`, cls 共用 `ch_ppocr_mobile_v2.0_cls`, versionCode 相同 (D35), 向导只登记 `zh` (D30), `.icons/recipe.json` `packages` 列出 12 个包名, 索引清单 12 份 (2.1.0 起).
 
 ### 5.5 身份派生表 (旧插件)
 
@@ -501,6 +508,9 @@ ocr.paddle(img, { useSlim: true });
 | Q27 | d.ts 与 Ace 本次加 `OcrResult.extras` 是否升版本号 | (a) 随下次发版一起升 (推荐, 已先行; 沿用 api-coverage "version unchanged" 惯例); (b) 现在升到 4.86.0 / 2.48.0 (约 30 分钟, 含 10 语言 changelog). 影响 d.ts 87fc1eb, Ace 2136195. 来源 paddle-ocr-v3-p5-1 | 2026-10-30 已决 (a), 已实施 |
 | Q28 | Node / Bun 的 ocr 是否补齐 Rhino 的其余识别选项. 桥此前只转发 engineId / engine / variant / profile (含 lang, model) / useRaw / imageQuality / imageFormat; Q26 (b) 为验收补了 `useOpenCL`. 仍未转发 `useSlim` (Rhino 缺省 true, Node / Bun 走契约缺省 false, 同一张图可能跑不同模型), `cpuThreadNum`, `detLongSize`, `scoreThreshold` (Rhino 缺省 -1, 桥为 0), `useCls`, `detLimitSideLen`, Rapid 的 `maxSideLen` / `boxScoreThresh`, 也没有 `mergeLine` (Q26 任务写的 "mergeLine 规则相同" 无从适用, 文档已写明 mergeLine 仅 Rhino) | (a) 保持现状 (推荐, 已实施; 不扩大本次范围, 零返工); (b) 补齐转发的 8 项, 不含 mergeLine (宿主 `buildOcrPluginOptions` 约 20 行, 两仓库 d.ts 与文档, Pad 复测, 约 1-2 小时; 缺省值向 Rhino 对齐会改变现有 Node / Bun 脚本的识别结果); (c) 8 项加 mergeLine (另需把 `OcrPaddle.mergeByLine` 改成不依赖 Rhino 对象, 约半天). 影响: 无条目阻塞. 来源 paddle-ocr-v3-q26 | 2026-10-30 已决 (c), 非推荐: 宿主 4eedcfc5e / 6e9b505c8, Node bb14d725, Bun b2c29df, 文档站 acf0888 / d18800d; 选项解析在 `OcrCallOptions`, 合并在 `OcrLineMerger`, Rhino 与桥共用 |
 | Q50 | `OcrLineMerger.merge` (即原 `OcrPaddle.mergeByLine`) 的排序比较不满足传递性: 同一行用 left 比, 不同行用 bottom 比, 片段上下错落时, 32 个片段及以上的 TimSort 可能抛 "Comparison method violates its general contract!". Rhino 一直如此, Q28 (c) 之后 Node / Bun 的 mergeLine 也同样受影响. JVM 随机框实测 (40 - 400 个片段, 每组 20000 次, 行距 30 px, 行高 24 px): 抖动 6 px 0 次, 14 px 约 0.03%, 30 px (超过行距) 约 0.2% | (a) 保持现状 (推荐, 已先行): 抖动在行距一半以内未复现, 没有用户报告; (b) 排序抛异常时退回按 bottom, left 的全序, 其他情况结果不变 (约 5 行加 1 个单测, 30 分钟); (c) 改成先分行再排序的确定算法, 结果可能与现有 Rhino 不同 (约半天, 需重跑 device_check options). 影响 mergeLine 的三个运行时, 不阻塞 P6. 来源 paddle-ocr-v3-q28 | 待维护者拍板 |
+| Q60 | 宿主两处不认识 arabic 的从右到左 (P6.1 发现). 宿主内嵌引擎 `plugin-api/paddle-ocr-onnx-engine` 有自己的 `CTCDecoder` 与 `BoxSorter`, 没有 `reverse`, 所以 arabic 包打进 APK 后文字是镜像的; `OcrLineMerger` 按左边界合并, 脚本传 `mergeLine: true` 时同一行的词语顺序相反 (缺省 `mergeLine` 为 false, 不受影响) | (a) 宿主同步: 内嵌引擎读 `reverse`, 行合并在 arabic 插件结果上按右边界 (推荐, 约 1-2 小时, 含打包验证, 等 q28 与 api-coverage 释放 `ocr` 目录后做); (b) 只做内嵌引擎, 行合并在文档标注; (c) 不改, 文档写明 arabic 不支持打包与 `mergeLine`. 未先行, 插件侧不受影响. 影响 P3 / D21, 不影响 2.1.0 发布 | 维护者决定 |
+| Q61 | 天城文, 泰卢固文, 卡纳达文, 泰米尔文模型的精度局限 (P6.1 发现). 上游模型对连字与写在辅音前面的元音符号读得差: 桌面 6 句整行相似度平均 devanagari 0.87, ta 0.85, te 0.74, ka 0.70 (无连字的句子 0.9 - 1.0, 含连字的 0.45 - 0.7). 前置元音按视觉顺序输出 (`दुनिया` 读成 `दुिनया`, `உரை` 读成 `உைர`), 有时直接漏读 (`किताब` 读成 `कताब`). Multilingual det 给单词级框, 真机上还漏检过短词 (`हम सब एक हैं` 的 `हैं`) | (a) 保持上游输出, README 与 changelog 写明 (推荐, 已先行); (b) 加前置元音重排后处理 (约半天 + 语料验证; 漏读无法修复, 模型若偶尔输出逻辑顺序会被改错); (c) 2.1.0 不发这四个语种 (改回 8 个 flavor, 约 1 小时). 影响 P6.1. 样图选了无连字的句子, 只检验流水线, 不代表精度 | 2.1.0 发布前后均可; (b) 不影响 APK 兼容 |
+| Q62 | 文档站 `api/ocrOptionsType.md` 第 133 行与 d.ts / Ace / Offline Docs 的 `profile` 取值只列 5 个语种 | (a) 随下一张宿主或文档卡同步 7 个新值 (推荐, 未做); (b) 现在开小卡 (约 30 分钟, 四个仓库本地提交). 宿主匹配是字符串比较, 没有白名单, 功能不受影响 | 维护者决定 |
 
 ---
 

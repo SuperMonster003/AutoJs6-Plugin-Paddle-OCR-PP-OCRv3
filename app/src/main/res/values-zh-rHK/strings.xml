@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="plugin_description">百度飛槳 PP-OCRv3 光學字符識別插件, 基於 ONNX Runtime, 分簡體中文, 英文, 繁體中文, 日文, 韓文語種包</string>
+    <string name="plugin_description">百度飛槳 PP-OCRv3 光學字符識別插件, 基於 ONNX Runtime, 分簡體中文, 英文, 繁體中文, 日文, 韓文, 拉丁字母, 阿拉伯文, 西里爾字母, 天城文, 泰盧固文, 卡納達文, 泰米爾文 12 個語種包</string>
 </resources>

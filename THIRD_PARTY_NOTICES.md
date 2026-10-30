@@ -1,6 +1,7 @@
 # Third-party notices
 
-Each language package (zh, en, zhHant, ja, ko) bundles the components below.
+Each language package (zh, en, zhHant, ja, ko, latin, arabic, cyrillic,
+devanagari, te, ka, ta) bundles the components below.
 Version 2.0.0 replaced Paddle Lite with ONNX Runtime; the 1.0.x releases
 recorded Paddle Lite (Apache License 2.0) instead.
 

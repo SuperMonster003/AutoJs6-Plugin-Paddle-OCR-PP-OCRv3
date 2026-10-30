@@ -4,6 +4,14 @@
 
 ******
 
+# v2.1.0
+
+###### 2026/10/31
+
+* `Hint` The Devanagari, Telugu, Kannada, and Tamil models read simple words well, but conjunct letters and vowel signs written before a consonant may be wrong or out of order
+* `Feature` Add seven language packages: Latin-alphabet languages (`latin`), Arabic (`arabic`), Cyrillic-alphabet languages (`cyrillic`), Devanagari (`devanagari`), Telugu (`te`), Kannada (`ka`), and Tamil (`ta`). Each is a separate APK, can be installed alongside the other packages, and is chosen with the `profile` in parentheses
+* `Feature` The Arabic package returns text in reading order and lists the words of each line from right to left
+
 # v2.0.0
 
 ###### 2026/10/30

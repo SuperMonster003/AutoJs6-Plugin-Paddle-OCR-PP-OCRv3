@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="plugin_description">ملحق Paddle OCR (PP-OCRv3) للتعرف على النص يعمل على ONNX Runtime, مع حزم لغات للصينية المبسطة والإنجليزية والصينية التقليدية واليابانية والكورية</string>
+    <string name="plugin_description">ملحق ⁨Paddle OCR (PP-OCRv3)⁩ للتعرف على النص يعمل على ONNX Runtime, مع 12 حزمة لغات: الصينية المبسطة والإنجليزية والصينية التقليدية واليابانية والكورية والحروف اللاتينية والعربية والسيريلية والديفاناغارية والتيلوغوية والكانادية والتاميلية</string>
 </resources>

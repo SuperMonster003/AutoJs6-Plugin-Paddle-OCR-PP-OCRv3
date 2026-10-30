@@ -41,7 +41,7 @@
 
 ******
 
-AutoJs6 Paddle OCR (PP-OCRv3) 플러그인은 PaddleOCR PP-OCRv3 와 ONNX Runtime 기반 광학 문자 인식 기능을 AutoJs6 에 추가하며, 화면 캡처, 로컬 이미지 파일, 원시 이미지 입력을 지원합니다. 2.0.0 부터 추론 엔진을 Paddle Lite 에서 ONNX Runtime 으로 바꾸어 4 개 ABI 를 지원하며, 인식 언어별로 5 개 언어 패키지로 나뉩니다.
+AutoJs6 Paddle OCR (PP-OCRv3) 플러그인은 PaddleOCR PP-OCRv3 와 ONNX Runtime 기반 광학 문자 인식 기능을 AutoJs6 에 추가하며, 화면 캡처, 로컬 이미지 파일, 원시 이미지 입력을 지원합니다. 2.0.0 부터 추론 엔진을 Paddle Lite 에서 ONNX Runtime 으로 바꾸어 4 개 ABI 를 지원하며, 인식 언어별로 12 개 언어 패키지로 나뉩니다.
 
 > **Paddle Lite 버전**: 1.0.x 의 Paddle Lite 구현은 [Paddle OCR (PP-OCRv3 Paddle Lite)](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite) 로 이름을 바꾸어 별도로 배포됩니다 (플러그인 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 변형 `v3-paddle-lite`). arm64-v8a 와 armeabi-v7a 만 지원하며 이 플러그인과 함께 설치할 수 있습니다.
 
@@ -51,7 +51,8 @@ AutoJs6 Paddle OCR (PP-OCRv3) 플러그인은 PaddleOCR PP-OCRv3 와 ONNX Runtim
 
 ******
 
-- 중국어 간체, 영어, 중국어 번체, 일본어, 한국어의 5 개 언어 패키지를 제공합니다. 중국어 간체 패키지는 1.0.x 의 패키지 이름과 플러그인 ID `paddle-ocr-pp-ocrv3` 를 그대로 사용하며, 모든 패키지의 엔진은 `paddle-ocr`, 변형은 `v3` 입니다.
+- 중국어 간체, 영어, 중국어 번체, 일본어, 한국어, 라틴 문자 언어, 아랍어, 키릴 문자 언어, 데바나가리 문자, 텔루구어, 칸나다어, 타밀어의 12 개 언어 패키지를 제공합니다. 중국어 간체 패키지는 1.0.x 의 패키지 이름과 플러그인 ID `paddle-ocr-pp-ocrv3` 를 그대로 사용하며, 모든 패키지의 엔진은 `paddle-ocr`, 변형은 `v3` 입니다.
+- 아랍어 패키지는 텍스트를 읽는 순서로 돌려주고, 같은 줄의 단어를 오른쪽에서 왼쪽 순서로 나열합니다.
 - AutoJs6 의 `ocr.paddle.recognizeText(image)` 와 `ocr.paddle.detect(image)` 를 지원합니다.
 - 화면 캡처, 로컬 이미지 파일, 원시 ARGB_8888 이미지 입력을 지원합니다.
 - 플러그인 정보, 사용 설명, README, CHANGELOG 는 스페인어/프랑스어/러시아어/아랍어/일본어/한국어/영어/중국어 간체/홍콩 번체 중국어/대만 번체 중국어를 지원합니다.
@@ -77,8 +78,15 @@ AutoJs6 Paddle OCR (PP-OCRv3) 플러그인은 PaddleOCR PP-OCRv3 와 ONNX Runtim
 | 중국어 번체 | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zh-hant-<ABI>-*.apk` |
 | 일본어 | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
 | 한국어 | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
+| 라틴 문자 언어 | `latin` | `paddle-ocr-pp-ocrv3-latin` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.latin` | `*-latin-<ABI>-*.apk` |
+| 아랍어 | `arabic` | `paddle-ocr-pp-ocrv3-arabic` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.arabic` | `*-arabic-<ABI>-*.apk` |
+| 키릴 문자 언어 | `cyrillic` | `paddle-ocr-pp-ocrv3-cyrillic` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.cyrillic` | `*-cyrillic-<ABI>-*.apk` |
+| 데바나가리 문자 | `devanagari` | `paddle-ocr-pp-ocrv3-devanagari` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.devanagari` | `*-devanagari-<ABI>-*.apk` |
+| 텔루구어 | `te` | `paddle-ocr-pp-ocrv3-te` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.te` | `*-te-<ABI>-*.apk` |
+| 칸나다어 | `ka` | `paddle-ocr-pp-ocrv3-ka` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ka` | `*-ka-<ABI>-*.apk` |
+| 타밀어 | `ta` | `paddle-ocr-pp-ocrv3-ta` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ta` | `*-ta-<ABI>-*.apk` |
 
-인식할 글자에 맞는 언어 패키지를 고르세요. 중국어 간체 패키지는 영문자와 숫자도 인식하며 기본 추천입니다. 중국어 번체, 일본어, 한국어 글자에는 해당 언어 패키지를 설치하고, 영어만 인식할 때는 영어 패키지를 설치해도 됩니다. 각 언어 패키지는 ABI 별로 `arm64-v8a` (대부분의 휴대폰), `armeabi-v7a`, `x86_64`, `x86`, `universal` (4 개 ABI 를 모두 포함, 가장 큼) 의 5 개 APK 가 있으며, 기기에 맞는 하나만 설치하면 됩니다.
+인식할 글자에 맞는 언어 패키지를 고르세요. 중국어 간체 패키지는 영문자와 숫자도 인식하며 기본 추천입니다. 중국어 번체, 일본어, 한국어, 아랍어, 텔루구어, 칸나다어, 타밀어 글자에는 해당 언어 패키지를 설치하고, 프랑스어, 독일어, 스페인어 등에는 라틴 문자 패키지를, 러시아어, 우크라이나어 등에는 키릴 문자 패키지를, 힌디어, 마라티어 등에는 데바나가리 문자 패키지를 설치하며, 영어만 인식할 때는 영어 패키지를 설치해도 됩니다. 데바나가리 문자, 텔루구어, 칸나다어, 타밀어 모델은 간단한 단어는 잘 읽지만, 결합 문자와 자음 앞에 쓰는 모음 기호는 잘못 읽거나 순서가 바뀔 수 있습니다. 각 언어 패키지는 ABI 별로 `arm64-v8a` (대부분의 휴대폰), `armeabi-v7a`, `x86_64`, `x86`, `universal` (4 개 ABI 를 모두 포함, 가장 큼) 의 5 개 APK 가 있으며, 기기에 맞는 하나만 설치하면 됩니다.
 
 ******
 
@@ -152,6 +160,14 @@ ocr.paddle()
 
 ******
 
+# v2.1.0
+
+###### 2026/10/31
+
+* `알림` 데바나가리 문자, 텔루구어, 칸나다어, 타밀어 모델은 간단한 단어는 잘 읽지만, 결합 문자와 자음 앞에 쓰는 모음 기호는 잘못 읽거나 순서가 바뀔 수 있습니다
+* `추가` 7 개 언어 패키지를 추가했습니다: 라틴 문자 언어 (`latin`), 아랍어 (`arabic`), 키릴 문자 언어 (`cyrillic`), 데바나가리 문자 (`devanagari`), 텔루구어 (`te`), 칸나다어 (`ka`), 타밀어 (`ta`). 각각 별도의 APK 이며 다른 언어 패키지와 함께 설치할 수 있고, 괄호 안의 `profile` 로 고릅니다
+* `추가` 아랍어 패키지는 텍스트를 읽는 순서로 돌려주고, 같은 줄의 단어를 오른쪽에서 왼쪽 순서로 나열합니다
+
 # v2.0.0
 
 ###### 2026/10/30
@@ -177,14 +193,6 @@ ocr.paddle()
 * `개선` libNative.so가 더 이상 OpenCV 심볼을 내보내지 않고 APK에 libopencv_java4.so가 포함되지 않아 크기가 줄었으며, 패키징된 앱에서 다른 버전의 OpenCV와 함께 사용 가능
 * `의존성` OpenCV Android AAR 4.8.0을 제거하고 정적 링크되는 OpenCV Android SDK 4.8.0만 사용 (다운로드 시 SHA-256 검증)
 
-# v1.0.5
-
-###### 2026/10/05
-
-* `수정` 공유 빌드 플러그인 1.8.3을 통해 AGP 9.1의 SDK XML v4 파싱 경고 및 JVM 단위 테스트 조립 작업에서 APK 네이티브 라이브러리 정렬 검사가 잘못 실행되는 문제 해결
-* `개선` compileSdk 와 targetSdk 를 37 (Android 17) 로 올리며, 플러그인 동작은 새 대상 버전의 영향을 받지 않음
-* `개선` Android 앱 정보 아이콘에 Icon Studio의 그림과 밝은 배경 및 어두운 배경을 사용하고 플러그인 센터의 투명 그림과 기존 런처 옵션을 유지
-
 ##### 더 많은 릴리스 기록은 다음을 참조하세요
 
 * [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/app/src/main/assets/doc/CHANGELOG-ko.md)
@@ -206,7 +214,7 @@ Release 빌드:
 .\gradlew.bat :app:appendDigestToReleasedFiles
 ```
 
-빌드 매개변수는 `version.properties` 에서 가져오며, 현재 최소 SDK 는 24, 대상 SDK 는 37 입니다. ONNX 모델은 저장소에 포함되지 않습니다. 빌드 전에 위의 `prepare_ppocrv3_assets.py` 를 실행하면 PaddleOCR 공식 모델을 내려받아 ONNX 로 변환하고 `libs/ppocr-android-sdk/models.provenance.json` 과 대조합니다. `--profile` 에는 `zh`, `en`, `zhHant`, `ja`, `ko`, `all` 을 쓸 수 있습니다. 서드파티 구성 요소와 라이선스는 [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md) 를 참고하세요.
+빌드 매개변수는 `version.properties` 에서 가져오며, 현재 최소 SDK 는 24, 대상 SDK 는 37 입니다. ONNX 모델은 저장소에 포함되지 않습니다. 빌드 전에 위의 `prepare_ppocrv3_assets.py` 를 실행하면 PaddleOCR 공식 모델을 내려받아 ONNX 로 변환하고 `libs/ppocr-android-sdk/models.provenance.json` 과 대조합니다. `--profile` 에는 `zh`, `en`, `zhHant`, `ja`, `ko`, `latin`, `arabic`, `cyrillic`, `devanagari`, `te`, `ka`, `ta`, `all` 을 쓸 수 있습니다. 서드파티 구성 요소와 라이선스는 [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md) 를 참고하세요.
 
 ******
 

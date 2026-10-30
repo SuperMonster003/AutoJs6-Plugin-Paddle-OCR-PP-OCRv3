@@ -4,6 +4,14 @@
 
 ******
 
+# v2.1.0
+
+###### 2026/10/31
+
+* `Note` Les modèles devanagari, télougou, kannada et tamoul lisent bien les mots simples, mais les ligatures et les signes vocaliques écrits avant la consonne peuvent être mal lus ou dans le désordre
+* `Ajout` Ajout de sept paquets de langue: langues en alphabet latin (`latin`), arabe (`arabic`), langues en alphabet cyrillique (`cyrillic`), devanagari (`devanagari`), télougou (`te`), kannada (`ka`) et tamoul (`ta`). Chacun est un APK distinct, peut être installé à côté des autres paquets et se choisit avec le `profile` indiqué entre parenthèses
+* `Ajout` Le paquet arabe renvoie le texte dans l'ordre de lecture et classe les mots de chaque ligne de droite à gauche
+
 # v2.0.0
 
 ###### 2026/10/30

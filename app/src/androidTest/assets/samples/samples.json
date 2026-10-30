@@ -41,5 +41,54 @@
       "한국어 문자 인식",
       "안녕하세요 세계"
     ]
+  },
+  "latin": {
+    "file": "latin.png",
+    "lines": [
+      "Reconnaissance de caractères",
+      "Schöne Grüße aus München"
+    ]
+  },
+  "arabic": {
+    "file": "arabic.png",
+    "lines": [
+      "التعرف على النصوص",
+      "مرحبا بالعالم"
+    ]
+  },
+  "cyrillic": {
+    "file": "cyrillic.png",
+    "lines": [
+      "Распознавание текста",
+      "Привет мир"
+    ]
+  },
+  "devanagari": {
+    "file": "devanagari.png",
+    "lines": [
+      "पाठ की पहचान",
+      "भारत देश महान"
+    ]
+  },
+  "te": {
+    "file": "te.png",
+    "lines": [
+      "మన దేశం",
+      "తెలుగు భాష"
+    ]
+  },
+  "ka": {
+    "file": "ka.png",
+    "lines": [
+      "ಬೆಂಗಳೂರು ನಗರ",
+      "ರಾಮನು ಕಾಡಿಗೆ ಹೋದನು"
+    ]
+  },
+  "ta": {
+    "file": "ta.png",
+    "lines": [
+      "வணக்கம் உலகம்",
+      "பள்ளி மாணவர்கள் படிக்கிறார்கள்"
+    ]
   }
 }

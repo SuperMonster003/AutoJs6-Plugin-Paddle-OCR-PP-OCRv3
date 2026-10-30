@@ -41,7 +41,7 @@
 
 ******
 
-AutoJs6 Paddle OCR (PP-OCRv3) 插件為 AutoJs6 提供基於 PaddleOCR PP-OCRv3 與 ONNX Runtime 的光學字符識別能力, 支援截圖, 本地圖像文件和原始圖像輸入. 自 2.0.0 起推理引擎由 Paddle Lite 改為 ONNX Runtime, 支援 4 個 ABI, 並按識別語種分為 5 個語種包.
+AutoJs6 Paddle OCR (PP-OCRv3) 插件為 AutoJs6 提供基於 PaddleOCR PP-OCRv3 與 ONNX Runtime 的光學字符識別能力, 支援截圖, 本地圖像文件和原始圖像輸入. 自 2.0.0 起推理引擎由 Paddle Lite 改為 ONNX Runtime, 支援 4 個 ABI, 並按識別語種分為 12 個語種包.
 
 > **Paddle Lite 版**: 1.0.x 的 Paddle Lite 實現已改名為 [Paddle OCR (PP-OCRv3 Paddle Lite)](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite) 單獨發佈 (插件 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 變體 `v3-paddle-lite`), 只支援 arm64-v8a 與 armeabi-v7a, 可與本插件同時安裝.
 
@@ -51,7 +51,8 @@ AutoJs6 Paddle OCR (PP-OCRv3) 插件為 AutoJs6 提供基於 PaddleOCR PP-OCRv3 
 
 ******
 
-- 提供 5 個語種包: 簡體中文, 英文, 繁體中文, 日文, 韓文; 簡體中文包沿用 1.0.x 的包名與插件 ID `paddle-ocr-pp-ocrv3`, 各語種包的引擎均為 `paddle-ocr`, 變體均為 `v3`.
+- 提供 12 個語種包: 簡體中文, 英文, 繁體中文, 日文, 韓文, 拉丁字母語言, 阿拉伯文, 西里爾字母語言, 天城文, 泰盧固文, 卡納達文, 泰米爾文; 簡體中文包沿用 1.0.x 的包名與插件 ID `paddle-ocr-pp-ocrv3`, 各語種包的引擎均為 `paddle-ocr`, 變體均為 `v3`.
+- 阿拉伯文包按閱讀順序返回文字, 同一行的詞語從右到左排列.
 - 支援 AutoJs6 中的 `ocr.paddle.recognizeText(image)` 和 `ocr.paddle.detect(image)`.
 - 支援屏幕截圖, 本地圖像文件和原始 ARGB_8888 圖像輸入.
 - 插件信息, 使用說明, README 與 CHANGELOG 均支援西班牙語/法語/俄語/阿拉伯語/日語/韓語/英語/簡體中文/香港繁體/台灣繁體.
@@ -77,8 +78,15 @@ AutoJs6 Paddle OCR (PP-OCRv3) 插件為 AutoJs6 提供基於 PaddleOCR PP-OCRv3 
 | 繁體中文 | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zh-hant-<ABI>-*.apk` |
 | 日文 | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
 | 韓文 | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
+| 拉丁字母語言 | `latin` | `paddle-ocr-pp-ocrv3-latin` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.latin` | `*-latin-<ABI>-*.apk` |
+| 阿拉伯文 | `arabic` | `paddle-ocr-pp-ocrv3-arabic` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.arabic` | `*-arabic-<ABI>-*.apk` |
+| 西里爾字母語言 | `cyrillic` | `paddle-ocr-pp-ocrv3-cyrillic` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.cyrillic` | `*-cyrillic-<ABI>-*.apk` |
+| 天城文 | `devanagari` | `paddle-ocr-pp-ocrv3-devanagari` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.devanagari` | `*-devanagari-<ABI>-*.apk` |
+| 泰盧固文 | `te` | `paddle-ocr-pp-ocrv3-te` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.te` | `*-te-<ABI>-*.apk` |
+| 卡納達文 | `ka` | `paddle-ocr-pp-ocrv3-ka` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ka` | `*-ka-<ABI>-*.apk` |
+| 泰米爾文 | `ta` | `paddle-ocr-pp-ocrv3-ta` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ta` | `*-ta-<ABI>-*.apk` |
 
-按要識別的文字選擇語種包: 簡體中文包也能識別英文字母與數字, 是默認推薦; 繁體中文, 日文或韓文請安裝對應的語種包; 只識別英文時也可以安裝英文包. 每個語種包按 ABI 提供 5 個 APK: `arm64-v8a` (大多數手機), `armeabi-v7a`, `x86_64`, `x86` 和 `universal` (包含全部 4 個 ABI, 體積最大), 只需安裝與設備匹配的一個.
+按要識別的文字選擇語種包: 簡體中文包也能識別英文字母與數字, 是默認推薦; 繁體中文, 日文, 韓文, 阿拉伯文, 泰盧固文, 卡納達文或泰米爾文請安裝對應的語種包; 拉丁字母語言包用於法語, 德語, 西班牙語等, 西里爾字母語言包用於俄語, 烏克蘭語等, 天城文包用於印地語, 馬拉地語等; 只識別英文時也可以安裝英文包. 天城文, 泰盧固文, 卡納達文, 泰米爾文模型讀簡單詞語較準, 但連寫字母與寫在輔音前面的元音符號可能讀錯或順序不對. 每個語種包按 ABI 提供 5 個 APK: `arm64-v8a` (大多數手機), `armeabi-v7a`, `x86_64`, `x86` 和 `universal` (包含全部 4 個 ABI, 體積最大), 只需安裝與設備匹配的一個.
 
 ******
 
@@ -152,6 +160,14 @@ ocr.paddle()
 
 ******
 
+# v2.1.0
+
+###### 2026/10/31
+
+* `提示` 天城文, 泰盧固文, 卡納達文, 泰米爾文模型讀簡單詞語較準, 但連寫字母與寫在輔音前面的元音符號可能讀錯或順序不對
+* `新增` 新增 7 個語種包: 拉丁字母語言 (`latin`), 阿拉伯文 (`arabic`), 西里爾字母語言 (`cyrillic`), 天城文 (`devanagari`), 泰盧固文 (`te`), 卡納達文 (`ka`), 泰米爾文 (`ta`); 每個語種包是獨立的 APK, 可與其他語種包同時安裝, 用括號裡的 `profile` 指定
+* `新增` 阿拉伯文包按閱讀順序返回文字, 同一行的詞語從右到左排列
+
 # v2.0.0
 
 ###### 2026/10/30
@@ -177,14 +193,6 @@ ocr.paddle()
 * `優化` libNative.so 不再導出 OpenCV 符號, APK 不再攜帶 libopencv_java4.so 且體積更小, 打包應用中可與其他版本的 OpenCV 同時使用
 * `依賴` 移除 OpenCV Android AAR 4.8.0, 僅保留靜態鏈接的 OpenCV Android SDK 4.8.0 (下載時校驗 SHA-256)
 
-# v1.0.5
-
-###### 2026/10/05
-
-* `修復` AGP 9.1 構建時的 SDK XML v4 解析警告及 JVM 單元測試組裝任務誤觸發 APK 原生程式庫對齊檢查的問題 (共用構建外掛 1.8.3)
-* `優化` 將 compileSdk 與 targetSdk 提升到 37 (Android 17), 插件行為不受新目標版本影響
-* `優化` Android 系統應用程式資訊圖示與圖示工作台共用圖稿及明暗底色, 保留外掛程式中心透明圖稿與現有啟動器選項
-
 ##### 更多發行歷史可參閱
 
 * [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/app/src/main/assets/doc/CHANGELOG-zh-Hant-HK.md)
@@ -206,7 +214,7 @@ Release 構建:
 .\gradlew.bat :app:appendDigestToReleasedFiles
 ```
 
-構建參數來自 `version.properties`, 當前最低 SDK 為 24, 目標 SDK 為 37. ONNX 模型不入庫: 構建前先運行上面的 `prepare_ppocrv3_assets.py`, 它會下載 PaddleOCR 官方模型, 轉換為 ONNX 並按 `libs/ppocr-android-sdk/models.provenance.json` 校驗; `--profile` 可選 `zh`, `en`, `zhHant`, `ja`, `ko` 或 `all`. 第三方組件與許可證見 [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
+構建參數來自 `version.properties`, 當前最低 SDK 為 24, 目標 SDK 為 37. ONNX 模型不入庫: 構建前先運行上面的 `prepare_ppocrv3_assets.py`, 它會下載 PaddleOCR 官方模型, 轉換為 ONNX 並按 `libs/ppocr-android-sdk/models.provenance.json` 校驗; `--profile` 可選 `zh`, `en`, `zhHant`, `ja`, `ko`, `latin`, `arabic`, `cyrillic`, `devanagari`, `te`, `ka`, `ta` 或 `all`. 第三方組件與許可證見 [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
 
 ******
 

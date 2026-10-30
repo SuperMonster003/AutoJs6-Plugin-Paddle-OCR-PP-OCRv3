@@ -95,9 +95,10 @@ class ReleaseMatrixTest(unittest.TestCase):
             self.assertTrue(any(name.startswith("autojs6-plugin-example-v1.0.0-" + flavor + "-universal-") for name in names))
 
     def test_language_flavors_by_abi_matrix(self):
-        # The five PP-OCRv3 language packages share one versionName; each ships four ABIs plus universal.
+        # The twelve PP-OCRv3 language packages share one versionName; each ships four ABIs plus universal.
         abis = ["arm64-v8a", "armeabi-v7a", "universal", "x86", "x86_64"]
-        flavors = {"zh": "", "en": ".en", "zhHant": ".zhhant", "ja": ".ja", "ko": ".ko"}
+        flavors = {"zh": "", "en": ".en", "zhHant": ".zhhant", "ja": ".ja", "ko": ".ko", "latin": ".latin", "arabic": ".arabic",
+                   "cyrillic": ".cyrillic", "devanagari": ".devanagari", "te": ".te", "ka": ".ka", "ta": ".ta"}
         shutil.rmtree(self.output)
         self.manifest["variants"] = []
         for flavor, suffix in flavors.items():
@@ -118,10 +119,10 @@ class ReleaseMatrixTest(unittest.TestCase):
             archive_release(self.manifest)
         receipt = json.loads((Path(self.manifest["destination"]) / "release-manifest.json").read_text())
         names = sorted(re.sub(r"-[0-9A-F]{8}\.apk$", "", item["file"]) for item in receipt["artifacts"])
-        tokens = ["zh", "en", "zh-hant", "ja", "ko"]
+        tokens = ["zh", "en", "zh-hant", "ja", "ko", "latin", "arabic", "cyrillic", "devanagari", "te", "ka", "ta"]
         expected = sorted(f"autojs6-plugin-example-v2.0.0-{token}-{abi}" for token in tokens for abi in abis)
         self.assertEqual(expected, names)
-        self.assertEqual(25, len({item["file"] for item in receipt["artifacts"]}))
+        self.assertEqual(60, len({item["file"] for item in receipt["artifacts"]}))
 
     def test_exact_matrix(self):
         self.assertEqual(1, len(collect(self.manifest)))

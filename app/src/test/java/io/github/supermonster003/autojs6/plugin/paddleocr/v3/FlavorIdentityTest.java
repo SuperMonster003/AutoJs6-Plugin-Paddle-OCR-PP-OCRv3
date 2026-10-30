@@ -20,6 +20,13 @@ public class FlavorIdentityTest {
         EXPECTED.put("zhHant", new String[] {PACKAGE + ".zhhant", "paddle-ocr-pp-ocrv3-zh-hant", "Paddle OCR (PP-OCRv3 ZH-Hant)", "zh-hant", "false"});
         EXPECTED.put("ja", new String[] {PACKAGE + ".ja", "paddle-ocr-pp-ocrv3-ja", "Paddle OCR (PP-OCRv3 JA)", "ja", "false"});
         EXPECTED.put("ko", new String[] {PACKAGE + ".ko", "paddle-ocr-pp-ocrv3-ko", "Paddle OCR (PP-OCRv3 KO)", "ko", "false"});
+        EXPECTED.put("latin", new String[] {PACKAGE + ".latin", "paddle-ocr-pp-ocrv3-latin", "Paddle OCR (PP-OCRv3 Latin)", "latin", "false"});
+        EXPECTED.put("arabic", new String[] {PACKAGE + ".arabic", "paddle-ocr-pp-ocrv3-arabic", "Paddle OCR (PP-OCRv3 Arabic)", "arabic", "false"});
+        EXPECTED.put("cyrillic", new String[] {PACKAGE + ".cyrillic", "paddle-ocr-pp-ocrv3-cyrillic", "Paddle OCR (PP-OCRv3 Cyrillic)", "cyrillic", "false"});
+        EXPECTED.put("devanagari", new String[] {PACKAGE + ".devanagari", "paddle-ocr-pp-ocrv3-devanagari", "Paddle OCR (PP-OCRv3 Devanagari)", "devanagari", "false"});
+        EXPECTED.put("te", new String[] {PACKAGE + ".te", "paddle-ocr-pp-ocrv3-te", "Paddle OCR (PP-OCRv3 TE)", "te", "false"});
+        EXPECTED.put("ka", new String[] {PACKAGE + ".ka", "paddle-ocr-pp-ocrv3-ka", "Paddle OCR (PP-OCRv3 KA)", "ka", "false"});
+        EXPECTED.put("ta", new String[] {PACKAGE + ".ta", "paddle-ocr-pp-ocrv3-ta", "Paddle OCR (PP-OCRv3 TA)", "ta", "false"});
     }
 
     @Test public void buildConfigMatchesTheIdentityTable() {
