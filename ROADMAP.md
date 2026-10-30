@@ -552,6 +552,26 @@ ocr.paddle(img, { useSlim: true });
 | AVD_API_33 | 33 | x86_64 | zh 5AD7D7C8, ko DB9895EE | 15 / 15 | 308-419 ms | nnapi, 380 vs 308 ms | - | raw 回退 0 |
 | AVD_API_35_16K | 35 | x86_64 (16 KB 页) | zh 5AD7D7C8, zhHant 8423519B | 15 / 15 | 148-412 ms | nnapi, 178 vs 175 ms | - | `getconf PAGE_SIZE` 16384; raw 回退 0; 覆盖 API 35 x86_64 |
 
+Paddle Lite 1.1.0 (67) 补测 (P5.3, 2026-10-30, paddle-ocr-v3-p5-3): 67 已在 6 台 arm64 设备通过, 其中 XQ-AT72 与 XQ-DQ72 由 P5.2 测过. 下表 4 台各自先用已装的 65 取只跑大图的参考 (`check_engine_thread.py --large-only --rounds 3`, 新进程不崩), 再装 `releases/v1.1.0/` 的 arm64 包 (23C59EBF), 跑 Lite 仓库 `check_device.py` 与 `check_engine_thread.py --compare`. 复现集每台都是 100 calls 0 failed, 1 个进程, 无原生崩溃, 8 组 112 框每轮一致且与本机 65 逐框相同. 固定样图一列来自本仓库 `check_device.py --lite 1.1.0` (温中位 fp32 / slim).
+
+| 设备 | API | Lite `check_device` | 复现集 | 固定样图 fp32 / slim | 备注 |
+| --- | --- | --- | --- | --- | --- |
+| OnePlus OPD2413 (63751f63) | 35 | 4 / 5 | 100 calls 0 failed | 184 / 213 ms | 安装由维护者在机上确认. 唯一 FAIL 是 `recognize`: 该项在设备上现画样图并精确比较, ColorOS 字体下 "桨" 读成 "浆" (755 ms); 固定样图两项 1.00 通过, 大图与 65 逐框相同, 不是 67 的回归. ColorOS 拒绝直接绑定被 force-stop 的插件 (`bindService returned false`), 所以这台用 `check_engine_thread.py` 的临时副本, 绑定前先发 WAKE 动作 (Lite 仓库未改) |
+| Redmi 22120RN86C (bek749scrwv4wo8h) | 33 | 5 / 5 | 100 calls 0 failed | 1193 / 1227 ms | Lite 在插件中心已是开启, 不用维护者操作 |
+| Xiaomi Pad 23046RP50C (968e9f18) | 35 | 5 / 5 | 100 calls 0 failed | 522 / 491 ms | |
+| Sony G8441 (BH900ASK9E) | 28 | 5 / 5 | 100 calls 0 failed | 627 / 510 ms | |
+
+2.0.0 最终包冒烟 (P5.3 R3, 2026-10-30): tag `v2.0.0` = 39a340a, versionCode 72, 宿主 debug 5935, `check_device.py --lite 1.1.0 --cls`. 与上面 67 构建的差别只有 flavor 改字面量声明, 文件名 `zh-hant` 与 changelog, 所以只跑真机 arm64; x86 / x86_64 只有归档校验与 CI 证据.
+
+| 设备 | API | 语种包 (zh arm64 0D72CCD9) | 结果 | zh fp32 CPU / NNAPI 温中位 | Lite fp32 / slim |
+| --- | --- | --- | --- | --- | --- |
+| Sony XQ-AT72 (QV710AF65F) | 31 | 5 个语种 | 33 / 33 | 234 / 225 ms | 197 / 193 ms |
+| Sony XQ-DQ72 (QV770340J7) | 33 | zh, en | 18 / 18 | 133 / 116 ms | 125 / 124 ms |
+| Sony G8441 (BH900ASK9E) | 28 | zh, ja | 18 / 18 | 600 / 678 ms | 627 / 510 ms |
+| Redmi 22120RN86C (bek749scrwv4wo8h) | 33 | zh, zhHant | 18 / 18 | 1481 / 1470 ms | 1193 / 1227 ms |
+| Xiaomi Pad 23046RP50C (968e9f18) | 35 | zh, en | 18 / 18 | 454 / 454 ms | 522 / 491 ms |
+| OnePlus OPD2413 (63751f63) | 35 | 未执行 | - | - | 每次安装都要维护者在机上确认, 这台保持 2.0.0 (67) |
+
 精度与速度基线 (P4.2 / P4.3, 详见 `docs/benchmark.md`; CPU 4 线程, 1 次预热 + 10 次中位; "合计" 是 11 张图各自中位之和):
 
 | 设备 | 档位 | 一致率 (vs 旧 Paddle-Lite) | 一致率 (vs fp32) | det + rec 中位耗时 | 备注 |
