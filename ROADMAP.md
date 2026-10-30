@@ -220,7 +220,7 @@ docs/dev/opencv-ocr-runtime-decoupling-roadmap.md (D10 加注), .changelog (zh-H
 | P2 | 旧插件 | 带历史复制到新仓库, 改名, 1.1.0 构建与验证 | 已完成: P2.1 (新仓库 ca42783 / dd8e558 / 688983d, 发布前改邮箱后为 ca76366 / cc2208c / ebf6acb, 见 P5.2), P2.2 (Pad 共存验证) |
 | P3 | 宿主 | 内嵌 ONNX Runtime 引擎, 打包两变体, 默认选择与 profile 匹配, 向导, changelog, 单测 | 已完成: P3.1 - P3.4 (宿主本地 9 笔, f38abc036 - bfc871fae), P3.5 (宿主本地 f3aa53bb0 / 5737cbdc1) |
 | P4 | 测试 | 设备矩阵, 新旧对比, 精度与速度基线, slim 判定, 打包 APK 两引擎 | 已完成 (`docs/benchmark.md`, 附录 F); slim 达标 (Q2 未提问), 新待决 Q14 (Lite 1.1.0 崩溃); OnePlus 与 Redmi 同日补测, 都是 15 / 15 |
-| P5 | 文档 / 发布 / 索引 | 四仓库文档, README / changelog, 2.0.0 与 1.1.0 发布, 索引 6 包登记 | 进行中: P5.1 完成 (四仓库本地提交), P5.2 完成 (Lite 1.1.0 已发布 d5e1e19), P5.3 进行中 |
+| P5 | 文档 / 发布 / 索引 | 四仓库文档, README / changelog, 2.0.0 与 1.1.0 发布, 索引 6 包登记 | 已完成: P5.1 (四仓库本地提交), P5.2 (Lite 1.1.0 已发布 d5e1e19), P5.3 (2.0.0 已发布, tag v2.0.0 = 39a340a, 索引 91c0bf5) |
 | P6 | 插件 | 2.1.0 其余 7 语种与其他候选 | 未开始 |
 
 依赖顺序:
@@ -355,6 +355,7 @@ P0 (资产脚本与模型)   P2 (旧插件新仓库)   P3.1 - P3.4 (宿主引擎
 
 - [x] (宿主) `PluginInstallWizardCatalog` 新增 Paddle Lite 条目, `InstalledPluginRepository` / `<queries>` 按需加包名 (若按前缀匹配则记录 "无需改"); `.changelog` zh-Hans 条目 (打包支持 ONNX Runtime 版 Paddle OCR, `profile` 选语种包, Paddle Lite 插件); 回填 `REQUIRES_HOST_VERSION` 目标值到本路线图 D24 (该提交的 versionCode). 证据: 提交 hash, 向导截图 (任一设备).
   - 2026-10-30 由 paddle-ocr-v3-p3-host 完成 (同步自看板): b2dd1757b 向导 Paddle Lite 条目 + zh-Hans changelog (Q7 (a)), 62fbdda04 向导顺序单测 (PluginInstallWizardLoaderTest 与 CatalogTest 各 5 / 5); `REQUIRES_HOST_VERSION` 目标值 5935 已回填 D24. 向导截图按附录 D Q12 (a) 移到 P5.3 索引登记后再取 (维护者 2026-10-30 已拍板).
+  - 2026-10-30 paddle-ocr-v3-p5-3 补截图 (E4): Xiaomi Pad 23046RP50C (968e9f18, API 35, 宿主 debug 5935), 索引 91c0bf5 推送后删除宿主的本地索引缓存, 由宿主脚本打开向导 (未点屏幕, 只滚动列表), 向导从线上索引加载. "图像" 分类里 `Paddle OCR (PP-OCRv3)` 与 `Paddle OCR (PP-OCRv3 Paddle Lite)` 相邻, 都显示新登记的目录图标; "其他" 分类没有另外 4 个语种包 (Q7 (a)). 截图: `.bak/visual/v2.0.0/wizard-image-category-pad.png`, `.bak/visual/v2.0.0/wizard-others-category-pad.png` (不入库), 共享笔记目录 `p5-3-wizard-image-category-pad.png`, `p5-3-wizard-others-category-pad.png`.
 
 ### P3.5 打包 APK 验证
 
@@ -403,7 +404,11 @@ P0 (资产脚本与模型)   P2 (旧插件新仓库)   P3.1 - P3.4 (宿主引擎
 
 ### P5.3 本仓库 2.0.0 发布与索引 (D29)
 
-- [ ] (发布) R1-R5 (5 个 flavor 的清单各一份, `catalog-icons` 登记两个仓库的图标, `official-repositories.json` +1); `REQUIRES_HOST_VERSION` 回填为 P3.4 的值 (是否等宿主公开见附录 D Q5). 证据: tag, Release 链接 (APK 数量), 索引提交 hash, SHA-256.
+- [x] (发布) R1-R5 (5 个 flavor 的清单各一份, `catalog-icons` 登记两个仓库的图标, `official-repositories.json` +1); `REQUIRES_HOST_VERSION` 回填为 P3.4 的值 (是否等宿主公开见附录 D Q5). 证据: tag, Release 链接 (APK 数量), 索引提交 hash, SHA-256.
+  - 2026-10-30 由 paddle-ocr-v3-p5-3 完成: 轻量 tag `v2.0.0` = 39a340a (build 47, versionCode 72), Release https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/releases/tag/v2.0.0 (25 个 APK + `SHA256SUMS`; 先建草稿, 25 个摘要与归档回执逐个一致后公开, 下载抽样 zh armeabi-v7a 与 `SHA256SUMS` 通过). SHA-256: zh arm64-v8a `267f20add3c96f3a...` (0D72CCD9), zh universal `3a7ed0de8bb2f479...` (DE015BCF), `SHA256SUMS` 文件 `4eaf4f56c972f730...`. 索引 91c0bf5 已推送: 5 份 `release-manifests/.../72.json`, `official-repositories.json` 52 条, `catalog-icons.json` 45 条 (新增 6 个包, 图标内容相同), `FEATURED_DISTRIBUTIONS` 加 v3 = zh; 全量生成 52 个仓库 72 个条目, 相对 HEAD 只有 v3 这 6 个包变化, 索引 CI 通过且重新生成无差异, 线上索引已是 2.0.0.
+  - R1 / R2: VERSION_BUILD 47, 10 语言 changelog 补 profile / variant, 1.0.6 归属, 最低宿主 5935, OpenCV 打包与 OpenCV 插件关系 (39a340a); `generate_markdown --check` 通过. R3: `prepush_check` 6 / 6; 最终包冒烟见附录 F (5 台真机). R4: `appendDigestToReleasedFiles` 校验身份, 签名, 16 KB 对齐与 CRC32. 回执 `sourceDirty: true` 只因未跟踪的 `libs/paddleocr/` (不在构建内, 维护者待删), 已跟踪文件是干净的.
+  - 发布阻塞 (c477718): 索引生成器从 tag 静态解析 `productFlavors`, 只认 `create("字面量")`, 循环写法会让生成失败; 它还按 kebab-case 把资源归到分发变体, 而归档名是 `zhhant`. 已改字面量声明, 归档与 README 改 `zh-hant`, 发布前用本地模拟 (真实回执数据过准入绑定) 验证. 另外全部语种包 featured 会进向导 "其他" 分类, 与 Q7 (a) 冲突, 所以 `FEATURED_DISTRIBUTIONS` 加 v3 = zh (与 v4 / v5 / v6 同样做法).
+  - 偏差: 推送时 master 多带了 q26 的 11bd5e8 (ROADMAP 一行 Q28), 维护者确认的清单是 11 笔, 实推 12 笔; 原因是 harness 用 `eval ... &&` 包裹, 命令里的 `set -e` 不生效, 前置核对没有拦住, 后续改用脚本文件. tag 用完整哈希, 不受影响. tag 上的 `Android verification` 因 venv 缺 `setuptools` 失败 (d96104d 在 master 修复), APK 不受影响, 该工作流此前从未在 ONNX Runtime 版上跑过.
 
 ---
 
