@@ -1,0 +1,45 @@
+{
+  "zh": {
+    "file": "zh.png",
+    "lines": [
+      "欢迎使用文字识别插件",
+      "今天的天气非常好"
+    ]
+  },
+  "zh-rotated": {
+    "file": "zh-rotated.png",
+    "lines": [
+      "欢迎使用文字识别插件",
+      "今天的天气非常好"
+    ],
+    "rotated": true
+  },
+  "en": {
+    "file": "en.png",
+    "lines": [
+      "Hello AutoJs6 Plugin",
+      "Optical Character Recognition"
+    ]
+  },
+  "zhHant": {
+    "file": "zhHant.png",
+    "lines": [
+      "歡迎使用文字識別插件",
+      "繁體中文測試成功"
+    ]
+  },
+  "ja": {
+    "file": "ja.png",
+    "lines": [
+      "日本語の文字認識",
+      "こんにちは世界"
+    ]
+  },
+  "ko": {
+    "file": "ko.png",
+    "lines": [
+      "한국어 문자 인식",
+      "안녕하세요 세계"
+    ]
+  }
+}
