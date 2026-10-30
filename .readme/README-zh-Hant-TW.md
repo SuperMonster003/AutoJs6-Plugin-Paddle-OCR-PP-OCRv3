@@ -41,7 +41,9 @@
 
 ******
 
-AutoJs6 Paddle OCR (PP-OCRv3) 外掛為 AutoJs6 提供基於 PaddleOCR PP-OCRv3 的光學字元辨識能力, 支援截圖, 本機影像檔案和原始影像輸入.
+AutoJs6 Paddle OCR (PP-OCRv3) 外掛為 AutoJs6 提供基於 PaddleOCR PP-OCRv3 與 ONNX Runtime 的光學字元辨識能力, 支援截圖, 本機影像檔案和原始影像輸入. 自 2.0.0 起推論引擎由 Paddle Lite 改為 ONNX Runtime, 支援 4 個 ABI, 並依辨識語種分為 5 個語種包.
+
+> **Paddle Lite 版**: 1.0.x 的 Paddle Lite 實作已改名為 [Paddle OCR (PP-OCRv3 Paddle Lite)](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite) 另行發布 (外掛 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 變體 `v3-paddle-lite`), 只支援 arm64-v8a 與 armeabi-v7a, 可與本外掛同時安裝.
 
 ******
 
@@ -49,13 +51,34 @@ AutoJs6 Paddle OCR (PP-OCRv3) 外掛為 AutoJs6 提供基於 PaddleOCR PP-OCRv3 
 
 ******
 
-- 提供 `paddle-ocr-pp-ocrv3` 外掛服務, 外掛 ID 為 `paddle-ocr-pp-ocrv3`.
+- 提供 5 個語種包: 簡體中文, 英文, 繁體中文, 日文, 韓文; 簡體中文包沿用 1.0.x 的套件名稱與外掛 ID `paddle-ocr-pp-ocrv3`, 各語種包的引擎皆為 `paddle-ocr`, 變體皆為 `v3`.
 - 支援 AutoJs6 中的 `ocr.paddle.recognizeText(image)` 和 `ocr.paddle.detect(image)`.
 - 支援螢幕截圖, 本機影像檔案和原始 ARGB_8888 影像輸入.
 - 外掛資訊, 使用說明, README 與 CHANGELOG 均支援西班牙語/法語/俄語/阿拉伯語/日語/韓語/英語/簡體中文/香港繁體/台灣繁體.
-- 基於 PaddleOCR PP-OCRv3, Paddle Lite 和 OpenCV 4.8.0.
+- 基於 PaddleOCR PP-OCRv3, ONNX Runtime 1.21.1 和 OpenCV 4.8.0, 支援 arm64-v8a, armeabi-v7a, x86_64 與 x86 共 4 個 ABI.
+- `useSlim: true` 使用以 ONNX Runtime 動態量化 (int8) 產生的偵測與辨識模型.
+- `useCls: true` 在辨識前判斷文字方向, 可辨識旋轉 180 度的文字; 預設關閉, 與 1.0.x 一致.
+- `useOpenCL` 在 ONNX Runtime 版映射為 NNAPI: Android 8.1 (API 27) 及以上使用 NNAPI 執行提供者, 較低版本或 NNAPI 初始化失敗時退回 CPU; 是否更快因裝置而異.
 - 影像最多包含 16777216 個像素, 原始影像緩衝區上限為 64 MiB
 - 編碼影像最大為 64 MiB, 支援檔案描述元和管線傳輸
+
+******
+
+### 語種包
+
+******
+
+每個語種包是一個獨立 APK, 可以同時安裝多個:
+
+| 語種 | `profile` | 外掛 ID | 套件名稱 | APK 檔名 |
+| --- | --- | --- | --- | --- |
+| 簡體中文 | `zh` | `paddle-ocr-pp-ocrv3` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3` | `*-zh-<ABI>-*.apk` |
+| 英文 | `en` | `paddle-ocr-pp-ocrv3-en` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.en` | `*-en-<ABI>-*.apk` |
+| 繁體中文 | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zhhant-<ABI>-*.apk` |
+| 日文 | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
+| 韓文 | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
+
+依要辨識的文字選擇語種包: 簡體中文包也能辨識英文字母與數字, 是預設推薦; 繁體中文, 日文或韓文請安裝對應的語種包; 只辨識英文時也可以安裝英文包. 每個語種包依 ABI 提供 5 個 APK: `arm64-v8a` (大多數手機), `armeabi-v7a`, `x86_64`, `x86` 和 `universal` (包含全部 4 個 ABI, 檔案最大), 只需安裝與裝置相符的一個.
 
 ******
 
@@ -86,6 +109,24 @@ ocr.paddle.recognizeText();
 ocr.paddle("test.png");
 ```
 
+指定語種包與選項:
+
+```js
+let img = images.read("test.png");
+/* 使用日文語種包. */
+ocr.paddle(img, { profile: "ja" });
+/* 依外掛 ID 指定韓文語種包. */
+ocr.paddle(img, { engineId: "paddle-ocr-pp-ocrv3-ko" });
+/* 使用量化模型並開啟文字方向分類. */
+ocr.paddle(img, { useSlim: true, useCls: true });
+/* useOpenCL 在 ONNX Runtime 版映射為 NNAPI. */
+ocr.paddle(img, { useOpenCL: true });
+/* 使用 Paddle Lite 版外掛. */
+ocr.paddle(img, { variant: "v3-paddle-lite" });
+```
+
+依 `profile` 選擇語種包與 `useCls` 選項需要 AutoJs6 6.8.0 或更新版本. 較舊的宿主不會依 `profile` 選擇, 也不會傳遞 `useCls`; 同時安裝多個語種包時可用 `engineId` 指定.
+
 ******
 
 ### 介面方法
@@ -98,6 +139,7 @@ ocr.paddle("test.png");
 ocr.paddle.recognizeText(image)
 ocr.paddle.detect(image)
 ocr.paddle(image)
+ocr.paddle(image, options)
 ocr.paddle.recognizeText()
 ocr.paddle()
 ```
@@ -109,6 +151,21 @@ ocr.paddle()
 ### 發行歷史
 
 ******
+
+# v2.0.0
+
+###### 2026/10/30
+
+* `提示` 辨識引擎由 Paddle Lite 改為 ONNX Runtime, 開發者改為 SuperMonster003; 原 Paddle Lite 實作改名為 Paddle OCR (PP-OCRv3 Paddle Lite) 另行發布 (外掛 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 變體 `v3-paddle-lite`), 可與本外掛同時安裝
+* `提示` 依辨識語種分為簡體中文, 英文, 繁體中文, 日文, 韓文 5 個語種包, 每個語種包是獨立的 APK; 簡體中文包沿用原本的套件名稱與外掛 ID
+* `提示` 依 `profile` 選擇語種包與 `useCls` 選項需要 AutoJs6 6.8.0 或更新版本; 較舊的宿主不會依 `profile` 選擇, 也不會傳遞 `useCls`
+* `新增` 支援 x86_64 與 x86 裝置 (包括模擬器), 共 4 個 ABI
+* `新增` 新增 `useCls` 選項, 辨識前先判斷文字方向, 可辨識旋轉 180 度的文字; 預設關閉
+* `新增` `useOpenCL` 在 ONNX Runtime 版映射為 NNAPI: Android 8.1 及以上使用 NNAPI, 較低版本或 NNAPI 無法使用時退回 CPU
+* `最佳化` `useSlim` 改用以 ONNX Runtime 動態量化 (int8) 產生的偵測與辨識模型
+* `依賴` 新增 ONNX Runtime Android 1.21.1, 移除 Paddle Lite
+* `依賴` PaddleOCR PP-OCRv3 模型改為 ONNX 格式 (由官方推論模型轉換), 新增英文, 繁體中文, 日文, 韓文辨識模型與文字方向分類模型
+* `依賴` OpenCV 4.8.0 改為以共用程式庫 libopencv_java4.so 提供, 與 PP-OCRv4 外掛相同
 
 # v1.0.6
 
@@ -127,17 +184,6 @@ ocr.paddle()
 * `最佳化` 將 compileSdk 與 targetSdk 提升到 37 (Android 17), 外掛程式行為不受新目標版本影響
 * `最佳化` Android 系統應用程式資訊圖示與圖示工作台共用圖稿及明暗底色, 保留外掛程式中心透明圖稿與現有啟動器選項
 
-# v1.0.4
-
-###### 2026/09/13
-
-* `修復` 初始化字串轉換的 JNI 暫存參照清理不完整的問題, 並在 JNI 例外時及時終止初始化 _[`issue #575`](http://issues.autojs6.com/575)_
-* `修復` 外掛中心顯示的版本與 ABI 資訊符合實際安裝的 APK
-* `修復` 編碼影像最大為 64 MiB, 支援檔案描述元和管線傳輸
-* `修復` 版本日期保持統一的英文格式
-* `最佳化` 發行下載檔案產生前驗證 APK 版本, 簽章與完整變體集合
-* `最佳化` 影像最多包含 16777216 個像素, 原始影像緩衝區上限為 64 MiB
-
 ##### 更多發行歷史可參閱
 
 * [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/app/src/main/assets/doc/CHANGELOG-zh-Hant-TW.md)
@@ -149,16 +195,17 @@ ocr.paddle()
 ******
 
 ```powershell
-.\gradlew.bat :app:assembleDebug
+python -I scripts\prepare_ppocrv3_assets.py --profile all --slim
+.\gradlew.bat :app:assembleZhDebug
 ```
 
 Release 建置:
 
 ```powershell
-.\gradlew.bat :app:assembleRelease
+.\gradlew.bat :app:appendDigestToReleasedFiles
 ```
 
-建置參數來自 `version.properties`, 目前最低 SDK 為 24, 目標 SDK 為 37.
+建置參數來自 `version.properties`, 目前最低 SDK 為 24, 目標 SDK 為 37. ONNX 模型不納入版本庫: 建置前先執行上方的 `prepare_ppocrv3_assets.py`, 它會下載 PaddleOCR 官方模型, 轉換為 ONNX 並依 `libs/ppocr-android-sdk/models.provenance.json` 校驗; `--profile` 可選 `zh`, `en`, `zhHant`, `ja`, `ko` 或 `all`. 第三方元件與授權見 [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
 
 ******
 
@@ -185,8 +232,9 @@ app/src/main/res/raw-*/plugin_instruction.md
 
 - AutoJs6 OCR 文件: https://docs.autojs6.com/#/ocr
 - PaddleOCR 官方專案: https://github.com/PaddlePaddle/PaddleOCR
-- Paddle Lite 官方專案: https://github.com/PaddlePaddle/Paddle-Lite
+- ONNX Runtime 官方專案: https://github.com/microsoft/onnxruntime
 - OpenCV 官方網站: https://opencv.org/
+- Paddle OCR (PP-OCRv3 Paddle Lite) 外掛: https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite
 
 
 [16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/docs/16kb.md)

@@ -4,6 +4,21 @@
 
 ******
 
+# v2.0.0
+
+###### 2026/10/30
+
+* `알림` 인식 엔진을 Paddle Lite 에서 ONNX Runtime 으로 바꾸고 개발자를 SuperMonster003 으로 변경했습니다. 기존 Paddle Lite 구현은 Paddle OCR (PP-OCRv3 Paddle Lite) 로 별도 배포되며 (플러그인 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 변형 `v3-paddle-lite`), 이 플러그인과 함께 설치할 수 있습니다
+* `알림` 인식 언어별로 중국어 간체, 영어, 중국어 번체, 일본어, 한국어의 5 개 언어 패키지로 나뉘며 각각 독립된 APK 입니다. 중국어 간체 패키지는 기존 패키지 이름과 플러그인 ID 를 그대로 사용합니다
+* `알림` `profile` 로 언어 패키지를 고르는 기능과 `useCls` 옵션은 AutoJs6 6.8.0 이상이 필요합니다. 이전 호스트는 `profile` 로 고르지 않고 `useCls` 도 전달하지 않습니다
+* `추가` x86_64 와 x86 기기 (에뮬레이터 포함) 를 지원하여 모두 4 개 ABI 를 지원합니다
+* `추가` `useCls` 옵션 추가: 인식 전에 글자 방향을 판별하여 180 도 회전한 글자도 인식합니다. 기본값은 꺼짐입니다
+* `추가` `useOpenCL` 은 ONNX Runtime 버전에서 NNAPI 로 매핑됩니다. Android 8.1 이상은 NNAPI 를 사용하고, 그보다 낮은 버전이거나 NNAPI 를 쓸 수 없으면 CPU 로 돌아갑니다
+* `개선` `useSlim` 은 ONNX Runtime 동적 양자화 (int8) 로 만든 검출 및 인식 모델을 사용합니다
+* `의존성` ONNX Runtime Android 1.21.1 추가, Paddle Lite 제거
+* `의존성` PaddleOCR PP-OCRv3 모델을 ONNX 형식으로 변경 (공식 추론 모델에서 변환), 영어, 중국어 번체, 일본어, 한국어 인식 모델과 글자 방향 분류 모델 추가
+* `의존성` OpenCV 4.8.0 을 공유 라이브러리 libopencv_java4.so 로 제공 (PP-OCRv4 플러그인과 동일)
+
 # v1.0.6
 
 ###### 2026/10/10

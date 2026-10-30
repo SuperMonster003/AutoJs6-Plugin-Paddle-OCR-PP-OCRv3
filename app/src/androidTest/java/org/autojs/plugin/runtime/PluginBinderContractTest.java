@@ -22,6 +22,7 @@ import org.autojs.plugin.common.api.PluginInfo;
 import org.autojs.plugin.common.api.PluginCapabilityKeys;
 import org.autojs.plugin.paddle.ocr.api.IOcrPlugin;
 import org.autojs.plugin.paddle.ocr.api.OcrOptions;
+import org.autojs.plugin.paddle.ocr.api.PaddleOcrPluginCapabilityKeys;
 import org.junit.Test;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,9 +78,11 @@ public class PluginBinderContractTest {
                 assertEquals(InstalledPackageIdentity.stringResource(context, "app_name"), info.getName());
                 assertEquals(InstalledPackageIdentity.stringResource(context, "plugin_description"), info.getDescription());
                 assertArrayEquals(InstalledPackageIdentity.supportedAbis(context), info.getSupportedAbis());
-                assertFalse(info.getId().isEmpty());
-                assertFalse(info.getEngine().isEmpty());
-                assertFalse(info.getVariant().isEmpty());
+                // Every language package keeps the 1.0.x engine and variant; the zh package also keeps the plugin id.
+                assertTrue(info.getId(), info.getId().startsWith("paddle-ocr-pp-ocrv3"));
+                assertEquals("paddle-ocr", info.getEngine());
+                assertEquals("v3", info.getVariant());
+                assertNotNull(info.getCapabilities().getString(PaddleOcrPluginCapabilityKeys.MODEL_PROFILE));
                 assertTrue(info.getCapabilities().getInt(PluginCapabilityKeys.REQUIRES_HOST_VERSION) > 0);
                 File image = File.createTempFile("binder-blank-", ".png", context.getCacheDir());
                 try {

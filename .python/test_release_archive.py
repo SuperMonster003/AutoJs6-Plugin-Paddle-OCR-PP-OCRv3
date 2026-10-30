@@ -94,6 +94,34 @@ class ReleaseMatrixTest(unittest.TestCase):
         for flavor in ["mobile", "server"]:
             self.assertTrue(any(name.startswith("autojs6-plugin-example-v1.0.0-" + flavor + "-universal-") for name in names))
 
+    def test_language_flavors_by_abi_matrix(self):
+        # The five PP-OCRv3 language packages share one versionName; each ships four ABIs plus universal.
+        abis = ["arm64-v8a", "armeabi-v7a", "universal", "x86", "x86_64"]
+        flavors = {"zh": "", "en": ".en", "zhHant": ".zhhant", "ja": ".ja", "ko": ".ko"}
+        shutil.rmtree(self.output)
+        self.manifest["variants"] = []
+        for flavor, suffix in flavors.items():
+            directory = self.output.parent / flavor / "release"
+            directory.mkdir(parents=True)
+            elements, outputs = [], []
+            for abi in abis:
+                apk = directory / f"plugin-{abi}.apk"
+                apk.write_bytes(f"{flavor}-{abi}".encode())
+                filters = [] if abi == "universal" else [{"filterType": "ABI", "value": abi}]
+                elements.append({"filters": filters, "versionCode": 65, "versionName": "2.0.0", "outputFile": apk.name})
+                outputs.append({"abi": abi, "versionCode": 65, "versionName": "2.0.0"})
+            application = "test.plugin" + suffix
+            (directory / "output-metadata.json").write_text(json.dumps({"variantName": flavor + "Release", "applicationId": application, "elements": elements}))
+            self.manifest["variants"].append({"name": flavor + "Release", "applicationId": application, "nativeAbis": abis[:2] + abis[3:], "outputs": outputs})
+        self.manifest["destination"] = str(self.root / "releases/v2.0.0")
+        with patch("release_archive.verify_apk", return_value=[]):
+            archive_release(self.manifest)
+        receipt = json.loads((Path(self.manifest["destination"]) / "release-manifest.json").read_text())
+        names = sorted(re.sub(r"-[0-9A-F]{8}\.apk$", "", item["file"]) for item in receipt["artifacts"])
+        expected = sorted(f"autojs6-plugin-example-v2.0.0-{flavor.lower()}-{abi}" for flavor in flavors for abi in abis)
+        self.assertEqual(expected, names)
+        self.assertEqual(25, len({item["file"] for item in receipt["artifacts"]}))
+
     def test_exact_matrix(self):
         self.assertEqual(1, len(collect(self.manifest)))
 

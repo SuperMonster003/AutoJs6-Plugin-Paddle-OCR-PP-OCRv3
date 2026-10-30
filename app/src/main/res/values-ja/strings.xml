@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="plugin_description">Baidu PaddlePaddle に基づく文字認識用 Paddle OCR プラグイン</string>
+    <string name="plugin_description">ONNX Runtime で動作する Paddle OCR (PP-OCRv3) 文字認識プラグイン, 簡体字中国語, 英語, 繁体字中国語, 日本語, 韓国語の言語パッケージを提供</string>
 </resources>

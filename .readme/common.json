@@ -7,7 +7,8 @@
   "created_timestamp": "1773538952",
   "docs_ocr_url": "https://docs.autojs6.com/#/ocr",
   "paddle_ocr_url": "https://github.com/PaddlePaddle/PaddleOCR",
-  "paddle_lite_url": "https://github.com/PaddlePaddle/Paddle-Lite",
+  "onnxruntime_url": "https://github.com/microsoft/onnxruntime",
+  "paddle_lite_plugin_url": "https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite",
   "opencv_url": "https://opencv.org/",
-  "api_methods": "ocr.paddle.recognizeText(image)\nocr.paddle.detect(image)\nocr.paddle(image)\nocr.paddle.recognizeText()\nocr.paddle()"
+  "api_methods": "ocr.paddle.recognizeText(image)\nocr.paddle.detect(image)\nocr.paddle(image)\nocr.paddle(image, options)\nocr.paddle.recognizeText()\nocr.paddle()"
 }

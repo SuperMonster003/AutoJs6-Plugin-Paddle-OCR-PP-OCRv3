@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="plugin_description">Complemento Paddle OCR para reconocimiento de texto basado en Baidu PaddlePaddle</string>
+    <string name="plugin_description">Complemento Paddle OCR (PP-OCRv3) de reconocimiento de texto sobre ONNX Runtime, con paquetes de idioma para chino simplificado, inglés, chino tradicional, japonés y coreano</string>
 </resources>

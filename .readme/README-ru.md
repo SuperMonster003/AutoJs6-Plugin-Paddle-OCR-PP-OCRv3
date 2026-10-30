@@ -41,7 +41,9 @@
 
 ******
 
-Плагин AutoJs6 Paddle OCR (PP-OCRv3) добавляет оптическое распознавание символов на базе PaddleOCR PP-OCRv3, с поддержкой снимков экрана, локальных файлов изображений и необработанного ввода изображений.
+Плагин AutoJs6 Paddle OCR (PP-OCRv3) добавляет оптическое распознавание символов на базе PaddleOCR PP-OCRv3 и ONNX Runtime, с поддержкой снимков экрана, локальных файлов изображений и необработанного ввода изображений. Начиная с версии 2.0.0 он работает на ONNX Runtime вместо Paddle Lite, поддерживает четыре ABI и выпускается в виде пяти языковых пакетов.
+
+> **Версия Paddle Lite**: реализация Paddle Lite из 1.0.x теперь выпускается отдельно под названием [Paddle OCR (PP-OCRv3 Paddle Lite)](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite) (ID плагина `paddle-ocr-pp-ocrv3-paddle-lite`, вариант `v3-paddle-lite`). Она поддерживает только arm64-v8a и armeabi-v7a и может быть установлена вместе с этим плагином.
 
 ******
 
@@ -49,13 +51,34 @@
 
 ******
 
-- Предоставляет сервис плагина `paddle-ocr-pp-ocrv3`, с ID плагина `paddle-ocr-pp-ocrv3`.
+- Выпускается в виде пяти языковых пакетов: китайский упрощённый, английский, китайский традиционный, японский и корейский. Пакет для китайского упрощённого сохраняет имя пакета и ID плагина `paddle-ocr-pp-ocrv3` из 1.0.x; все пакеты используют движок `paddle-ocr` и вариант `v3`.
 - Поддерживает `ocr.paddle.recognizeText(image)` и `ocr.paddle.detect(image)` в AutoJs6.
 - Поддерживает снимки экрана, локальные файлы изображений и необработанный ввод ARGB_8888.
 - Информация о плагине, инструкции, README и CHANGELOG поддерживают испанский/французский/русский/арабский/японский/корейский/английский/упрощенный китайский/традиционный китайский Гонконга/традиционный китайский Тайваня.
-- Основан на PaddleOCR PP-OCRv3, Paddle Lite и OpenCV 4.8.0.
+- Основан на PaddleOCR PP-OCRv3, ONNX Runtime 1.21.1 и OpenCV 4.8.0, для четырёх ABI: arm64-v8a, armeabi-v7a, x86_64 и x86.
+- `useSlim: true` использует модели обнаружения и распознавания, квантованные в int8 динамическим квантованием ONNX Runtime.
+- `useCls: true` перед распознаванием определяет направление текста, поэтому читается и текст, повёрнутый на 180 градусов; по умолчанию выключено, как в 1.0.x.
+- `useOpenCL` в версии ONNX Runtime сопоставлен с NNAPI: на Android 8.1 (API 27) и новее используется поставщик выполнения NNAPI, на более старых версиях или при сбое запуска NNAPI распознавание возвращается на CPU. Будет ли быстрее, зависит от устройства.
 - Изображения могут содержать до 16777216 пикселей; размер буферов необработанных изображений ограничен 64 MiB
 - Размер закодированного изображения ограничен 64 MiB с поддержкой файловых дескрипторов и каналов
+
+******
+
+### Языковые пакеты
+
+******
+
+Каждый языковой пакет является отдельным APK, можно установить несколько одновременно:
+
+| Язык | `profile` | ID плагина | Имя пакета | Имя файла APK |
+| --- | --- | --- | --- | --- |
+| Китайский упрощённый | `zh` | `paddle-ocr-pp-ocrv3` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3` | `*-zh-<ABI>-*.apk` |
+| Английский | `en` | `paddle-ocr-pp-ocrv3-en` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.en` | `*-en-<ABI>-*.apk` |
+| Китайский традиционный | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zhhant-<ABI>-*.apk` |
+| Японский | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
+| Корейский | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
+
+Выбирайте пакет по тексту, который нужно распознавать: пакет для китайского упрощённого читает и латинские буквы с цифрами и рекомендуется по умолчанию; для китайского традиционного, японского или корейского текста установите соответствующий пакет; для текста только на английском можно установить и английский пакет. Каждый пакет выпускается в пяти APK по ABI: `arm64-v8a` (большинство телефонов), `armeabi-v7a`, `x86_64`, `x86` и `universal` (все четыре ABI, самый большой). Устанавливайте только тот, что подходит устройству.
 
 ******
 
@@ -86,6 +109,24 @@ ocr.paddle.recognizeText();
 ocr.paddle("test.png");
 ```
 
+Выбор языкового пакета и параметров распознавания:
+
+```js
+let img = images.read("test.png");
+/* Использовать японский пакет. */
+ocr.paddle(img, { profile: "ja" });
+/* Выбрать корейский пакет по ID плагина. */
+ocr.paddle(img, { engineId: "paddle-ocr-pp-ocrv3-ko" });
+/* Использовать квантованные модели и включить классификацию направления текста. */
+ocr.paddle(img, { useSlim: true, useCls: true });
+/* useOpenCL в версии ONNX Runtime сопоставлен с NNAPI. */
+ocr.paddle(img, { useOpenCL: true });
+/* Использовать версию Paddle Lite. */
+ocr.paddle(img, { variant: "v3-paddle-lite" });
+```
+
+Выбор пакета через `profile` и параметр `useCls` требуют AutoJs6 6.8.0 или новее. Более старые хосты не выбирают пакет по `profile` и не передают `useCls`; если установлено несколько языковых пакетов, укажите нужный через `engineId`.
+
 ******
 
 ### Методы API
@@ -98,6 +139,7 @@ ocr.paddle("test.png");
 ocr.paddle.recognizeText(image)
 ocr.paddle.detect(image)
 ocr.paddle(image)
+ocr.paddle(image, options)
 ocr.paddle.recognizeText()
 ocr.paddle()
 ```
@@ -109,6 +151,21 @@ ocr.paddle()
 ### История выпусков
 
 ******
+
+# v2.0.0
+
+###### 2026/10/30
+
+* `Заметка` Распознавание теперь работает на ONNX Runtime вместо Paddle Lite, разработчиком указан SuperMonster003. Прежняя реализация на Paddle Lite выпускается отдельно как Paddle OCR (PP-OCRv3 Paddle Lite) (ID плагина `paddle-ocr-pp-ocrv3-paddle-lite`, вариант `v3-paddle-lite`) и может быть установлена вместе с этим плагином
+* `Заметка` Плагин теперь выпускается в виде пяти языковых пакетов (китайский упрощённый, английский, китайский традиционный, японский и корейский), каждый является отдельным APK; пакет для китайского упрощённого сохраняет прежние имя пакета и ID плагина
+* `Заметка` Выбор пакета через `profile` и параметр `useCls` требуют AutoJs6 6.8.0 или новее; более старые хосты не выбирают пакет по `profile` и не передают `useCls`
+* `Добавлено` Поддержка устройств x86_64 и x86, включая эмуляторы, всего четыре ABI
+* `Добавлено` Новый параметр `useCls`: перед распознаванием определяется направление текста, поэтому читается и текст, повёрнутый на 180 градусов; по умолчанию выключен
+* `Добавлено` `useOpenCL` в версии ONNX Runtime сопоставлен с NNAPI: Android 8.1 и новее использует NNAPI, более старые версии или устройства без доступного NNAPI возвращаются на CPU
+* `Улучшено` `useSlim` теперь использует модели обнаружения и распознавания, квантованные в int8 динамическим квантованием ONNX Runtime
+* `Зависимость` Добавлен ONNX Runtime Android 1.21.1, удалён Paddle Lite
+* `Зависимость` Модели PaddleOCR PP-OCRv3 переведены в формат ONNX (конвертированы из официальных моделей вывода), добавлены модели распознавания для английского, китайского традиционного, японского и корейского и модель направления текста
+* `Зависимость` OpenCV 4.8.0 теперь поставляется как общая библиотека libopencv_java4.so, как в плагине PP-OCRv4
 
 # v1.0.6
 
@@ -127,17 +184,6 @@ ocr.paddle()
 * `Улучшено` Подняты compileSdk и targetSdk до 37 (Android 17); поведение плагина не зависит от нового целевого уровня
 * `Улучшено` Значки в сведениях о приложении Android используют изображения и светлый и тёмный фон Icon Studio, сохраняя прозрачные изображения центра плагинов и существующие варианты значков лаунчера
 
-# v1.0.4
-
-###### 2026/09/13
-
-* `Исправлено` Неполная очистка временных ссылок JNI при преобразовании строк во время инициализации; инициализация теперь сразу прекращается при исключениях JNI _[`issue #575`](http://issues.autojs6.com/575)_
-* `Исправлено` Информация о версии и ABI в центре плагинов соответствует установленному APK
-* `Исправлено` Размер закодированного изображения ограничен 64 MiB с поддержкой файловых дескрипторов и каналов
-* `Исправлено` Даты версий используют единый английский формат
-* `Улучшено` Проверка версий, подписей и полного набора вариантов APK перед подготовкой файлов для загрузки
-* `Улучшено` Изображения могут содержать до 16777216 пикселей; размер буферов необработанных изображений ограничен 64 MiB
-
 ##### Дополнительную историю выпусков см.
 
 * [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/app/src/main/assets/doc/CHANGELOG-ru.md)
@@ -149,16 +195,17 @@ ocr.paddle()
 ******
 
 ```powershell
-.\gradlew.bat :app:assembleDebug
+python -I scripts\prepare_ppocrv3_assets.py --profile all --slim
+.\gradlew.bat :app:assembleZhDebug
 ```
 
 Сборка Release:
 
 ```powershell
-.\gradlew.bat :app:assembleRelease
+.\gradlew.bat :app:appendDigestToReleasedFiles
 ```
 
-Параметры сборки берутся из `version.properties`, текущий min SDK 24 и target SDK 37.
+Параметры сборки берутся из `version.properties`, текущий min SDK 24 и target SDK 37. Модели ONNX не хранятся в репозитории: перед сборкой запустите `prepare_ppocrv3_assets.py`, как показано выше. Скрипт скачивает официальные модели PaddleOCR, конвертирует их в ONNX и сверяет с `libs/ppocr-android-sdk/models.provenance.json`; `--profile` принимает `zh`, `en`, `zhHant`, `ja`, `ko` или `all`. Сторонние компоненты и лицензии перечислены в [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
 
 ******
 
@@ -185,8 +232,9 @@ app/src/main/res/raw-*/plugin_instruction.md
 
 - Документация AutoJs6 OCR: https://docs.autojs6.com/#/ocr
 - Официальный проект PaddleOCR: https://github.com/PaddlePaddle/PaddleOCR
-- Официальный проект Paddle Lite: https://github.com/PaddlePaddle/Paddle-Lite
+- Официальный проект ONNX Runtime: https://github.com/microsoft/onnxruntime
 - Официальный сайт OpenCV: https://opencv.org/
+- Плагин Paddle OCR (PP-OCRv3 Paddle Lite): https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite
 
 
 [16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/docs/16kb.md)

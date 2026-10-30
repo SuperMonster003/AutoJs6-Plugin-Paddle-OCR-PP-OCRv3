@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="plugin_description">ملحق Paddle OCR للتعرف على النص يعتمد على Baidu PaddlePaddle</string>
+    <string name="plugin_description">ملحق Paddle OCR (PP-OCRv3) للتعرف على النص يعمل على ONNX Runtime, مع حزم لغات للصينية المبسطة والإنجليزية والصينية التقليدية واليابانية والكورية</string>
 </resources>

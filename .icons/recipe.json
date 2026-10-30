@@ -4,7 +4,11 @@
   "profile": "catalog",
   "repository": "AutoJs6-Plugin-Paddle-OCR-PP-OCRv3",
   "packages": [
-    "io.github.supermonster003.autojs6.plugin.paddleocr.v3"
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.en",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja",
+    "io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko"
   ],
   "launcher": false,
   "params": {

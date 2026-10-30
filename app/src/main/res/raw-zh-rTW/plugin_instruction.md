@@ -32,4 +32,22 @@ ocr.paddle.recognizeText("test.png");
 ocr.paddle("test.png");
 ```
 
+選擇語種包並設定辨識選項 (`profile` 與 `useCls` 需要 AutoJs6 6.8.0 或更新版本):
+
+```js
+let img = images.read("test.png");
+
+/* 使用日文語種包. */
+
+ocr.paddle(img, { profile: "ja" });
+
+/* 辨識前判斷文字方向, 可辨識旋轉 180 度的文字 (預設關閉). */
+
+ocr.paddle(img, { useCls: true });
+
+/* useOpenCL 在 ONNX Runtime 版映射為 NNAPI, 無法使用時退回 CPU. */
+
+ocr.paddle(img, { useOpenCL: true });
+```
+
 更多使用方式, 可參閱 AutoJs6 應用文件的 [光學字元識別 (OCR)](https://docs.autojs6.com/#/ocr) 章節.

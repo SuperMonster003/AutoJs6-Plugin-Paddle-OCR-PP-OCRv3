@@ -41,7 +41,9 @@ Le README.md actuel prend en charge les langues suivantes:
 
 ******
 
-Le plugin AutoJs6 Paddle OCR (PP-OCRv3) ajoute une reconnaissance optique de caracteres basee sur PaddleOCR PP-OCRv3, avec prise en charge des captures d'ecran, des fichiers image locaux et des entrees image brutes.
+Le plugin AutoJs6 Paddle OCR (PP-OCRv3) ajoute une reconnaissance optique de caractères basée sur PaddleOCR PP-OCRv3 et ONNX Runtime, avec prise en charge des captures d'écran, des fichiers image locaux et des entrées image brutes. Depuis la version 2.0.0, il fonctionne avec ONNX Runtime au lieu de Paddle Lite, prend en charge quatre ABI et se décline en cinq paquets de langue.
+
+> **Édition Paddle Lite**: l'implémentation Paddle Lite de 1.0.x est désormais publiée séparément sous le nom [Paddle OCR (PP-OCRv3 Paddle Lite)](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite) (ID de plugin `paddle-ocr-pp-ocrv3-paddle-lite`, variante `v3-paddle-lite`). Elle ne prend en charge que arm64-v8a et armeabi-v7a et peut être installée à côté de ce plugin.
 
 ******
 
@@ -49,13 +51,34 @@ Le plugin AutoJs6 Paddle OCR (PP-OCRv3) ajoute une reconnaissance optique de car
 
 ******
 
-- Fournit le service de plugin `paddle-ocr-pp-ocrv3`, avec l'ID de plugin `paddle-ocr-pp-ocrv3`.
+- Se décline en cinq paquets de langue (chinois simplifié, anglais, chinois traditionnel, japonais et coréen). Le paquet chinois simplifié conserve le nom de paquet et l'ID de plugin `paddle-ocr-pp-ocrv3` de 1.0.x; tous les paquets utilisent le moteur `paddle-ocr` et la variante `v3`.
 - Prend en charge `ocr.paddle.recognizeText(image)` et `ocr.paddle.detect(image)` dans AutoJs6.
 - Prend en charge les captures d'ecran, les fichiers image locaux et les entrees image brutes ARGB_8888.
 - Les informations du plugin, les instructions, le README et le CHANGELOG prennent en charge espagnol/francais/russe/arabe/japonais/coreen/anglais/chinois simplifie/chinois traditionnel de Hong Kong/chinois traditionnel de Taiwan.
-- Base sur PaddleOCR PP-OCRv3, Paddle Lite et OpenCV 4.8.0.
+- Basé sur PaddleOCR PP-OCRv3, ONNX Runtime 1.21.1 et OpenCV 4.8.0, pour quatre ABI (arm64-v8a, armeabi-v7a, x86_64 et x86).
+- `useSlim: true` utilise des modèles de détection et de reconnaissance quantifiés en int8 par la quantification dynamique d'ONNX Runtime.
+- `useCls: true` détermine l'orientation du texte avant la reconnaissance, ce qui permet de lire un texte tourné de 180 degrés; désactivé par défaut, comme en 1.0.x.
+- `useOpenCL` est associé à NNAPI dans l'édition ONNX Runtime. Sous Android 8.1 (API 27) ou ultérieur, le fournisseur d'exécution NNAPI est utilisé; sur les versions antérieures, ou si NNAPI ne démarre pas, la reconnaissance repasse sur le CPU. Le gain de vitesse dépend de l'appareil.
 - Les images peuvent contenir jusqu'à 16777216 pixels; les tampons bruts sont limités à 64 MiB
 - Les images encodées sont limitées à 64 MiB avec prise en charge des fichiers et des tubes
+
+******
+
+### Paquets de langue
+
+******
+
+Chaque paquet de langue est un APK distinct, et plusieurs peuvent être installés en même temps:
+
+| Langue | `profile` | ID de plugin | Nom de paquet | Nom de l'APK |
+| --- | --- | --- | --- | --- |
+| Chinois simplifié | `zh` | `paddle-ocr-pp-ocrv3` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3` | `*-zh-<ABI>-*.apk` |
+| Anglais | `en` | `paddle-ocr-pp-ocrv3-en` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.en` | `*-en-<ABI>-*.apk` |
+| Chinois traditionnel | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zhhant-<ABI>-*.apk` |
+| Japonais | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
+| Coréen | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
+
+Choisissez le paquet selon le texte à lire. Le paquet chinois simplifié lit aussi les lettres latines et les chiffres et constitue la recommandation par défaut. Pour du texte en chinois traditionnel, en japonais ou en coréen, installez le paquet correspondant; pour du texte uniquement en anglais, vous pouvez aussi installer le paquet anglais. Chaque paquet existe en cinq APK selon l'ABI (`arm64-v8a` pour la plupart des téléphones, `armeabi-v7a`, `x86_64`, `x86` et `universal`, qui contient les quatre ABI et est le plus volumineux). N'installez que celui qui correspond à votre appareil.
 
 ******
 
@@ -86,6 +109,24 @@ ocr.paddle.recognizeText();
 ocr.paddle("test.png");
 ```
 
+Choisir un paquet de langue et régler les options de reconnaissance:
+
+```js
+let img = images.read("test.png");
+/* Utiliser le paquet japonais. */
+ocr.paddle(img, { profile: "ja" });
+/* Choisir le paquet coréen par ID de plugin. */
+ocr.paddle(img, { engineId: "paddle-ocr-pp-ocrv3-ko" });
+/* Utiliser les modèles quantifiés et activer la classification de l'orientation du texte. */
+ocr.paddle(img, { useSlim: true, useCls: true });
+/* useOpenCL est associé à NNAPI dans l'édition ONNX Runtime. */
+ocr.paddle(img, { useOpenCL: true });
+/* Utiliser l'édition Paddle Lite. */
+ocr.paddle(img, { variant: "v3-paddle-lite" });
+```
+
+Le choix d'un paquet par `profile` et l'option `useCls` nécessitent AutoJs6 6.8.0 ou ultérieur. Les hôtes plus anciens ne choisissent pas par `profile` et ne transmettent pas `useCls`; si plusieurs paquets de langue sont installés, utilisez `engineId` pour en choisir un.
+
 ******
 
 ### Methodes API
@@ -98,6 +139,7 @@ Les API OCR courantes incluent:
 ocr.paddle.recognizeText(image)
 ocr.paddle.detect(image)
 ocr.paddle(image)
+ocr.paddle(image, options)
 ocr.paddle.recognizeText()
 ocr.paddle()
 ```
@@ -109,6 +151,21 @@ ocr.paddle()
 ### Historique des versions
 
 ******
+
+# v2.0.0
+
+###### 2026/10/30
+
+* `Note` La reconnaissance fonctionne désormais avec ONNX Runtime au lieu de Paddle Lite, et le développeur devient SuperMonster003. L'ancienne implémentation Paddle Lite est publiée séparément sous le nom Paddle OCR (PP-OCRv3 Paddle Lite) (ID de plugin `paddle-ocr-pp-ocrv3-paddle-lite`, variante `v3-paddle-lite`) et peut être installée à côté de ce plugin
+* `Note` Le plugin se décline désormais en cinq paquets de langue (chinois simplifié, anglais, chinois traditionnel, japonais et coréen), chacun étant un APK distinct; le paquet chinois simplifié conserve le nom de paquet et l'ID de plugin d'origine
+* `Note` Le choix d'un paquet par `profile` et l'option `useCls` nécessitent AutoJs6 6.8.0 ou ultérieur; les hôtes plus anciens ne choisissent pas par `profile` et ne transmettent pas `useCls`
+* `Ajout` Prise en charge des appareils x86_64 et x86, émulateurs compris, soit quatre ABI au total
+* `Ajout` Nouvelle option `useCls`, qui détermine l'orientation du texte avant la reconnaissance pour lire aussi un texte tourné de 180 degrés; désactivée par défaut
+* `Ajout` `useOpenCL` est associé à NNAPI dans l'édition ONNX Runtime: Android 8.1 ou ultérieur utilise NNAPI, et les versions antérieures ou les appareils sans NNAPI disponible repassent sur le CPU
+* `Amelioration` `useSlim` utilise désormais des modèles de détection et de reconnaissance quantifiés en int8 par la quantification dynamique d'ONNX Runtime
+* `Dependance` Ajout d'ONNX Runtime Android 1.21.1 et suppression de Paddle Lite
+* `Dependance` Les modèles PaddleOCR PP-OCRv3 passent au format ONNX, convertis à partir des modèles d'inférence officiels, avec de nouveaux modèles de reconnaissance anglais, chinois traditionnel, japonais et coréen et un modèle d'orientation du texte
+* `Dependance` OpenCV 4.8.0 est désormais fourni sous forme de bibliothèque partagée libopencv_java4.so, comme dans le plugin PP-OCRv4
 
 # v1.0.6
 
@@ -127,17 +184,6 @@ ocr.paddle()
 * `Amelioration` compileSdk et targetSdk passent à 37 (Android 17) ; le comportement du plugin ne dépend pas de la nouvelle cible
 * `Amelioration` Les icônes des informations d'application Android utilisent les illustrations et les fonds clairs et sombres d'Icon Studio, en conservant les images transparentes du centre de plugins et les choix du lanceur
 
-# v1.0.4
-
-###### 2026/09/13
-
-* `Correction` Nettoyage incomplet des références JNI temporaires lors de la conversion des chaînes pendant l'initialisation; celle-ci s'arrête désormais immédiatement en cas d'exception JNI _[`issue #575`](http://issues.autojs6.com/575)_
-* `Correction` Les informations de version et d'ABI du centre des plugins correspondent à l'APK installé
-* `Correction` Les images encodées sont limitées à 64 MiB avec prise en charge des fichiers et des tubes
-* `Correction` Les dates de version utilisent un format anglais uniforme
-* `Amelioration` Validation des versions, signatures et variantes complètes des APK avant la création des fichiers à télécharger
-* `Amelioration` Les images peuvent contenir jusqu'à 16777216 pixels; les tampons bruts sont limités à 64 MiB
-
 ##### Pour plus d'historique des versions, voir
 
 * [CHANGELOG.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/app/src/main/assets/doc/CHANGELOG-fr.md)
@@ -149,16 +195,17 @@ ocr.paddle()
 ******
 
 ```powershell
-.\gradlew.bat :app:assembleDebug
+python -I scripts\prepare_ppocrv3_assets.py --profile all --slim
+.\gradlew.bat :app:assembleZhDebug
 ```
 
 Compilation Release:
 
 ```powershell
-.\gradlew.bat :app:assembleRelease
+.\gradlew.bat :app:appendDigestToReleasedFiles
 ```
 
-Les parametres de compilation viennent de `version.properties`, avec le SDK minimum actuel 24 et le SDK cible 37.
+Les paramètres de compilation viennent de `version.properties`, avec le SDK minimum actuel 24 et le SDK cible 37. Les modèles ONNX ne sont pas versionnés: avant de compiler, exécutez `prepare_ppocrv3_assets.py` comme ci-dessus. Il télécharge les modèles officiels de PaddleOCR, les convertit en ONNX et les vérifie avec `libs/ppocr-android-sdk/models.provenance.json`; `--profile` accepte `zh`, `en`, `zhHant`, `ja`, `ko` ou `all`. Les composants tiers et leurs licences sont listés dans [THIRD_PARTY_NOTICES.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/THIRD_PARTY_NOTICES.md).
 
 ******
 
@@ -185,8 +232,9 @@ app/src/main/res/raw-*/plugin_instruction.md
 
 - Documentation OCR AutoJs6: https://docs.autojs6.com/#/ocr
 - Projet officiel PaddleOCR: https://github.com/PaddlePaddle/PaddleOCR
-- Projet officiel Paddle Lite: https://github.com/PaddlePaddle/Paddle-Lite
+- Projet officiel ONNX Runtime: https://github.com/microsoft/onnxruntime
 - Site officiel OpenCV: https://opencv.org/
+- Plugin Paddle OCR (PP-OCRv3 Paddle Lite): https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite
 
 
 [16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/blob/master/docs/16kb.md)

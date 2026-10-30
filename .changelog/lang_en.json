@@ -5,6 +5,27 @@
   "changelog_label_improvement": "Improvement",
   "changelog_label_dependency": "Dependency",
   "$data": {
+    "v2.0.0": {
+      "released_date": "2026/10/30",
+      "hint": [
+        "Recognition now runs on ONNX Runtime instead of Paddle Lite, and the developer is now SuperMonster003. The previous Paddle Lite implementation is published separately as Paddle OCR (PP-OCRv3 Paddle Lite) (plugin ID `paddle-ocr-pp-ocrv3-paddle-lite`, variant `v3-paddle-lite`) and can be installed alongside this plugin",
+        "The plugin now comes as five language packages (Simplified Chinese, English, Traditional Chinese, Japanese, and Korean), each a separate APK; the Simplified Chinese package keeps the original package name and plugin ID",
+        "Choosing a package by `profile` and the `useCls` option need AutoJs6 6.8.0 or later; older hosts do not choose by `profile` and do not pass `useCls` on"
+      ],
+      "feature": [
+        "Support x86_64 and x86 devices, including emulators, for four ABIs in total",
+        "Add the `useCls` option, which checks the text direction before recognition so text rotated by 180 degrees can be read; it is off by default",
+        "`useOpenCL` maps to NNAPI in the ONNX Runtime edition: Android 8.1 and later use NNAPI, and older versions or devices where NNAPI is unavailable fall back to the CPU"
+      ],
+      "improvement": [
+        "`useSlim` now uses detection and recognition models quantized to int8 with ONNX Runtime dynamic quantization"
+      ],
+      "dependency": [
+        "Add ONNX Runtime Android 1.21.1 and remove Paddle Lite",
+        "PaddleOCR PP-OCRv3 models are now in ONNX format, converted from the official inference models, with new English, Traditional Chinese, Japanese, and Korean recognition models and a text direction model",
+        "OpenCV 4.8.0 is now shipped as the shared library libopencv_java4.so, as in the PP-OCRv4 plugin"
+      ]
+    },
     "v1.0.6": {
       "released_date": "2026/10/10",
       "hint": [

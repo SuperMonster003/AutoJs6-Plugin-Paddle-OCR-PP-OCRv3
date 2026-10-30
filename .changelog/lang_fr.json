@@ -5,6 +5,27 @@
   "changelog_label_improvement": "Amelioration",
   "changelog_label_dependency": "Dependance",
   "$data": {
+    "v2.0.0": {
+      "released_date": "2026/10/30",
+      "hint": [
+        "La reconnaissance fonctionne désormais avec ONNX Runtime au lieu de Paddle Lite, et le développeur devient SuperMonster003. L'ancienne implémentation Paddle Lite est publiée séparément sous le nom Paddle OCR (PP-OCRv3 Paddle Lite) (ID de plugin `paddle-ocr-pp-ocrv3-paddle-lite`, variante `v3-paddle-lite`) et peut être installée à côté de ce plugin",
+        "Le plugin se décline désormais en cinq paquets de langue (chinois simplifié, anglais, chinois traditionnel, japonais et coréen), chacun étant un APK distinct; le paquet chinois simplifié conserve le nom de paquet et l'ID de plugin d'origine",
+        "Le choix d'un paquet par `profile` et l'option `useCls` nécessitent AutoJs6 6.8.0 ou ultérieur; les hôtes plus anciens ne choisissent pas par `profile` et ne transmettent pas `useCls`"
+      ],
+      "feature": [
+        "Prise en charge des appareils x86_64 et x86, émulateurs compris, soit quatre ABI au total",
+        "Nouvelle option `useCls`, qui détermine l'orientation du texte avant la reconnaissance pour lire aussi un texte tourné de 180 degrés; désactivée par défaut",
+        "`useOpenCL` est associé à NNAPI dans l'édition ONNX Runtime: Android 8.1 ou ultérieur utilise NNAPI, et les versions antérieures ou les appareils sans NNAPI disponible repassent sur le CPU"
+      ],
+      "improvement": [
+        "`useSlim` utilise désormais des modèles de détection et de reconnaissance quantifiés en int8 par la quantification dynamique d'ONNX Runtime"
+      ],
+      "dependency": [
+        "Ajout d'ONNX Runtime Android 1.21.1 et suppression de Paddle Lite",
+        "Les modèles PaddleOCR PP-OCRv3 passent au format ONNX, convertis à partir des modèles d'inférence officiels, avec de nouveaux modèles de reconnaissance anglais, chinois traditionnel, japonais et coréen et un modèle d'orientation du texte",
+        "OpenCV 4.8.0 est désormais fourni sous forme de bibliothèque partagée libopencv_java4.so, comme dans le plugin PP-OCRv4"
+      ]
+    },
     "v1.0.6": {
       "released_date": "2026/10/10",
       "hint": [

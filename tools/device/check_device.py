@@ -1,7 +1,8 @@
 """Install language packages of this plugin on a device and check them through the AutoJs6 host.
 
 Each check prints PASS or FAIL with its key values (recognized text is not printed):
-  install    every flavor's APK for the device ABI installs over any earlier build
+  install    every flavor's APK for the device ABI installs over any earlier build (a build signed
+             by the other key, debug vs release, is uninstalled first)
   identity   each installed package has the versionName and versionCode of version.properties
   discovery  every installed flavor answers the org.autojs.plugin.PADDLE_OCR action (coexistence)
   label      the host reads each flavor's application label
@@ -162,8 +163,14 @@ def main():
             report(f'{flavor} install', False, f'expected one {abi} APK, found {len(candidates)}')
             continue
         installed = adb('install', '-r', str(candidates[0]), timeout=300)
+        replaced = 'INSTALL_FAILED_UPDATE_INCOMPATIBLE' in installed.stdout + installed.stderr
+        if replaced:
+            # The installed build is signed by the other key (debug vs release): replace it.
+            adb('uninstall', package, timeout=120)
+            installed = adb('install', str(candidates[0]), timeout=300)
         report(f'{flavor} install', installed.returncode == 0 and 'Success' in installed.stdout,
-               candidates[0].name if installed.returncode == 0 else installed.stderr.strip()[-200:])
+               (candidates[0].name + (' (replaced a build with another signature)' if replaced else ''))
+               if installed.returncode == 0 else installed.stderr.strip()[-200:])
         dump = adb('shell', 'dumpsys', 'package', package).stdout
         code = re.search(r'versionCode=(\d+)', dump)
         name = re.search(r'versionName=(\S+)', dump)

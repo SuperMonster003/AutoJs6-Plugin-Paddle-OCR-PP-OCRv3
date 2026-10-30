@@ -129,8 +129,8 @@ class OcrService : Service() {
     }
 
     internal companion object {
-        // Temporary floor until the host release with profile matching is known (roadmap D24).
-        const val REQUIRES_HOST_VERSION = 3835
+        // First host build that matches by profile and forwards useCls (roadmap D24).
+        const val REQUIRES_HOST_VERSION = 5935
         const val CAPABILITY_MODEL_FAMILY = "modelFamily"
         const val CAPABILITY_LANGUAGE = "language"
     }
