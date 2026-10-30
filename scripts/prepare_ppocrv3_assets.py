@@ -35,6 +35,7 @@ PADDLEOCR_BOS_BASE = "https://paddleocr.bj.bcebos.com"
 PADDLEOCR_TAG = "v2.7.0"
 PADDLEOCR_RAW_BASE = f"https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/{PADDLEOCR_TAG}"
 
+SETUPTOOLS_VERSION = "84.2.1"
 PADDLEPADDLE_VERSION = "3.2.1"
 PADDLE2ONNX_VERSION = "1.3.1"
 ONNXRUNTIME_VERSION = "1.21.1"
@@ -42,6 +43,8 @@ ONNX_VERSION = "1.23.2"
 OPSET_VERSION = 7
 
 CONVERTER_REQUIREMENTS = (
+    # Python 3.12 venvs have no setuptools, and importing paddle needs it.
+    f"setuptools=={SETUPTOOLS_VERSION}",
     f"paddlepaddle=={PADDLEPADDLE_VERSION}",
     f"paddle2onnx=={PADDLE2ONNX_VERSION}",
     f"onnxruntime=={ONNXRUNTIME_VERSION}",
