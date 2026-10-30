@@ -217,9 +217,9 @@ docs/dev/opencv-ocr-runtime-decoupling-roadmap.md (D10 加注), .changelog (zh-H
 | --- | --- | --- | --- |
 | P0 | 插件 | 资产流水线: 下载, 转换, 字典, slim 量化, provenance, 16 KB 复核 | 已完成 (67d710d) |
 | P1 | 插件 | 本体改造: 删 Paddle-Lite, ONNX Runtime SDK + cls + slim, 5 flavor, 服务与能力, 测试, CI, 图标, 文档资源 | 已完成 (b9fa0cc, c9b17bd) |
-| P2 | 旧插件 | 带历史复制到新仓库, 改名, 1.1.0 构建与验证 | 进行中: P2.1 已完成 (新仓库 ca42783 / dd8e558 / 688983d), P2.2 未开始 |
-| P3 | 宿主 | 内嵌 ONNX Runtime 引擎, 打包两变体, 默认选择与 profile 匹配, 向导, changelog, 单测 | 进行中: P3.1 - P3.4 已完成 (宿主本地 9 笔, f38abc036 - bfc871fae), P3.5 未开始 |
-| P4 | 测试 | 设备矩阵, 新旧对比, 精度与速度基线, slim 判定, 打包 APK 两引擎 | 未开始 |
+| P2 | 旧插件 | 带历史复制到新仓库, 改名, 1.1.0 构建与验证 | 已完成: P2.1 (新仓库 ca42783 / dd8e558 / 688983d), P2.2 (Pad 共存验证) |
+| P3 | 宿主 | 内嵌 ONNX Runtime 引擎, 打包两变体, 默认选择与 profile 匹配, 向导, changelog, 单测 | 已完成: P3.1 - P3.4 (宿主本地 9 笔, f38abc036 - bfc871fae), P3.5 (宿主本地 f3aa53bb0 / 5737cbdc1) |
+| P4 | 测试 | 设备矩阵, 新旧对比, 精度与速度基线, slim 判定, 打包 APK 两引擎 | 已完成 (`docs/benchmark.md`, 附录 F); slim 达标 (Q2 未提问), 新待决 Q14 (Lite 1.1.0 崩溃); OnePlus 与 Redmi zh 冒烟未执行, 等维护者在机上操作 |
 | P5 | 文档 / 发布 / 索引 | 四仓库文档, README / changelog, 2.0.0 与 1.1.0 发布, 索引 6 包登记 | 未开始 |
 | P6 | 插件 | 2.1.0 其余 7 语种与其他候选 | 未开始 |
 
@@ -327,7 +327,8 @@ P0 (资产脚本与模型)   P2 (旧插件新仓库)   P3.1 - P3.4 (宿主引擎
 
 ### P2.2 共存验证
 
-- [ ] (测试) 任一 arm64 真机同时安装 Paddle Lite 1.1.0 与 ONNX Runtime 2.0.0 (zh), 插件中心两者都识别; 脚本 `ocr.paddle(img, { variant: "v3-paddle-lite" })` 与 `{ variant: "v3" }` 分别命中对应插件 (日志中的包名), 无显式条件时按 D22 命中 ONNX Runtime 版 (需 P3.3 宿主 debug 包; 之前只验证前两项). 证据: 日志片段与设备型号.
+- [x] (测试) 任一 arm64 真机同时安装 Paddle Lite 1.1.0 与 ONNX Runtime 2.0.0 (zh), 插件中心两者都识别; 脚本 `ocr.paddle(img, { variant: "v3-paddle-lite" })` 与 `{ variant: "v3" }` 分别命中对应插件 (日志中的包名), 无显式条件时按 D22 命中 ONNX Runtime 版 (需 P3.3 宿主 debug 包; 之前只验证前两项). 证据: 日志片段与设备型号.
+  - 2026-10-30 由 paddle-ocr-v3-p2-2-p3-5 完成 (同步自看板, 本条由 paddle-ocr-v3-p4 同步): Xiaomi Pad 23046RP50C (968e9f18, API 35, 宿主 debug 5935, 含宿主本地提交 f3aa53bb0 的选择日志 "select: <包名> (variant X) for <条件>"), v3 2.0.0 (67) 与 paddlelite 1.1.0 (65) 共存, 插件中心 9 个 Paddle OCR 服务, 两者都在并已启用 (截图在共享笔记目录 p2-2-plugin-center-pad-968e9f18.png); `variant: "v3-paddle-lite"` -> `...v3.paddlelite` (2 / 2 行, 4014 ms), `variant: "v3"` -> `...v3` (724 ms), 无条件且其余 7 个关闭 -> `...v3` (581 ms), 即 D22 选 ONNX Runtime 版. 其余 Paddle OCR 插件开着时无条件调用由它们按 D22 平手规则响应 (P4.1 在 Redmi / Pad 上同样观察到).
 
 ---
 
@@ -357,7 +358,8 @@ P0 (资产脚本与模型)   P2 (旧插件新仓库)   P3.1 - P3.4 (宿主引擎
 
 ### P3.5 打包 APK 验证
 
-- [ ] (测试) 宿主 debug 包 + ONNX Runtime 插件 (zh) 打包一个调用 `ocr.paddle` 的脚本: arm64 真机与 x86_64 AVD 各安装运行, 识别结果与宿主应用内一致, `useSlim` 走 slim 目录 (日志); 只装 Paddle Lite 插件时打包仍走 Paddle-Lite 引擎 (arm64 真机); 两者都装时打包器选中 ONNX Runtime (日志 "Selected plugin ... (v3)"). 证据: 三组结果与 APK 的 `lib/` 清单.
+- [x] (测试) 宿主 debug 包 + ONNX Runtime 插件 (zh) 打包一个调用 `ocr.paddle` 的脚本: arm64 真机与 x86_64 AVD 各安装运行, 识别结果与宿主应用内一致, `useSlim` 走 slim 目录 (日志); 只装 Paddle Lite 插件时打包仍走 Paddle-Lite 引擎 (arm64 真机); 两者都装时打包器选中 ONNX Runtime (日志 "Selected plugin ... (v3)"). 证据: 三组结果与 APK 的 `lib/` 清单.
+  - 2026-10-30 由 paddle-ocr-v3-p2-2-p3-5 完成 (同步自看板): 宿主本地提交 f3aa53bb0 (选择与内嵌引擎加载日志), 5737cbdc1 (设备测试 `PaddleOcrOnnxPackagingDeviceTest` + `tools/paddle-ocr-v3`), 单测 52 / 52. Pad 七组 + AVD_API_33 (x86_64) 两组, 打包应用与宿主识别文本逐项一致; ort 组 `lib/` 8 项 (ONNX Runtime + OpenCV). Pad fp32 456 ms, slim 185 ms (日志 `models/ppocrv3-slim`), `useOpenCL` 358 ms (provider nnapi), 倒置图 `useCls` 关 0 / 2 行, 开 2 / 2 行; AVD fp32 1063 ms, slim 294 ms, nnapi 321 ms, cls 开 2 / 2 行. Lite + ORT 同装 -> 选 ORT; 加装 Rapid OCR ppocrv3 1.0.6 后 `libonnxruntime.so` 三方字节相同 (17908496 字节, `67465b2bcf0a`), 无冲突; 关闭 OpenCV 插件 -> 构建报 `error_apk_paddle_ocr_onnx_runtime_requires_opencv_plugin`; 只装 Lite -> `v3-paddle-lite` (Paddle-Lite 引擎 603 / 80 ms); 只装旧 1.0.5 -> `v3` 回退 `v3-paddle-lite` (535 / 79 ms). 新待决 Q20 (脚本层看不到 `executionProvider`, 已按推荐先行, 见看板). 明细在共享笔记目录 p2-2-p3-5-notes.md 与 p2-2-p3-5-device.log.
 
 ---
 
@@ -367,19 +369,23 @@ P0 (资产脚本与模型)   P2 (旧插件新仓库)   P3.1 - P3.4 (宿主引擎
 
 ### P4.1 冒烟矩阵 (D33)
 
-- [ ] (测试) 附录 F 每台设备: 安装 zh + 任一其他语种 flavor, 激活, 中文样图 `ocr.paddle` (无条件), `profile` 指定语种样图, `useSlim: true`, `RAW_IMAGE` 路径 (宿主 `SharedMemory` 传图); x86 / x86_64 在 AVD 上跑 (API 24, 33 / 35 x86_64, 16 KB 镜像); 旧 Paddle Lite 1.1.0 在 arm64 真机冒烟. 记录型号 / API / ABI / 耗时. 证据: 附录 F 表填满, 未在线设备写 "未执行".
+- [x] (测试) 附录 F 每台设备: 安装 zh + 任一其他语种 flavor, 激活, 中文样图 `ocr.paddle` (无条件), `profile` 指定语种样图, `useSlim: true`, `RAW_IMAGE` 路径 (宿主 `SharedMemory` 传图); x86 / x86_64 在 AVD 上跑 (API 24, 33 / 35 x86_64, 16 KB 镜像); 旧 Paddle Lite 1.1.0 在 arm64 真机冒烟. 记录型号 / API / ABI / 耗时. 证据: 附录 F 表填满, 未在线设备写 "未执行".
+  - 2026-10-30 由 paddle-ocr-v3-p4 完成 (附录 F 冒烟结果表): 宿主 debug 5935, 插件 release 2.0.0 (67). 全部通过: XQ-AT72 33 / 33 (5 个 flavor), XQ-DQ72 18 / 18, G8441 arm64 18 / 18 与 armeabi-v7a 包 18 / 18, Xiaomi Pad 18 / 18, AVD_API_24 (x86) 15 / 15, AVD_API_33 (x86_64) 15 / 15, AVD_API_35_16K 15 / 15; Paddle Lite 1.1.0 在 5 台 arm64 (含 v7a 包) 上 fp32 / slim 都通过. `useOpenCL`: API 27 及以上都报 nnapi 且文本与 CPU 相同, 耗时与 CPU 相差 -6% 到 +23%; API 24 回退 cpu. `RAW_IMAGE` 路径在 API 27 及以上宿主回退 0 次. 未执行: OnePlus 63751f63 (ColorOS 安装确认页需维护者在机上确认), Redmi 的 zh 包 6 项 (插件中心为关闭状态, 未代为开启; 同机 zhHant 与 Lite 通过, 13 / 19); 两项补测后更新附录 F. 脚本改动: `--abi`, `--lite`, 宿主脚本改为 `-e script` 内联启动 (Android 11+ 的 `-e path` 需要全部文件访问权限), 外部目录由宿主自建, 运行前用 adb 启动宿主的启动器活动 (切到前台).
 
 ### P4.2 新旧对比
 
-- [ ] (测试) 图集 (D34) 在旧 Paddle-Lite (1.0.6 APK 或 Paddle Lite 1.1.0) 与 ONNX Runtime fp32 上逐行比较文本, 记录一致率与差异样例 (预期 >= 95%; 低于则分析是否转换 / 预处理差异并登记待决); 耗时对比 (XQ-AT72). 证据: 数字与差异清单 (`docs/benchmark.md`).
+- [x] (测试) 图集 (D34) 在旧 Paddle-Lite (1.0.6 APK 或 Paddle Lite 1.1.0) 与 ONNX Runtime fp32 上逐行比较文本, 记录一致率与差异样例 (预期 >= 95%; 低于则分析是否转换 / 预处理差异并登记待决); 耗时对比 (XQ-AT72). 证据: 数字与差异清单 (`docs/benchmark.md`).
+  - 2026-10-30 由 paddle-ocr-v3-p4 完成: `docs/benchmark.md`, 工具 `tools/device/benchmark.py` (`--lite`, `--image`) 与 `tools/device/make_benchmark_images.py` (11 张图, 哈希在文档里). XQ-AT72 (API 31, 宿主 debug 5935) 4 张 1080 x 1500 大图 (zh / en 的 settings 与 notes): Paddle Lite 1.1.0 fp32 与 ORT fp32 一致 56 / 56 (100%), Lite slim 56 / 56, 加宿主样图 57 / 57, 无差异样例; 两引擎对标注文本的命中相同. 中位 wall 合计 ORT fp32 3468 ms, Lite fp32 3292 ms (ORT 慢 5.1%). XQ-DQ72 (API 33) `zh-settings` 19 / 19, 636 / 624 ms. 发现 Lite 1.1.0 "先小图后大图" 崩溃 (登记 Q14), 对比在新进程里只跑大图.
 
 ### P4.3 slim 判定 (D5, D19)
 
-- [ ] (测试) slim 与 fp32 的一致率与耗时 (XQ-AT72, x86_64 AVD); 达标 (一致率 >= 95% 且 rec 耗时下降) 则 `useSlim` 文档照写; 不达标按附录 D Q2 拍板后处理. 证据: 数字入 `docs/benchmark.md` 与附录 F.
+- [x] (测试) slim 与 fp32 的一致率与耗时 (XQ-AT72, x86_64 AVD); 达标 (一致率 >= 95% 且 rec 耗时下降) 则 `useSlim` 文档照写; 不达标按附录 D Q2 拍板后处理. 证据: 数字入 `docs/benchmark.md` 与附录 F.
+  - 2026-10-30 由 paddle-ocr-v3-p4 完成, 达标, `useSlim` 文档照写, Q2 未提问: 11 张图各用对应语种 flavor, CPU 4 线程, 1 次预热 + 10 次取中位. XQ-AT72 一致率 246 / 251 (98.0%), rec 合计 8716 -> 8074 ms (-7.4%), wall 合计 11311 -> 10768 ms (-4.8%); AVD_API_33 (x86_64) 246 / 251 (98.0%), rec 合计 6894 -> 6764 ms (-1.9%), wall 合计 9295 -> 9362 ms (+0.7%). 两台的 5 个不同框完全相同 (zhHant-notes 1, ja-settings 1, ja-notes 2, ko-settings 1, 各差一两个字), fp32 与 slim 对标注文本的命中逐图相同. 会话加载 fp32 98-147 ms, slim 75-103 ms. NNAPI (zh fp32) 文本与 CPU 相同 (两台 29 / 29 框).
 
 ### P4.4 API 24 与 16 KB
 
-- [ ] (测试) API 24 AVD (x86 或 x86_64): 安装, 激活, 识别; 16 KB 页 AVD (API 35 16K): 安装与识别 (记忆: 冷引导后等 1 分钟再测). 证据: 结果与 AVD 名.
+- [x] (测试) API 24 AVD (x86 或 x86_64): 安装, 激活, 识别; 16 KB 页 AVD (API 35 16K): 安装与识别 (记忆: 冷引导后等 1 分钟再测). 证据: 结果与 AVD 名.
+  - 2026-10-30 由 paddle-ocr-v3-p4 完成: AVD_API_24 ("Android SDK built for x86", API 24, x86, 宿主 debug 5935 x86): zh (x86-61EB321F) 与 ja (x86-D3DCAAF1) 安装, 插件中心发现与标签, 无条件与 `profile: "ja"` 识别, 15 / 15 PASS, 温中位 265-455 ms; `useOpenCL` 回退 cpu, `RAW_IMAGE` 不适用 (API < 27). AVD_API_35_16K (sdk_gphone16k_x86_64, API 35, `getconf PAGE_SIZE` 16384, 只读启动, 冷引导后等待再测): zh (x86_64-5AD7D7C8) 与 zhHant (x86_64-8423519B) 15 / 15 PASS, 温中位 148-412 ms, NNAPI 可用, raw 回退 0. 16K 镜像上宿主在后台会被缓存应用冻结 (`ActivityManager: freezing`) 卡在识别中途, 在宿主脚本里 `app.launch` 也来不及; 脚本改为先用 adb 启动宿主的启动器活动再发脚本, 复测 15 / 15 通过, 宿主未再被冻结.
 
 ---
 
@@ -468,7 +474,7 @@ ocr.paddle(img, { useSlim: true });
 | 编号 | 事项 | 选项 | 拍板时点 |
 | --- | --- | --- | --- |
 | Q1 | cls 的开关方式 | (a) 默认开启, 不提供开关 (推荐; 与旧 v3 行为一致, 契约零改动, 耗时增加约 5-10%); (b) 默认开启, extras 私有键 `ppocrv3.useCls` 可关 (文档只在插件 README 写); (c) 契约 `PaddleOcrOptionExtraKeys` 新增 `USE_CLS` 并在宿主 `OcrOptions` 解析 (改宿主契约, 四仓库文档) | P1.2 前; 2026-10-30 已决 (c), 宿主 f38abc036 `USE_CLS = "useCls"`; 缺省值见 Q11 |
-| Q2 | slim 实测不达标时 | (a) 保留 fp32 作 slim 档, `useSlim` 实际无差别并在文档标注 (推荐; 零返工); (b) 改静态量化 (需校准集, 约 1 天); (c) 去掉 slim 目录, `useSlim` 忽略 (打包目录可选项删掉) | P4.3 后 |
+| Q2 | slim 实测不达标时 | (a) 保留 fp32 作 slim 档, `useSlim` 实际无差别并在文档标注 (推荐; 零返工); (b) 改静态量化 (需校准集, 约 1 天); (c) 去掉 slim 目录, `useSlim` 忽略 (打包目录可选项删掉) | P4.3 后; 2026-10-30 实测达标, 未提问: XQ-AT72 与 AVD_API_33 一致率均 98.0% (246 / 251), rec 合计 -7.4% / -1.9%, `useSlim` 文档照写 (`docs/benchmark.md`) |
 | Q3 | 是否保留 universal APK | (a) 保留 (推荐; 与 v4 / v5 / v6 一致, 每版 25 个 APK, universal 约 200 MB); (b) 只发单 ABI (每版 20 个, 索引 `artifacts` 无 universal, 旧用户手动选 ABI) | P1.4 前; 2026-10-30 已决 (a) |
 | Q4 | 旧插件 versionCode 延续 | (a) 保持 `VERSION_CODE_OFFSET=25` 与提交数接续 (推荐; 新包名无升级关系, 但保持公式与历史一致, 1.1.0 约 65); (b) 改 `VERSION_CODE_OFFSET=0` 从提交数重算 (约 40, 需改 `AGENTS.md` 的迁移说明) | P2.1 前; 2026-10-30 已决 (a) |
 | Q5 | 2.0.0 是否等宿主 6.8.0 公开 | (a) 不等, `REQUIRES_HOST_VERSION` 指向 P3.4 的本地构建 (推荐; Macaw / Prism 先例; 旧公开宿主 6.7.x 上插件仍可用, 只是 `profile` 不参与选择且默认选择顺序不确定); (b) 等宿主公开后再发 | P5.3 前; 2026-10-30 已决 (a) |
@@ -479,7 +485,8 @@ ocr.paddle(img, { useSlim: true });
 | Q10 | slim 量化范围 (D19) | (a) 量化 MatMul 与权重不少于 100000 个元素的 Conv (推荐, 已先行; rec 体积 44-49%, 桌面预检 5 语种框与文本 100% 一致; det 的 Conv 都低于阈值, slim det 约等于 fp32 只折叠 BN, 体积 97%); (b) 阈值 50000 (rec 约 30%, zh 字符一致率 0.95, 一行不一致); (c) `quantize_dynamic` 默认全部 Conv (rec 约 26%, zh rec 输出全空, zhHant / ko det 丢框, 不可用). 影响 P0.2, P4.3, Q2; 改选返工: 改 `CONV_MIN_WEIGHTS` 一个常量并重跑脚本, 约 10 分钟 | 2026-10-30 已决 (a); P4.3 真机实测后可再议 |
 | Q11 | `useCls` 缺省值 | Q1 选项 (a) 写的 "与旧 v3 行为一致" 前提不成立: 旧 v3 的 `isClassificationEnabled` 从未置 true, 实际从未跑 cls. (a) 保持缺省 true (推荐, 已先行; 契约 f38abc036 已按 true 定稿, 旋转 180 度的文字也能识别, 每次多一次 cls 推理); (b) 缺省 false 与旧 v3 实际行为一致 (改宿主契约说明与插件缺省, 约 30 分钟). 影响 P1.2, P3, P5.1 文档 | 2026-10-30 已决 (b): 插件 `PpOcrV3EngineSettings.DEFAULT_USE_CLS = false` 与 SDK `PaddleOCRConfig.useCls` 缺省 false, 宿主契约说明由 P3 改 |
 | Q12 | P3.4 向导截图怎么取 (向导加载器跳过官方索引中没有的条目, Paddle Lite 包名要到 P5.3 才登记索引) | (a) 截图移到 P5.3 索引登记后再取 (推荐, 已先行; `PluginInstallWizardLoaderTest` 5 / 5 已覆盖顺序, 分类与回退标题); (b) 现在在调试宿主上注入本地索引缓存后截图 (约 30 分钟 + 一台设备). 来源 paddle-ocr-v3-p3-host | 2026-10-30 已决 (a): 截图移交 P5.3 索引登记后再取 |
-| Q13 | 2.0.0 重新打包 `libopencv_java4.so` (1.0.6 的 4efab64 已把 OpenCV 静态链接进 `libNative.so` 并只导出 3 个 JNI 方法, 不再带这个库; 2.0.0 按 D15 沿用 v4 的 OpenCV 4.8.0 Java 模块, 每个 ABI 带一份, arm64 约 20.4 MB) | (a) 保持打包, 在 2.0.0 changelog 的 dependency 写明 (推荐, 已先行; 与 v4 相同; Q8 (a) 之后打包应用从 OpenCV 插件带入该库, 不从本插件 APK 复制, 1.0.6 要避免的同名库来源冲突不再出现); (b) 改为 JNI 前后处理并静态链接 OpenCV 核心模块 (约 2 天, 体积收益未实测); (c) Kotlin 重写前后处理, 去掉 OpenCV (约 2 - 3 天, 可与 Q8 (d) 合并). 影响 P1.4, D15, 2.0.0 changelog; 改选返工见各选项. 来源 paddle-ocr-v3-p0-p1 | 已按推荐先行, 待维护者确认 |
+| Q13 | 2.0.0 重新打包 `libopencv_java4.so` (1.0.6 的 4efab64 已把 OpenCV 静态链接进 `libNative.so` 并只导出 3 个 JNI 方法, 不再带这个库; 2.0.0 按 D15 沿用 v4 的 OpenCV 4.8.0 Java 模块, 每个 ABI 带一份, arm64 约 20.4 MB) | (a) 保持打包, 在 2.0.0 changelog 的 dependency 写明 (推荐, 已先行; 与 v4 相同; Q8 (a) 之后打包应用从 OpenCV 插件带入该库, 不从本插件 APK 复制, 1.0.6 要避免的同名库来源冲突不再出现); (b) 改为 JNI 前后处理并静态链接 OpenCV 核心模块 (约 2 天, 体积收益未实测); (c) Kotlin 重写前后处理, 去掉 OpenCV (约 2 - 3 天, 可与 Q8 (d) 合并). 影响 P1.4, D15, 2.0.0 changelog; 改选返工见各选项. 来源 paddle-ocr-v3-p0-p1 | 2026-10-30 已决 (a): 保持打包, 维护者看过三选项体积对比后选定 |
+| Q14 | Paddle Lite 1.1.0 在 "先识别小图再识别大图" 时崩溃 (P4.2 发现: 服务在接收调用的 binder 线程上跑引擎, 原生 det 只在第一个线程用 960 x 960 预热; 只跑过小图的线程再收到大图时 SIGSEGV (SEGV_ACCERR, `memset`, `libpaddle_light_api_shared.so` pc `0xbc800`), 该宿主进程之后的调用都报 `DeadObjectException`; XQ-AT72 与 XQ-DQ72 复现, 新进程只跑大图或一次小图后接大图不崩; `libpaddle_light_api_shared.so` 与 1.0.5 字节相同, 已发布版本可能同样受影响 (未实测); ORT 版不受影响) | (a) Lite 仓库的服务把全部引擎调用放到一个常驻线程, 1.1.0 发布前重建并在两台 arm64 上重跑复现集 (推荐, 未先行: Lite 仓库本批只读; 约 1-2 小时); (b) 照常发布, README / changelog 写已知问题 (零返工); (c) 每个新线程先做一次 960 x 960 预热 (约 1 小时, 根因是推测, 每个新线程多约 150 ms). 影响 P5.2 (1.1.0 发布), `docs/benchmark.md` 的 Lite 测法. 来源 paddle-ocr-v3-p4 | P5.2 前 |
 
 ---
 
@@ -522,11 +529,30 @@ ocr.paddle(img, { useSlim: true });
 | x86_64 AVD (API 33 / 35, 含 AVD_API_35_16K) | 33 / 35 | x86_64 | 4 ABI 的核心验证, 16 KB (记忆: 冷引导后等 1 分钟) |
 | armeabi-v7a | - | armv7 | 本地无 32 位真机; 用 arm64 设备安装 armv7 APK (系统允许时) 或标注 "仅构建与对齐校验" |
 
-精度与速度基线 (P4.2 / P4.3 填写):
+冒烟结果 (P4.1 / P4.4, 2026-10-30, paddle-ocr-v3-p4): `tools/device/check_device.py`, 宿主 debug 5935 (含 P3 改动), 插件 `releases/v2.0.0/` 的 release 包 (67). 每台装 zh + 另一语种 flavor (XQ-AT72 装全部 5 个), 检查插件中心发现与标签, 无条件 `ocr.paddle` (中文样图), `profile` 指定语种样图, fp32 / slim x CPU / `useOpenCL` (NNAPI), 编码图与 `RAW_IMAGE` (`SharedMemory`) 两条路径, 倒置样图 `useCls: true` (INFO, 不计数), arm64 上另装 Paddle Lite 1.1.0 (fp32 / slim). 温中位是 `ocr.paddle` 每项 4 次调用去掉首次后的中位 wall 时间, 含插件选择, 不是基准数据 (基准见 `docs/benchmark.md`). 宿主不在前台时会被系统限速 (Pad 上各引擎都慢到 2.1-2.4 s) 或被缓存应用冻结卡住 (AVD_API_35_16K), 脚本因此先用 adb 启动宿主的启动器活动再发脚本.
+
+| 设备 | API | ABI | 安装的 APK (文件名摘要) | 结果 | 温中位 (ORT) | `useOpenCL` (zh fp32, vs CPU) | Lite 1.1.0 fp32 / slim | 备注 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Sony XQ-AT72 (QV710AF65F) | 31 | arm64-v8a | zh 4F117434, en 4FB80072, zhHant 2ABC9F0D, ja A921353B, ko 451909D6, Lite AB15CF9B | 33 / 33 | 170-260 ms | nnapi, 241 vs 219 ms, 文本相同 | 197 / 187 ms | 5 个 `profile` 都命中对应包; raw 回退 0 |
+| Sony XQ-DQ72 (QV770340J7) | 33 | arm64-v8a | zh 4F117434, en 4FB80072, Lite AB15CF9B | 18 / 18 | 105-128 ms | nnapi, 117 vs 117 ms | 125 / 125 ms | |
+| Sony G8441 (BH900ASK9E) | 28 | arm64-v8a | zh 4F117434, ja A921353B, Lite AB15CF9B | 18 / 18 | 552-774 ms | nnapi, 637 vs 598 ms | 421 / 441 ms | |
+| Sony G8441 (BH900ASK9E), 32 位包 | 28 | armeabi-v7a | zh E28140C9, ja B3A17010, Lite 863EA86E | 18 / 18 | 740-909 ms | nnapi, 847 vs 740 ms | 791 / 805 ms | `--abi armeabi-v7a` 安装, `primaryCpuAbi` 核对为 armeabi-v7a; 测完装回 arm64 包 |
+| Redmi 22120RN86C (bek749scrwv4wo8h) | 33 | arm64-v8a | zh 4F117434, zhHant 2ABC9F0D, Lite AB15CF9B | 13 / 19 | zhHant 1495-1504 ms | 未执行 (zh 未启用) | 1108 / 1188 ms | zh 包在插件中心是关闭状态 (沿用该机对同包名旧版的设置, 未代为开启), zh 的 6 项报 "not enabled in Plugin Center", 未执行; 无条件调用由已装的 v4 / v5 / v6 响应 (D22); 宿主在后台时测得, 耗时偏高 |
+| Xiaomi Pad 23046RP50C (968e9f18) | 35 | arm64-v8a | zh 4F117434, en 4FB80072, Lite AB15CF9B | 18 / 18 | 437-530 ms | nnapi, 440 vs 466 ms | 496 / 502 ms | P3.5 释放后测; 无条件调用由已装的 v4 / v5 / v6 响应 (D22) |
+| OnePlus OPD2413 (63751f63) | 35 | arm64-v8a | - | 未执行 | - | - | - | adb 安装停在 ColorOS 安装确认页, 需维护者在机上确认 (zh, 另一 flavor, Lite 共三次) |
+| AVD_API_24 | 24 | x86 | zh 61EB321F, ja D3DCAAF1 | 15 / 15 | 265-455 ms | 回退 cpu (API < 27), 333 vs 372 ms | - (Lite 无 x86) | `RAW_IMAGE` 低于 API 27 不适用, 两条路径都走编码图 |
+| AVD_API_33 | 33 | x86_64 | zh 5AD7D7C8, ko DB9895EE | 15 / 15 | 308-419 ms | nnapi, 380 vs 308 ms | - | raw 回退 0 |
+| AVD_API_35_16K | 35 | x86_64 (16 KB 页) | zh 5AD7D7C8, zhHant 8423519B | 15 / 15 | 148-412 ms | nnapi, 178 vs 175 ms | - | `getconf PAGE_SIZE` 16384; raw 回退 0; 覆盖 API 35 x86_64 |
+
+精度与速度基线 (P4.2 / P4.3, 详见 `docs/benchmark.md`; CPU 4 线程, 1 次预热 + 10 次中位; "合计" 是 11 张图各自中位之和):
 
 | 设备 | 档位 | 一致率 (vs 旧 Paddle-Lite) | 一致率 (vs fp32) | det + rec 中位耗时 | 备注 |
 | --- | --- | --- | --- | --- | --- |
-| | | | | | |
+| XQ-AT72 (API 31, arm64) | fp32 | 56 / 56 (100%, Lite 1.1.0 fp32, 4 张大图) | - | zh-settings 200 + 633 ms; 合计 2028 + 8716 ms | 4 张大图 wall 合计 3468 ms, Lite fp32 3292 ms |
+| XQ-AT72 (API 31, arm64) | slim | 56 / 56 (Lite slim vs ORT fp32) | 246 / 251 (98.0%) | zh-settings 210 + 596 ms; 合计 2118 + 8074 ms | rec -7.4%, 达标 |
+| AVD_API_33 (x86_64) | fp32 | - (Lite 无 x86_64) | - | zh-settings 183 + 494 ms; 合计 1940 + 6894 ms | |
+| AVD_API_33 (x86_64) | slim | - | 246 / 251 (98.0%) | zh-settings 197 + 585 ms; 合计 2071 + 6764 ms | rec -1.9%, 达标; 单图 rec 在模拟器上有升有降, 只判合计 |
+| XQ-DQ72 (API 33, arm64) | fp32 | 19 / 19 (zh-settings) | 19 / 19 (slim, zh-settings) | zh-settings det 约 136-140 + rec 476 ms (slim 429 ms) | wall 636 ms, Lite fp32 624 ms |
 
 ---
 
