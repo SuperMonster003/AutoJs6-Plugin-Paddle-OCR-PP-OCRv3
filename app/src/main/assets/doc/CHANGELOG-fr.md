@@ -8,16 +8,17 @@
 
 ###### 2026/10/30
 
-* `Note` La reconnaissance fonctionne désormais avec ONNX Runtime au lieu de Paddle Lite, et le développeur devient SuperMonster003. L'ancienne implémentation Paddle Lite est publiée séparément sous le nom Paddle OCR (PP-OCRv3 Paddle Lite) (ID de plugin `paddle-ocr-pp-ocrv3-paddle-lite`, variante `v3-paddle-lite`) et peut être installée à côté de ce plugin
+* `Note` La reconnaissance fonctionne désormais avec ONNX Runtime au lieu de Paddle Lite, et le développeur devient SuperMonster003. L'ancienne implémentation Paddle Lite est publiée séparément sous le nom Paddle OCR (PP-OCRv3 Paddle Lite) (ID de plugin `paddle-ocr-pp-ocrv3-paddle-lite`, variante `v3-paddle-lite`) et peut être installée à côté de ce plugin. Les versions 1.0.6 et antérieures appartiennent à ce plugin Paddle Lite, qui se poursuit dans son propre dépôt
 * `Note` Le plugin se décline désormais en cinq paquets de langue (chinois simplifié, anglais, chinois traditionnel, japonais et coréen), chacun étant un APK distinct; le paquet chinois simplifié conserve le nom de paquet et l'ID de plugin d'origine
-* `Note` Le choix d'un paquet par `profile` et l'option `useCls` nécessitent AutoJs6 6.8.0 ou ultérieur; les hôtes plus anciens ne choisissent pas par `profile` et ne transmettent pas `useCls`
+* `Note` Le choix d'un paquet par `profile` et l'option `useCls` nécessitent AutoJs6 6.8.0 ou ultérieur; les hôtes plus anciens ne choisissent pas par `profile` et ne transmettent pas `useCls`; ce plugin déclare comme minimum le code de version d'hôte 5935 (AutoJs6 6.8.0)
 * `Ajout` Prise en charge des appareils x86_64 et x86, émulateurs compris, soit quatre ABI au total
 * `Ajout` Nouvelle option `useCls`, qui détermine l'orientation du texte avant la reconnaissance pour lire aussi un texte tourné de 180 degrés; désactivée par défaut
 * `Ajout` `useOpenCL` est associé à NNAPI dans l'édition ONNX Runtime: Android 8.1 ou ultérieur utilise NNAPI, et les versions antérieures ou les appareils sans NNAPI disponible repassent sur le CPU
+* `Ajout` Choisissez la langue avec `profile` (`zh`, `en`, `zh-hant`, `ja`, `ko`) et l'édition Paddle Lite avec `variant: "v3-paddle-lite"`; sans ces options, le paquet en chinois simplifié est utilisé par défaut parmi les plugins PP-OCRv3
 * `Amelioration` `useSlim` utilise désormais des modèles de détection et de reconnaissance quantifiés en int8 par la quantification dynamique d'ONNX Runtime
 * `Dependance` Ajout d'ONNX Runtime Android 1.21.1 et suppression de Paddle Lite
 * `Dependance` Les modèles PaddleOCR PP-OCRv3 passent au format ONNX, convertis à partir des modèles d'inférence officiels, avec de nouveaux modèles de reconnaissance anglais, chinois traditionnel, japonais et coréen et un modèle d'orientation du texte
-* `Dependance` OpenCV 4.8.0 est désormais fourni sous forme de bibliothèque partagée libopencv_java4.so, comme dans le plugin PP-OCRv4
+* `Dependance` OpenCV 4.8.0 est de nouveau fourni sous forme de bibliothèque partagée libopencv_java4.so, une par ABI, comme dans le plugin PP-OCRv4 (1.0.6 la liait statiquement à libNative.so). Les applications empaquetées prennent cette bibliothèque dans le plugin OpenCV, pas dans ce plugin: l'empaquetage avec ce plugin ajoute OpenCV automatiquement et échoue s'il n'est pas installé
 
 # v1.0.6
 

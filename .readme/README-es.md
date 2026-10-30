@@ -74,7 +74,7 @@ Cada paquete de idioma es un APK independiente, y se pueden instalar varios a la
 | --- | --- | --- | --- | --- |
 | Chino simplificado | `zh` | `paddle-ocr-pp-ocrv3` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3` | `*-zh-<ABI>-*.apk` |
 | Inglés | `en` | `paddle-ocr-pp-ocrv3-en` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.en` | `*-en-<ABI>-*.apk` |
-| Chino tradicional | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zhhant-<ABI>-*.apk` |
+| Chino tradicional | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zh-hant-<ABI>-*.apk` |
 | Japonés | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
 | Coreano | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
 
@@ -156,16 +156,17 @@ ocr.paddle()
 
 ###### 2026/10/30
 
-* `Nota` El reconocimiento funciona ahora con ONNX Runtime en lugar de Paddle Lite, y el desarrollador pasa a ser SuperMonster003. La implementación Paddle Lite anterior se publica por separado como Paddle OCR (PP-OCRv3 Paddle Lite) (ID de complemento `paddle-ocr-pp-ocrv3-paddle-lite`, variante `v3-paddle-lite`) y puede instalarse junto con este complemento
+* `Nota` El reconocimiento funciona ahora con ONNX Runtime en lugar de Paddle Lite, y el desarrollador pasa a ser SuperMonster003. La implementación Paddle Lite anterior se publica por separado como Paddle OCR (PP-OCRv3 Paddle Lite) (ID de complemento `paddle-ocr-pp-ocrv3-paddle-lite`, variante `v3-paddle-lite`) y puede instalarse junto con este complemento. Las versiones 1.0.6 y anteriores pertenecen a ese complemento Paddle Lite, que continúa en su propio repositorio
 * `Nota` El complemento se distribuye ahora en cinco paquetes de idioma (chino simplificado, inglés, chino tradicional, japonés y coreano), cada uno un APK independiente; el paquete de chino simplificado conserva el nombre de paquete y el ID de complemento originales
-* `Nota` Elegir un paquete por `profile` y la opción `useCls` requieren AutoJs6 6.8.0 o posterior; los hosts anteriores no eligen por `profile` ni transmiten `useCls`
+* `Nota` Elegir un paquete por `profile` y la opción `useCls` requieren AutoJs6 6.8.0 o posterior; los hosts anteriores no eligen por `profile` ni transmiten `useCls`; este complemento declara como mínimo el código de versión de host 5935 (AutoJs6 6.8.0)
 * `Nuevo` Compatibilidad con dispositivos x86_64 y x86, incluidos los emuladores, para un total de cuatro ABI
 * `Nuevo` Nueva opción `useCls`, que determina la orientación del texto antes del reconocimiento para leer también el texto girado 180 grados; desactivada de forma predeterminada
 * `Nuevo` `useOpenCL` se asigna a NNAPI en la edición ONNX Runtime: Android 8.1 o posterior usa NNAPI, y las versiones anteriores o los dispositivos sin NNAPI disponible vuelven a la CPU
+* `Nuevo` Elija el idioma con `profile` (`zh`, `en`, `zh-hant`, `ja`, `ko`) y la edición Paddle Lite con `variant: "v3-paddle-lite"`; sin estas opciones, el paquete de chino simplificado es el predeterminado entre los complementos PP-OCRv3
 * `Mejora` `useSlim` usa ahora modelos de detección y reconocimiento cuantizados a int8 con la cuantización dinámica de ONNX Runtime
 * `Dependencia` Añadir ONNX Runtime Android 1.21.1 y eliminar Paddle Lite
 * `Dependencia` Los modelos PaddleOCR PP-OCRv3 pasan al formato ONNX, convertidos desde los modelos de inferencia oficiales, con nuevos modelos de reconocimiento para inglés, chino tradicional, japonés y coreano y un modelo de orientación del texto
-* `Dependencia` OpenCV 4.8.0 se incluye ahora como la biblioteca compartida libopencv_java4.so, igual que en el complemento PP-OCRv4
+* `Dependencia` OpenCV 4.8.0 vuelve a incluirse como la biblioteca compartida libopencv_java4.so, una por ABI, igual que en el complemento PP-OCRv4 (1.0.6 la enlazaba de forma estática en libNative.so). Las aplicaciones empaquetadas toman esta biblioteca del complemento OpenCV, no de este complemento: al empaquetar con este complemento se añade OpenCV automáticamente, y el empaquetado falla si no está instalado
 
 # v1.0.6
 

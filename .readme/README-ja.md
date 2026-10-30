@@ -74,7 +74,7 @@ AutoJs6 Paddle OCR (PP-OCRv3) プラグインは PaddleOCR PP-OCRv3 と ONNX Run
 | --- | --- | --- | --- | --- |
 | 簡体字中国語 | `zh` | `paddle-ocr-pp-ocrv3` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3` | `*-zh-<ABI>-*.apk` |
 | 英語 | `en` | `paddle-ocr-pp-ocrv3-en` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.en` | `*-en-<ABI>-*.apk` |
-| 繁体字中国語 | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zhhant-<ABI>-*.apk` |
+| 繁体字中国語 | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zh-hant-<ABI>-*.apk` |
 | 日本語 | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
 | 韓国語 | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
 
@@ -156,16 +156,17 @@ ocr.paddle()
 
 ###### 2026/10/30
 
-* `注意` 認識エンジンを Paddle Lite から ONNX Runtime に切り替え, 開発者を SuperMonster003 に変更しました. 従来の Paddle Lite 実装は Paddle OCR (PP-OCRv3 Paddle Lite) として別途公開され (プラグイン ID `paddle-ocr-pp-ocrv3-paddle-lite`, バリアント `v3-paddle-lite`), このプラグインと同時にインストールできます
+* `注意` 認識エンジンを Paddle Lite から ONNX Runtime に切り替え, 開発者を SuperMonster003 に変更しました. 従来の Paddle Lite 実装は Paddle OCR (PP-OCRv3 Paddle Lite) として別途公開され (プラグイン ID `paddle-ocr-pp-ocrv3-paddle-lite`, バリアント `v3-paddle-lite`), このプラグインと同時にインストールできます. 1.0.6 以前の記録はこの Paddle Lite プラグインのもので, 今後は新しいリポジトリで更新を続けます
 * `注意` 認識する言語ごとに簡体字中国語, 英語, 繁体字中国語, 日本語, 韓国語の 5 つの言語パッケージに分かれ, それぞれ独立した APK です. 簡体字中国語パッケージは従来のパッケージ名とプラグイン ID を引き継ぎます
-* `注意` `profile` による言語パッケージの選択と `useCls` オプションには AutoJs6 6.8.0 以降が必要です. それより前のホストは `profile` で選択せず, `useCls` も渡しません
+* `注意` `profile` による言語パッケージの選択と `useCls` オプションには AutoJs6 6.8.0 以降が必要です. それより前のホストは `profile` で選択せず, `useCls` も渡しません. このプラグインが宣言する最低ホストのバージョンコードは 5935 (AutoJs6 6.8.0) です
 * `追加` x86_64 と x86 の端末 (エミュレータを含む) に対応し, 合計 4 つの ABI になりました
 * `追加` `useCls` オプションを追加しました. 認識の前に文字の向きを判定し, 180 度回転した文字も認識できます. 既定では無効です
 * `追加` `useOpenCL` は ONNX Runtime 版では NNAPI に対応付けられます. Android 8.1 以降は NNAPI を使い, それより前のバージョンや NNAPI が使えない場合は CPU に戻ります
+* `追加` `profile` で言語 (`zh`, `en`, `zh-hant`, `ja`, `ko`) を, `variant: "v3-paddle-lite"` で Paddle Lite 版を選択できます. 指定しない場合, PP-OCRv3 プラグインの中では簡体字中国語パッケージが既定で使われます
 * `改善` `useSlim` は ONNX Runtime の動的量子化 (int8) で生成した検出モデルと認識モデルを使うようになりました
 * `依存関係` ONNX Runtime Android 1.21.1 を追加し, Paddle Lite を削除
 * `依存関係` PaddleOCR PP-OCRv3 モデルを ONNX 形式に変更 (公式推論モデルから変換) し, 英語, 繁体字中国語, 日本語, 韓国語の認識モデルと文字の向きの分類モデルを追加
-* `依存関係` OpenCV 4.8.0 を共有ライブラリ libopencv_java4.so で提供するように変更 (PP-OCRv4 プラグインと同じ)
+* `依存関係` OpenCV 4.8.0 を共有ライブラリ libopencv_java4.so として ABI ごとに同梱する形に戻しました (PP-OCRv4 プラグインと同じ. 1.0.6 は libNative.so に静的リンク). アプリのパッケージ化ではこのライブラリを OpenCV プラグインから取得し, このプラグインからはコピーしません. このプラグインを選ぶと OpenCV プラグインが自動で含まれ, 未インストールの場合はパッケージ化がエラーになります
 
 # v1.0.6
 

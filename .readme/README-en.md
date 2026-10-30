@@ -74,7 +74,7 @@ Each language package is a separate APK, and several can be installed at the sam
 | --- | --- | --- | --- | --- |
 | Simplified Chinese | `zh` | `paddle-ocr-pp-ocrv3` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3` | `*-zh-<ABI>-*.apk` |
 | English | `en` | `paddle-ocr-pp-ocrv3-en` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.en` | `*-en-<ABI>-*.apk` |
-| Traditional Chinese | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zhhant-<ABI>-*.apk` |
+| Traditional Chinese | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zh-hant-<ABI>-*.apk` |
 | Japanese | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
 | Korean | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
 
@@ -156,16 +156,17 @@ ocr.paddle()
 
 ###### 2026/10/30
 
-* `Hint` Recognition now runs on ONNX Runtime instead of Paddle Lite, and the developer is now SuperMonster003. The previous Paddle Lite implementation is published separately as Paddle OCR (PP-OCRv3 Paddle Lite) (plugin ID `paddle-ocr-pp-ocrv3-paddle-lite`, variant `v3-paddle-lite`) and can be installed alongside this plugin
+* `Hint` Recognition now runs on ONNX Runtime instead of Paddle Lite, and the developer is now SuperMonster003. The previous Paddle Lite implementation is published separately as Paddle OCR (PP-OCRv3 Paddle Lite) (plugin ID `paddle-ocr-pp-ocrv3-paddle-lite`, variant `v3-paddle-lite`) and can be installed alongside this plugin. Versions 1.0.6 and earlier belong to that Paddle Lite plugin, which continues in its own repository
 * `Hint` The plugin now comes as five language packages (Simplified Chinese, English, Traditional Chinese, Japanese, and Korean), each a separate APK; the Simplified Chinese package keeps the original package name and plugin ID
-* `Hint` Choosing a package by `profile` and the `useCls` option need AutoJs6 6.8.0 or later; older hosts do not choose by `profile` and do not pass `useCls` on
+* `Hint` Choosing a package by `profile` and the `useCls` option need AutoJs6 6.8.0 or later; older hosts do not choose by `profile` and do not pass `useCls` on. This plugin declares host version code 5935 (AutoJs6 6.8.0) as its minimum
 * `Feature` Support x86_64 and x86 devices, including emulators, for four ABIs in total
 * `Feature` Add the `useCls` option, which checks the text direction before recognition so text rotated by 180 degrees can be read; it is off by default
 * `Feature` `useOpenCL` maps to NNAPI in the ONNX Runtime edition: Android 8.1 and later use NNAPI, and older versions or devices where NNAPI is unavailable fall back to the CPU
+* `Feature` Choose a language with `profile` (`zh`, `en`, `zh-hant`, `ja`, `ko`) and the Paddle Lite edition with `variant: "v3-paddle-lite"`; without them, the Simplified Chinese package is the default among the PP-OCRv3 plugins
 * `Improvement` `useSlim` now uses detection and recognition models quantized to int8 with ONNX Runtime dynamic quantization
 * `Dependency` Add ONNX Runtime Android 1.21.1 and remove Paddle Lite
 * `Dependency` PaddleOCR PP-OCRv3 models are now in ONNX format, converted from the official inference models, with new English, Traditional Chinese, Japanese, and Korean recognition models and a text direction model
-* `Dependency` OpenCV 4.8.0 is now shipped as the shared library libopencv_java4.so, as in the PP-OCRv4 plugin
+* `Dependency` OpenCV 4.8.0 is shipped again as the shared library libopencv_java4.so, one per ABI, as in the PP-OCRv4 plugin (1.0.6 linked it statically into libNative.so). Packaged applications take this library from the OpenCV plugin, not from this plugin: packaging with this plugin adds the OpenCV plugin automatically and fails if it is not installed
 
 # v1.0.6
 

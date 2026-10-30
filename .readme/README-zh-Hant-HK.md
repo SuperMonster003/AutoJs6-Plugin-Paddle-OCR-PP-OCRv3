@@ -74,7 +74,7 @@ AutoJs6 Paddle OCR (PP-OCRv3) 插件為 AutoJs6 提供基於 PaddleOCR PP-OCRv3 
 | --- | --- | --- | --- | --- |
 | 簡體中文 | `zh` | `paddle-ocr-pp-ocrv3` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3` | `*-zh-<ABI>-*.apk` |
 | 英文 | `en` | `paddle-ocr-pp-ocrv3-en` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.en` | `*-en-<ABI>-*.apk` |
-| 繁體中文 | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zhhant-<ABI>-*.apk` |
+| 繁體中文 | `zh-hant` | `paddle-ocr-pp-ocrv3-zh-hant` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.zhhant` | `*-zh-hant-<ABI>-*.apk` |
 | 日文 | `ja` | `paddle-ocr-pp-ocrv3-ja` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ja` | `*-ja-<ABI>-*.apk` |
 | 韓文 | `ko` | `paddle-ocr-pp-ocrv3-ko` | `io.github.supermonster003.autojs6.plugin.paddleocr.v3.ko` | `*-ko-<ABI>-*.apk` |
 
@@ -156,16 +156,17 @@ ocr.paddle()
 
 ###### 2026/10/30
 
-* `提示` 識別引擎由 Paddle Lite 改為 ONNX Runtime, 開發者改為 SuperMonster003; 原 Paddle Lite 實現改名為 Paddle OCR (PP-OCRv3 Paddle Lite) 單獨發佈 (插件 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 變體 `v3-paddle-lite`), 可與本插件同時安裝
+* `提示` 識別引擎由 Paddle Lite 改為 ONNX Runtime, 開發者改為 SuperMonster003; 原 Paddle Lite 實現改名為 Paddle OCR (PP-OCRv3 Paddle Lite) 單獨發佈 (插件 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 變體 `v3-paddle-lite`), 可與本插件同時安裝; 1.0.6 及更早的版本記錄屬於這個 Paddle Lite 插件, 它現在在新倉庫繼續更新
 * `提示` 按識別語種分為簡體中文, 英文, 繁體中文, 日文, 韓文 5 個語種包, 每個語種包是獨立的 APK; 簡體中文包沿用原來的包名與插件 ID
-* `提示` 按 `profile` 選擇語種包與 `useCls` 選項需要 AutoJs6 6.8.0 或更高版本; 較舊的宿主不會按 `profile` 選擇, 也不會傳遞 `useCls`
+* `提示` 按 `profile` 選擇語種包與 `useCls` 選項需要 AutoJs6 6.8.0 或更高版本; 較舊的宿主不會按 `profile` 選擇, 也不會傳遞 `useCls`; 本插件聲明的最低宿主版本號為 5935 (AutoJs6 6.8.0)
 * `新增` 支援 x86_64 與 x86 設備 (包括模擬器), 共 4 個 ABI
 * `新增` 新增 `useCls` 選項, 識別前先判斷文字方向, 可識別旋轉 180 度的文字; 默認關閉
 * `新增` `useOpenCL` 在 ONNX Runtime 版映射為 NNAPI: Android 8.1 及以上使用 NNAPI, 較低版本或 NNAPI 不可用時回退 CPU
+* `新增` 新增語種包選擇: 用 `profile` 指定語種 (`zh`, `en`, `zh-hant`, `ja`, `ko`), 用 `variant: "v3-paddle-lite"` 指定 Paddle Lite 版; 不指定時, 在 PP-OCRv3 插件之間默認使用簡體中文包
 * `優化` `useSlim` 改用由 ONNX Runtime 動態量化 (int8) 生成的檢測與識別模型
 * `依賴` 新增 ONNX Runtime Android 1.21.1, 移除 Paddle Lite
 * `依賴` PaddleOCR PP-OCRv3 模型改為 ONNX 格式 (由官方推理模型轉換), 新增英文, 繁體中文, 日文, 韓文識別模型與文字方向分類模型
-* `依賴` OpenCV 4.8.0 改為以共享庫 libopencv_java4.so 提供, 與 PP-OCRv4 插件相同
+* `依賴` OpenCV 4.8.0 改回以共享庫 libopencv_java4.so 隨 APK 提供, 每個 ABI 一份, 與 PP-OCRv4 插件相同 (1.0.6 曾把它靜態鏈接進 libNative.so); 打包應用時這個庫來自 OpenCV 插件, 不從本插件複製: 選用本插件打包會自動帶入 OpenCV 插件, 未安裝時打包報錯
 
 # v1.0.6
 

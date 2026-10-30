@@ -8,16 +8,17 @@
 
 ###### 2026/10/30
 
-* `提示` 辨識引擎由 Paddle Lite 改為 ONNX Runtime, 開發者改為 SuperMonster003; 原 Paddle Lite 實作改名為 Paddle OCR (PP-OCRv3 Paddle Lite) 另行發布 (外掛 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 變體 `v3-paddle-lite`), 可與本外掛同時安裝
+* `提示` 辨識引擎由 Paddle Lite 改為 ONNX Runtime, 開發者改為 SuperMonster003; 原 Paddle Lite 實作改名為 Paddle OCR (PP-OCRv3 Paddle Lite) 另行發布 (外掛 ID `paddle-ocr-pp-ocrv3-paddle-lite`, 變體 `v3-paddle-lite`), 可與本外掛同時安裝; 1.0.6 及更早的版本紀錄屬於這個 Paddle Lite 外掛, 它現在在新儲存庫繼續更新
 * `提示` 依辨識語種分為簡體中文, 英文, 繁體中文, 日文, 韓文 5 個語種包, 每個語種包是獨立的 APK; 簡體中文包沿用原本的套件名稱與外掛 ID
-* `提示` 依 `profile` 選擇語種包與 `useCls` 選項需要 AutoJs6 6.8.0 或更新版本; 較舊的宿主不會依 `profile` 選擇, 也不會傳遞 `useCls`
+* `提示` 依 `profile` 選擇語種包與 `useCls` 選項需要 AutoJs6 6.8.0 或更新版本; 較舊的宿主不會依 `profile` 選擇, 也不會傳遞 `useCls`; 本外掛宣告的最低宿主版本號為 5935 (AutoJs6 6.8.0)
 * `新增` 支援 x86_64 與 x86 裝置 (包括模擬器), 共 4 個 ABI
 * `新增` 新增 `useCls` 選項, 辨識前先判斷文字方向, 可辨識旋轉 180 度的文字; 預設關閉
 * `新增` `useOpenCL` 在 ONNX Runtime 版映射為 NNAPI: Android 8.1 及以上使用 NNAPI, 較低版本或 NNAPI 無法使用時退回 CPU
+* `新增` 新增語種包選擇: 以 `profile` 指定語種 (`zh`, `en`, `zh-hant`, `ja`, `ko`), 以 `variant: "v3-paddle-lite"` 指定 Paddle Lite 版; 未指定時, 在 PP-OCRv3 外掛之間預設使用簡體中文包
 * `最佳化` `useSlim` 改用以 ONNX Runtime 動態量化 (int8) 產生的偵測與辨識模型
 * `依賴` 新增 ONNX Runtime Android 1.21.1, 移除 Paddle Lite
 * `依賴` PaddleOCR PP-OCRv3 模型改為 ONNX 格式 (由官方推論模型轉換), 新增英文, 繁體中文, 日文, 韓文辨識模型與文字方向分類模型
-* `依賴` OpenCV 4.8.0 改為以共用程式庫 libopencv_java4.so 提供, 與 PP-OCRv4 外掛相同
+* `依賴` OpenCV 4.8.0 改回以共用程式庫 libopencv_java4.so 隨 APK 提供, 每個 ABI 一份, 與 PP-OCRv4 外掛相同 (1.0.6 曾將它靜態連結進 libNative.so); 打包應用程式時這個程式庫來自 OpenCV 外掛, 不從本外掛複製: 選用本外掛打包會自動帶入 OpenCV 外掛, 未安裝時打包會報錯
 
 # v1.0.6
 
