@@ -169,7 +169,9 @@ def archive_release(manifest, verify_only=False):
         content = apk.read_bytes()
         crc = f"{zlib.crc32(content) & 0xffffffff:08X}"
         flavor = variant["name"][:-7].strip("-") if variant["name"] != "release" else ""
-        suffix = f"-{flavor.lower()}" if flavor and version_abi_counts[(output["versionName"], output["abi"])] > 1 else ""
+        # The official index generator matches release assets to flavors by this kebab-case token.
+        token = re.sub(r"(?<!^)(?=[A-Z])", "-", flavor).lower()
+        suffix = f"-{token}" if flavor and version_abi_counts[(output["versionName"], output["abi"])] > 1 else ""
         filename = f"{manifest['projectName']}-v{output['versionName']}{suffix}-{output['abi']}-{crc}.apk"
         require(re.fullmatch(r"[A-Za-z0-9._+-]+\.apk", filename), "Unsafe release filename")
         verified.append((apk, {"file": filename, "variant": variant["name"], "applicationId": variant["applicationId"], "versionName": output["versionName"], "versionCode": output["versionCode"], "abi": output["abi"], "nativeAbis": native_abis, "crc32": crc, "sha256": hashlib.sha256(content).hexdigest()}))

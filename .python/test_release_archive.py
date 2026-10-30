@@ -118,7 +118,8 @@ class ReleaseMatrixTest(unittest.TestCase):
             archive_release(self.manifest)
         receipt = json.loads((Path(self.manifest["destination"]) / "release-manifest.json").read_text())
         names = sorted(re.sub(r"-[0-9A-F]{8}\.apk$", "", item["file"]) for item in receipt["artifacts"])
-        expected = sorted(f"autojs6-plugin-example-v2.0.0-{flavor.lower()}-{abi}" for flavor in flavors for abi in abis)
+        tokens = ["zh", "en", "zh-hant", "ja", "ko"]
+        expected = sorted(f"autojs6-plugin-example-v2.0.0-{token}-{abi}" for token in tokens for abi in abis)
         self.assertEqual(expected, names)
         self.assertEqual(25, len({item["file"] for item in receipt["artifacts"]}))
 

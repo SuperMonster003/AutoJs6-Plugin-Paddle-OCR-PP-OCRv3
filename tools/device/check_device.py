@@ -252,7 +252,8 @@ def main():
             if args.build == 'debug':
                 candidates = sorted((ROOT / 'app' / 'build' / 'outputs' / 'apk' / flavor / 'debug').glob(f'*-{abi}.apk'))
             else:
-                candidates = sorted((ROOT / 'releases' / f'v{version_name}').glob(f'*-{flavor.lower()}-{abi}-*.apk'))
+                token = FLAVORS[flavor][3]
+                candidates = sorted((ROOT / 'releases' / f'v{version_name}').glob(f'*-{token}-{abi}-*.apk'))
             if len(candidates) != 1:
                 report(f'{flavor} install', False, f'expected one {abi} APK, found {len(candidates)}')
                 continue
