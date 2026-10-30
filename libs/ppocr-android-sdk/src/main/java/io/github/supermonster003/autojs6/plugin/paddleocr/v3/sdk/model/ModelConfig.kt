@@ -15,10 +15,13 @@
 package io.github.supermonster003.autojs6.plugin.paddleocr.v3.sdk.model
 
 import android.content.Context
+import io.github.supermonster003.autojs6.plugin.paddleocr.v3.sdk.postprocess.CTCDecoder
 import io.github.supermonster003.autojs6.plugin.paddleocr.v3.sdk.util.YamlUtils
 
 data class ModelConfig(
     val characterList: List<String>,
+    /** The recognizer reads a right-to-left script, see [CTCDecoder.toLogicalOrder]. */
+    val reverse: Boolean = false,
 ) {
     companion object {
         fun parse(context: Context, assetPath: String): ModelConfig {
@@ -38,7 +41,12 @@ data class ModelConfig(
                 if (lastOrNull() != " ") add(" ")
             }
 
-            return ModelConfig(characterList = charListWithSpace)
+            return ModelConfig(characterList = charListWithSpace, reverse = readReverse(content))
+        }
+
+        // scripts/prepare_ppocrv3_assets.py writes this key above character_dict, only for arabic.
+        fun readReverse(content: String): Boolean {
+            return content.lineSequence().takeWhile { it.trim() != "character_dict:" }.any { it.trim() == "reverse: true" }
         }
 
         private fun extractCharacterDict(content: String, assetPath: String): List<String> {
