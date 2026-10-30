@@ -57,7 +57,10 @@ pauses 2 s before the next run. The tables show medians.
 
 Times printed by `tools/device/check_device.py` are smoke-test numbers, not benchmark data: they
 go through `ocr.paddle` with plugin selection, make only a few calls and depend on the device
-state. On XQ-AT72 its warm median moved between about 110 ms and 260 ms across sessions.
+state. On XQ-AT72 its warm median moved between about 110 ms and 260 ms across sessions. The
+smoke results of every device are in roadmap appendix F. ColorOS asks to confirm each
+`adb install` on the phone, so a rerun there passes `--no-install`, which tests the installed
+packages and still checks their versions and ABI.
 
 ```
 python -I tools/device/make_benchmark_images.py

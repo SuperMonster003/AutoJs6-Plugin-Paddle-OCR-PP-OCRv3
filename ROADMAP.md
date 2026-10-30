@@ -219,7 +219,7 @@ docs/dev/opencv-ocr-runtime-decoupling-roadmap.md (D10 加注), .changelog (zh-H
 | P1 | 插件 | 本体改造: 删 Paddle-Lite, ONNX Runtime SDK + cls + slim, 5 flavor, 服务与能力, 测试, CI, 图标, 文档资源 | 已完成 (b9fa0cc, c9b17bd) |
 | P2 | 旧插件 | 带历史复制到新仓库, 改名, 1.1.0 构建与验证 | 已完成: P2.1 (新仓库 ca42783 / dd8e558 / 688983d), P2.2 (Pad 共存验证) |
 | P3 | 宿主 | 内嵌 ONNX Runtime 引擎, 打包两变体, 默认选择与 profile 匹配, 向导, changelog, 单测 | 已完成: P3.1 - P3.4 (宿主本地 9 笔, f38abc036 - bfc871fae), P3.5 (宿主本地 f3aa53bb0 / 5737cbdc1) |
-| P4 | 测试 | 设备矩阵, 新旧对比, 精度与速度基线, slim 判定, 打包 APK 两引擎 | 已完成 (`docs/benchmark.md`, 附录 F); slim 达标 (Q2 未提问), 新待决 Q14 (Lite 1.1.0 崩溃); OnePlus 与 Redmi zh 冒烟未执行, 等维护者在机上操作 |
+| P4 | 测试 | 设备矩阵, 新旧对比, 精度与速度基线, slim 判定, 打包 APK 两引擎 | 已完成 (`docs/benchmark.md`, 附录 F); slim 达标 (Q2 未提问), 新待决 Q14 (Lite 1.1.0 崩溃); OnePlus 与 Redmi 同日补测, 都是 15 / 15 |
 | P5 | 文档 / 发布 / 索引 | 四仓库文档, README / changelog, 2.0.0 与 1.1.0 发布, 索引 6 包登记 | 未开始 |
 | P6 | 插件 | 2.1.0 其余 7 语种与其他候选 | 未开始 |
 
@@ -370,7 +370,7 @@ P0 (资产脚本与模型)   P2 (旧插件新仓库)   P3.1 - P3.4 (宿主引擎
 ### P4.1 冒烟矩阵 (D33)
 
 - [x] (测试) 附录 F 每台设备: 安装 zh + 任一其他语种 flavor, 激活, 中文样图 `ocr.paddle` (无条件), `profile` 指定语种样图, `useSlim: true`, `RAW_IMAGE` 路径 (宿主 `SharedMemory` 传图); x86 / x86_64 在 AVD 上跑 (API 24, 33 / 35 x86_64, 16 KB 镜像); 旧 Paddle Lite 1.1.0 在 arm64 真机冒烟. 记录型号 / API / ABI / 耗时. 证据: 附录 F 表填满, 未在线设备写 "未执行".
-  - 2026-10-30 由 paddle-ocr-v3-p4 完成 (附录 F 冒烟结果表): 宿主 debug 5935, 插件 release 2.0.0 (67). 全部通过: XQ-AT72 33 / 33 (5 个 flavor), XQ-DQ72 18 / 18, G8441 arm64 18 / 18 与 armeabi-v7a 包 18 / 18, Xiaomi Pad 18 / 18, AVD_API_24 (x86) 15 / 15, AVD_API_33 (x86_64) 15 / 15, AVD_API_35_16K 15 / 15; Paddle Lite 1.1.0 在 5 台 arm64 (含 v7a 包) 上 fp32 / slim 都通过. `useOpenCL`: API 27 及以上都报 nnapi 且文本与 CPU 相同, 耗时与 CPU 相差 -6% 到 +23%; API 24 回退 cpu. `RAW_IMAGE` 路径在 API 27 及以上宿主回退 0 次. 未执行: OnePlus 63751f63 (ColorOS 安装确认页需维护者在机上确认), Redmi 的 zh 包 6 项 (插件中心为关闭状态, 未代为开启; 同机 zhHant 与 Lite 通过, 13 / 19); 两项补测后更新附录 F. 脚本改动: `--abi`, `--lite`, 宿主脚本改为 `-e script` 内联启动 (Android 11+ 的 `-e path` 需要全部文件访问权限), 外部目录由宿主自建, 运行前用 adb 启动宿主的启动器活动 (切到前台).
+  - 2026-10-30 由 paddle-ocr-v3-p4 完成 (附录 F 冒烟结果表): 宿主 debug 5935, 插件 release 2.0.0 (67). 全部通过: XQ-AT72 33 / 33 (5 个 flavor), XQ-DQ72 18 / 18, G8441 arm64 18 / 18 与 armeabi-v7a 包 18 / 18, Xiaomi Pad 18 / 18, AVD_API_24 (x86) 15 / 15, AVD_API_33 (x86_64) 15 / 15, AVD_API_35_16K 15 / 15; Paddle Lite 1.1.0 在 6 台 arm64 设备 (G8441 另测 v7a 包) 上 fp32 / slim 都通过. `useOpenCL`: API 27 及以上都报 nnapi 且文本与 CPU 相同, 耗时与 CPU 相差 -10% 到 +23%; API 24 回退 cpu. `RAW_IMAGE` 路径在 API 27 及以上宿主回退 0 次. OnePlus 63751f63 与 Redmi bek749scrwv4wo8h 同日补测, 都是 15 / 15 (`--no-install`, 用首轮已装并核对过的包): 首轮 Redmi 13 / 19 与 OnePlus 11 / 19 的失败都来自 zh 包在插件中心是关闭状态 (沿用同包名旧版的设置, 由维护者打开); OnePlus 的宿主还是 10-29 的旧构建, 不含 P3.3 的 profile 匹配, `profile: 'ko'` 落到 zh, 换成与 Redmi / XQ-AT72 相同的宿主 (sha256 f74c06cf) 后通过. 脚本改动: `--abi`, `--lite`, `--no-install` (ColorOS 每次 adb 安装都要在机上确认), 无条件路由只把插件中心开启的更高版本算作预期 (debug 宿主用 run-as 读开关), 宿主脚本改为 `-e script` 内联启动 (Android 11+ 的 `-e path` 需要全部文件访问权限), 外部目录由宿主自建, 运行前用 adb 启动宿主的启动器活动 (切到前台).
 
 ### P4.2 新旧对比
 
@@ -537,9 +537,9 @@ ocr.paddle(img, { useSlim: true });
 | Sony XQ-DQ72 (QV770340J7) | 33 | arm64-v8a | zh 4F117434, en 4FB80072, Lite AB15CF9B | 18 / 18 | 105-128 ms | nnapi, 117 vs 117 ms | 125 / 125 ms | |
 | Sony G8441 (BH900ASK9E) | 28 | arm64-v8a | zh 4F117434, ja A921353B, Lite AB15CF9B | 18 / 18 | 552-774 ms | nnapi, 637 vs 598 ms | 421 / 441 ms | |
 | Sony G8441 (BH900ASK9E), 32 位包 | 28 | armeabi-v7a | zh E28140C9, ja B3A17010, Lite 863EA86E | 18 / 18 | 740-909 ms | nnapi, 847 vs 740 ms | 791 / 805 ms | `--abi armeabi-v7a` 安装, `primaryCpuAbi` 核对为 armeabi-v7a; 测完装回 arm64 包 |
-| Redmi 22120RN86C (bek749scrwv4wo8h) | 33 | arm64-v8a | zh 4F117434, zhHant 2ABC9F0D, Lite AB15CF9B | 13 / 19 | zhHant 1495-1504 ms | 未执行 (zh 未启用) | 1108 / 1188 ms | zh 包在插件中心是关闭状态 (沿用该机对同包名旧版的设置, 未代为开启), zh 的 6 项报 "not enabled in Plugin Center", 未执行; 无条件调用由已装的 v4 / v5 / v6 响应 (D22); 宿主在后台时测得, 耗时偏高 |
+| Redmi 22120RN86C (bek749scrwv4wo8h) | 33 | arm64-v8a | zh 4F117434, zhHant 2ABC9F0D, Lite AB15CF9B | 15 / 15 | 1239-1506 ms | nnapi, 1415 vs 1484 ms, 文本相同 | 1160 / 1103 ms | 首轮 13 / 19: zh 包在插件中心是关闭状态 (沿用同包名旧版的设置), 维护者打开后用 `--no-install` 补测; 无条件调用由已装的 v4 / v5 / v6 响应 (D22); raw 回退 0; SoC 为 MT6769, 宿主在前台, 耗时是机型水平 |
 | Xiaomi Pad 23046RP50C (968e9f18) | 35 | arm64-v8a | zh 4F117434, en 4FB80072, Lite AB15CF9B | 18 / 18 | 437-530 ms | nnapi, 440 vs 466 ms | 496 / 502 ms | P3.5 释放后测; 无条件调用由已装的 v4 / v5 / v6 响应 (D22) |
-| OnePlus OPD2413 (63751f63) | 35 | arm64-v8a | - | 未执行 | - | - | - | adb 安装停在 ColorOS 安装确认页, 需维护者在机上确认 (zh, 另一 flavor, Lite 共三次) |
+| OnePlus OPD2413 (63751f63) | 35 | arm64-v8a | zh 4F117434, ko 451909D6, Lite AB15CF9B | 15 / 15 | 121-214 ms | nnapi, 169 vs 187 ms, 文本相同 | 177 / 175 ms | ColorOS: 三次安装由维护者在机上确认; 首轮 11 / 19 因 zh 在插件中心关闭; 维护者打开后第二轮 13 / 15: ko 路由因宿主早于 P3.3 (`profile: 'ko'` 落到 zh), zh 路由因脚本把插件中心关闭的 v5 / v6.tiny 也算作预期 (已改); 换成与 Redmi 相同的宿主后通过, 无条件调用由本插件 zh 响应; raw 回退 0 |
 | AVD_API_24 | 24 | x86 | zh 61EB321F, ja D3DCAAF1 | 15 / 15 | 265-455 ms | 回退 cpu (API < 27), 333 vs 372 ms | - (Lite 无 x86) | `RAW_IMAGE` 低于 API 27 不适用, 两条路径都走编码图 |
 | AVD_API_33 | 33 | x86_64 | zh 5AD7D7C8, ko DB9895EE | 15 / 15 | 308-419 ms | nnapi, 380 vs 308 ms | - | raw 回退 0 |
 | AVD_API_35_16K | 35 | x86_64 (16 KB 页) | zh 5AD7D7C8, zhHant 8423519B | 15 / 15 | 148-412 ms | nnapi, 178 vs 175 ms | - | `getconf PAGE_SIZE` 16384; raw 回退 0; 覆盖 API 35 x86_64 |

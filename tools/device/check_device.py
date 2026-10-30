@@ -8,7 +8,7 @@ Each check prints PASS or FAIL with its key values (recognized text is not print
   label      the host reads each flavor's application label
   routing    with zh first, ocr.paddle.recognizeText(img) without any condition reads the Chinese
              sample and the plugin that served it is reported (the zh package unless a Paddle OCR
-             plugin with a higher variant number is installed, roadmap D22); every other flavor is
+             plugin with a higher variant number is installed and enabled, roadmap D22); every other flavor is
              reached by { profile } alone (D23)
   recognize  ocr.paddle.recognizeText(img, { engineId }) reads the flavor's androidTest sample;
              the first flavor also runs useSlim x useOpenCL (fp32 / slim, CPU / NNAPI), reporting
@@ -158,6 +158,15 @@ def bring_host_to_front(adb, host):
         adb('shell', 'monkey', '-p', host, '-c', 'android.intent.category.LAUNCHER', '1')
 
 
+def disabled_plugins(adb, host):
+    """Packages switched off in the Plugin Center of the host, read with run-as (debug hosts only).
+
+    The host skips them when it picks a plugin, and a package without an entry counts as enabled.
+    """
+    prefs = adb('shell', 'run-as', host, 'cat', 'shared_prefs/plugin_center_enable_state.xml').stdout
+    return set(re.findall(r'name="key_\$_enabled_plugin_\$_([^"]+)" value="false"', prefs))
+
+
 def run_host_file(adb, host, name):
     """Runs a script pushed to the external files directory of the host, with the host in front."""
     bring_host_to_front(adb, host)
@@ -198,6 +207,9 @@ def main():
     parser.add_argument('--min-similarity', type=float, default=0.8)
     parser.add_argument('--cls', action='store_true', help='also run the rotated Chinese sample with useCls true')
     parser.add_argument('--lite', metavar='VERSION', help='also install and run Paddle Lite VERSION (e.g. 1.1.0)')
+    parser.add_argument('--no-install', action='store_true',
+                        help='test the installed packages (their version and ABI are still checked); ColorOS asks '
+                             'to confirm every adb install')
     parser.add_argument('--timeout', type=int, default=600, help='seconds to wait for the host script')
     parser.add_argument('--screenshot', type=Path, help='save a Plugin Center screenshot here')
     parser.add_argument('--json', type=Path, help='save the raw host result (including recognized text) here')
@@ -236,22 +248,23 @@ def main():
         suffix = FLAVORS[flavor][0]
         package = BASE_PACKAGE + suffix
         packages[flavor] = package
-        if args.build == 'debug':
-            candidates = sorted((ROOT / 'app' / 'build' / 'outputs' / 'apk' / flavor / 'debug').glob(f'*-{abi}.apk'))
-        else:
-            candidates = sorted((ROOT / 'releases' / f'v{version_name}').glob(f'*-{flavor.lower()}-{abi}-*.apk'))
-        if len(candidates) != 1:
-            report(f'{flavor} install', False, f'expected one {abi} APK, found {len(candidates)}')
-            continue
-        installed = adb('install', '-r', *abi_option, str(candidates[0]), timeout=300)
-        replaced = 'INSTALL_FAILED_UPDATE_INCOMPATIBLE' in installed.stdout + installed.stderr
-        if replaced:
-            # The installed build is signed by the other key (debug vs release): replace it.
-            adb('uninstall', package, timeout=120)
-            installed = adb('install', *abi_option, str(candidates[0]), timeout=300)
-        report(f'{flavor} install', installed.returncode == 0 and 'Success' in installed.stdout,
-               (candidates[0].name + (' (replaced a build with another signature)' if replaced else ''))
-               if installed.returncode == 0 else installed.stderr.strip()[-200:])
+        if not args.no_install:
+            if args.build == 'debug':
+                candidates = sorted((ROOT / 'app' / 'build' / 'outputs' / 'apk' / flavor / 'debug').glob(f'*-{abi}.apk'))
+            else:
+                candidates = sorted((ROOT / 'releases' / f'v{version_name}').glob(f'*-{flavor.lower()}-{abi}-*.apk'))
+            if len(candidates) != 1:
+                report(f'{flavor} install', False, f'expected one {abi} APK, found {len(candidates)}')
+                continue
+            installed = adb('install', '-r', *abi_option, str(candidates[0]), timeout=300)
+            replaced = 'INSTALL_FAILED_UPDATE_INCOMPATIBLE' in installed.stdout + installed.stderr
+            if replaced:
+                # The installed build is signed by the other key (debug vs release): replace it.
+                adb('uninstall', package, timeout=120)
+                installed = adb('install', *abi_option, str(candidates[0]), timeout=300)
+            report(f'{flavor} install', installed.returncode == 0 and 'Success' in installed.stdout,
+                   (candidates[0].name + (' (replaced a build with another signature)' if replaced else ''))
+                   if installed.returncode == 0 else installed.stderr.strip()[-200:])
         dump = adb('shell', 'dumpsys', 'package', package).stdout
         code = re.search(r'versionCode=(\d+)', dump)
         name = re.search(r'versionName=(\S+)', dump)
@@ -261,7 +274,7 @@ def main():
         primary = primary.group(1) if primary else None
         report(f'{flavor} identity', actual == (version_name, version_code) and primary == abi,
                f'{package} {actual[0]} ({actual[1]}), {primary}')
-    if args.lite:
+    if args.lite and not args.no_install:
         candidates = sorted((LITE_RELEASES / f'v{args.lite}').glob(f'*-v{args.lite}-{abi}-*.apk'))
         if len(candidates) == 1:
             installed = adb('install', '-r', *abi_option, str(candidates[0]), timeout=300)
@@ -276,7 +289,9 @@ def main():
     expected = list(packages.values()) + ([LITE_PACKAGE] if args.lite else [])
     report('discovery', all(package in ours for package in expected),
            f'{len(ours)} {BASE_PACKAGE}* services among {len(service_packages)} {ACTION} services')
-    higher = sorted(package for package in service_packages if HIGHER_VARIANT.search(package))
+    disabled = disabled_plugins(adb, args.host)
+    higher = sorted(package for package in service_packages
+                    if HIGHER_VARIANT.search(package) and package not in disabled)
 
     runs = []
     if flavors[0] == 'zh':
@@ -387,7 +402,7 @@ def main():
                 if run['routing'] is None:
                     # A higher variant wins the default choice (D22): the run must not reach this plugin.
                     passed = passed and served is None
-                    value += f', served by {served or "another plugin"} (installed: {", ".join(higher)})'
+                    value += f', served by {served or "another plugin"} (enabled: {", ".join(higher)})'
                 else:
                     passed = passed and served == run['routing']
                     value += f', served by {served or "another plugin"}'
