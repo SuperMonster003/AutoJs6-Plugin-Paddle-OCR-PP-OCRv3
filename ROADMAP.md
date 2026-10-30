@@ -57,7 +57,7 @@ D14-D38 据第 1 节派生, 进入对应阶段前可推翻 (推翻点见各条),
 | D20 | 宿主内嵌 ONNX Runtime 引擎 | 宿主新增模块 `plugin-api/paddle-ocr-onnx-engine` (源码复制自本仓库 `libs/ppocr-android-sdk`, 包 `org.autojs.plugin.paddle.ocr.onnx`; 不含模型与原生库), 依赖 `onnxruntime-android:1.21.1` 的 Java 类但排除其 `jni/` (Gradle `packaging.jniLibs.excludes` 或按 Rapid 插件的 `@aar` + 解包方式只取 classes), 原生库与模型由打包时从插件复制; OpenCV 走宿主自带 Java API. `PaddleOcrEmbeddedEngine` 增加 ONNX Runtime 候选 (条件: `nativeLibraryDir` 含 `libonnxruntime.so` + `libonnxruntime4j_jni.so`, assets 含 `models/ppocrv3/det/inference.onnx`), 排在 Paddle-Lite 候选之前 (D8); `useSlim` 在 slim 目录存在时生效, 否则回退 fp32. | P3.1 |
 | D21 | 宿主打包目录两变体 | `ApkBuildLibraryCatalog.PADDLE_OCR.variants`: 新增 `variant = "v3"` (`assetsToInclude` 必含 `assets/models/ppocrv3/`, 可选 `assets/models/ppocrv3-slim/`; `libsToInclude` `libonnxruntime.so`, `libonnxruntime4j_jni.so`, `libc++_shared.so`; `neededOnlyLibsToInclude` `libopencv_java4.so`), 原 Paddle-Lite 条目改为 `variant = "v3-paddle-lite"` (清单不变: `assets/labels/ppocr_keys_v1.txt`, `assets/models/ocr_v3_for_cpu/`, 可选 slim 目录, `libc++_shared.so`, `libpaddle_light_api_shared.so`, `libNative.so`, neededOnly `libopencv_java4.so`). 变体选择 (`selectBestPluginVariantCandidate`) 在多个候选时按 variants 列表顺序取第一个命中的 (ONNX Runtime 在前), 并把注释 "Packaged applications run the embedded Paddle Lite engine only" 改为两套引擎的说明; `docs/dev/opencv-ocr-runtime-decoupling-roadmap.md` D10 行加注 (v4-v6 仍不打包). | P3.2 |
 | D22 | 宿主默认插件选择: 平手时看 `recommendedForMobileDefault` | `OcrPluginHost` 无显式条件且优先级存储为空时, 现为 `maxBy` variant 中的数字 (`v3` 与 `v3-paddle-lite` 同为 3, 五个语种 flavor 同为 `v3`, 顺序不确定). 新规则: 数字平手时优先 capability `recommendedForMobileDefault = true` 的候选 (中文档 ONNX Runtime 插件), 仍平手时按包名排序取稳定结果. 旧 Paddle-Lite 插件不声明该键, 自然落后. | P3.3 |
-| D23 | `profile` 选项参与插件匹配 | 脚本 `ocr.paddle(img, { profile: "ja" })` 现只把 `PROFILE` 透传给插件 (`PaddleOcrOptionExtraKeys.PROFILE`), 宿主不按它选插件. 新规则: `matchesSelectionCriteria` 增加 `profile` 条件, 与插件 capability `modelProfile` 比较; 插件未声明 `modelProfile` 时该条件视为不匹配 (有显式 profile 就必须命中); v4 (`mobile` / `server` / `mobile-en`) 与 v5 / v6 的 profile 值同样可用. `hasExplicitSelectionCriteria` 同步. Node / Bun 桥已透传 `profile`, 不需改. | P3.3 |
+| D23 | `profile` 选项参与插件匹配 | 脚本 `ocr.paddle(img, { profile: "ja" })` 现只把 `PROFILE` 透传给插件 (`PaddleOcrOptionExtraKeys.PROFILE`), 宿主不按它选插件. 新规则: `matchesSelectionCriteria` 增加 `profile` 条件, 与插件 capability `modelProfile` 比较; 插件未声明 `modelProfile` 时该条件视为不匹配 (有显式 profile 就必须命中); v4 (`mobile` / `server` / `mobile-en`) 与 v5 / v6 的 profile 值同样可用. `hasExplicitSelectionCriteria` 同步. Node / Bun 桥已透传 `profile`, 不需改 (2026-10-30 P5.1 修正: 此说法在宿主 bb7e2fe53 之前不成立. 桥只把 `profile` 透传给插件, 自动模式 `selectForCall` 与 Node 桥选插件时都没传它, 所以 `ocr.detect(img, { engine, profile })` 与 Node / Bun 都不按 `profile` 选插件; bb7e2fe53 补上两处, Rhino 已真机验证, Node 桥只有编译证据). | P3.3 |
 | D24 | 插件能力声明 | 新插件 `getInfo`: `id` 按 flavor, `engine = paddle-ocr`, `variant = v3`, `supportedAbis` 4 项, `author = SuperMonster003`; capabilities: `REQUIRES_HOST_VERSION` (P3 落地后回填为支持 D22 / D23 的宿主 versionCode, 之前临时 3835; 2026-10-30 已回填 5935 = 宿主 VERSION_BUILD 4283 + 1652, 即宿主 b2dd1757b 及之后的本地提交, 插件 c9b17bd. 宿主 6.7.0 没有 OCR 插件的宿主版本门槛, 2.0.0 照常可用; 2026-07 起的宿主 (`OcrPluginHost.ensureHostVersionCompatible`) 低于 5935 时拒绝调用并提示宿主版本过低, 之后的设备验证需宿主 >= 5935), `SUPPORTS_RAW_IMAGE = true`, `SUPPORTS_TEXT_DETECTION` / `SUPPORTS_TEXT_RECOGNITION` / `SUPPORTS_TEXTLINE_ORIENTATION_CLASSIFICATION` 全 `true`, `modelProfile = <lang>`, `recommendedForMobileDefault` (zh `true`). 旧插件: 只改 `variant = v3-paddle-lite` 与 `id`, 其余 (`REQUIRES_HOST_VERSION 3835`, `SUPPORTS_RAW_IMAGE`) 不变. | P1.3 |
 | D25 | `OcrOptions` 到 ONNX Runtime 的映射 | `cpuThreadNum` -> `SessionOptions.setIntraOpNumThreads` (0 或负数用 4, 旧 v3 引擎默认); `useSlim` -> slim 目录 (D19, cls 共用 fp32); `useOpenCL` -> NNAPI 执行提供器 (附录 D Q6 (b): API < 27 或 NNAPI 建会话失败时回退 CPU 并打一条日志; 结果 extras `executionProvider` 报告实际使用的 `cpu` / `nnapi`); extras `DET_LIMIT_SIDE_LEN` > 0 优先, 否则 `detLongSize` > 0, 否则 960 -> det `limit_side_len` (`limit_type = max`, 与旧 v3 的 `det_long_size` 语义一致); `scoreThreshold` -> rec 分数过滤 (>= 0 用给定值, 宿主未设置时传 -1, 此时用 0.1, 与旧 v3 引擎 `Predictor` 默认一致; 2026-10-30 P1.2 反编译旧引擎核对, 原写 "默认 0" 有误); extras `USE_CLS` -> 方向分类 (附录 D Q1 (c); 缺省 `false`, 与旧 v3 实际行为一致, 附录 D Q11 (b)); extras `RAW_IMAGE` 系列 -> `ImageFdDecoder` (v4 原样); det 阈值 0.3 / box 0.5 / unclip 1.6 沿用 v4 默认, extras `detLimitType` / `detMaxSideLimit` / `detThresh` / `detBoxThresh` / `detUnclipRatio` / `recBatchSize` 与 v4 相同. 映射实现为纯函数 `PpOcrV3EngineSettings.resolve`. | P1.2 |
 | D26 | APK 形态: 每 flavor 4 ABI 拆分 + universal | `splits.abi` include 4 ABI, `isUniversalApk = true` (与 v4 一致), 5 个 flavor 每版 25 个 APK; 文件名 `autojs6-plugin-paddle-ocr-pp-ocrv3-v2.0.0-<flavor>-<abi>-<CRC32>.apk` (`release_archive.py` 已支持同版本多 flavor 时加 flavor 后缀). 预估单 ABI APK: arm64 约 55 MB (ONNX Runtime 18 + OpenCV 20.4 + 模型 16 + 其他), x86_64 约 90 MB; universal 约 200 MB. 是否保留 universal 见附录 D Q3. 2026-10-30 release 实测 (5 个 flavor 的范围): arm64-v8a 30.5 - 33.0 MB, armeabi-v7a 29.0 - 31.5 MB, x86 39.1 - 41.6 MB, x86_64 44.7 - 47.1 MB, universal 94.7 - 97.2 MB, 均小于上面的预估. | P1.4 |
@@ -71,7 +71,7 @@ D14-D38 据第 1 节派生, 进入对应阶段前可推翻 (推翻点见各条),
 | D34 | 精度与速度基线 | 图集: 宿主 `paddle_ocr_test.png` + 五语种各 2 张截图 (放 `.bak/visual/`, 不入库; 清单与 SHA-256 入 `docs/benchmark.md`); 指标: 文本一致率 (与 fp32 新插件的输出逐行比较), det + rec 平均耗时 (10 次取中位数), 在 XQ-AT72 (arm64) 与 x86_64 AVD 各测 fp32 与 slim; 结果写附录 F 表. | P4.3 |
 | D35 | 版本与构建号 | 本次 docs 提交 `VERSION_BUILD=38`; P1 第一笔提交把 `VERSION_NAME` 改为 `2.0.0`; versionCode 对 5 个 flavor 相同 (v4 做法), 索引清单按包名各登记一份同 versionCode. | P1.1 |
 | D36 | 16 KB 页对齐 | ONNX Runtime 1.21.1 AAR 的 `.so` 与 OpenCV 4.8.0 Java AAR 的 `.so` 已随 v4 1.0.4 四 ABI 发布且通过 v4 的对齐校验 (本仓库 `tools/16kb` 与 `release_archive.py` 的 ELF / ZIP 对齐检查沿用); P0.3 用 `tools/16kb` 复核 ONNX Runtime 4 ABI 原生库. | P0.3 |
-| D37 | Node / Bun 桥与 api-coverage | `ocr` 模块签名不变, `profile` 已经桥透传, 不改桥; api-coverage 门禁只在文档页改动时重跑 (P5.1). | P5.1 |
+| D37 | Node / Bun 桥与 api-coverage | `ocr` 模块签名不变, `profile` 已经桥透传, 不改桥; api-coverage 门禁只在文档页改动时重跑 (P5.1). 2026-10-30 P5.1 修正: 桥选插件时此前没传 `profile` (同 D23), 宿主 bb7e2fe53 在 `NodeBridgeProtocol` 补上, 这一行只有编译证据; 所以 "不改桥" 不成立. Node / Bun 结果的 extras 由 Q26 (b) 另行处理. | P5.1 |
 | D38 | 许可证与第三方记录 | 新插件: ONNX Runtime MIT, OpenCV Apache-2.0, PP-OCRv3 模型 Apache-2.0 (PaddleOCR), `THIRD_PARTY_NOTICES` 段落与 README "第三方来源" 更新 (`AGENTS.md` 要求来源记录同步); 旧插件保持原记录 (Paddle-Lite Apache-2.0). | P1.4 |
 
 ---
@@ -217,10 +217,10 @@ docs/dev/opencv-ocr-runtime-decoupling-roadmap.md (D10 加注), .changelog (zh-H
 | --- | --- | --- | --- |
 | P0 | 插件 | 资产流水线: 下载, 转换, 字典, slim 量化, provenance, 16 KB 复核 | 已完成 (67d710d) |
 | P1 | 插件 | 本体改造: 删 Paddle-Lite, ONNX Runtime SDK + cls + slim, 5 flavor, 服务与能力, 测试, CI, 图标, 文档资源 | 已完成 (b9fa0cc, c9b17bd) |
-| P2 | 旧插件 | 带历史复制到新仓库, 改名, 1.1.0 构建与验证 | 已完成: P2.1 (新仓库 ca42783 / dd8e558 / 688983d), P2.2 (Pad 共存验证) |
+| P2 | 旧插件 | 带历史复制到新仓库, 改名, 1.1.0 构建与验证 | 已完成: P2.1 (新仓库 ca42783 / dd8e558 / 688983d, 发布前改邮箱后为 ca76366 / cc2208c / ebf6acb, 见 P5.2), P2.2 (Pad 共存验证) |
 | P3 | 宿主 | 内嵌 ONNX Runtime 引擎, 打包两变体, 默认选择与 profile 匹配, 向导, changelog, 单测 | 已完成: P3.1 - P3.4 (宿主本地 9 笔, f38abc036 - bfc871fae), P3.5 (宿主本地 f3aa53bb0 / 5737cbdc1) |
 | P4 | 测试 | 设备矩阵, 新旧对比, 精度与速度基线, slim 判定, 打包 APK 两引擎 | 已完成 (`docs/benchmark.md`, 附录 F); slim 达标 (Q2 未提问), 新待决 Q14 (Lite 1.1.0 崩溃); OnePlus 与 Redmi 同日补测, 都是 15 / 15 |
-| P5 | 文档 / 发布 / 索引 | 四仓库文档, README / changelog, 2.0.0 与 1.1.0 发布, 索引 6 包登记 | 未开始 |
+| P5 | 文档 / 发布 / 索引 | 四仓库文档, README / changelog, 2.0.0 与 1.1.0 发布, 索引 6 包登记 | 进行中: P5.1 完成 (四仓库本地提交), P5.2 完成 (Lite 1.1.0 已发布 d5e1e19), P5.3 进行中 |
 | P6 | 插件 | 2.1.0 其余 7 语种与其他候选 | 未开始 |
 
 依赖顺序:
@@ -393,11 +393,13 @@ P0 (资产脚本与模型)   P2 (旧插件新仓库)   P3.1 - P3.4 (宿主引擎
 
 ### P5.1 文档与声明 (D31, D37)
 
-- [ ] (文档) `api/ocr.md`, `api/ocrOptionsType.md` (`variant` / `profile` 段), d.ts `DetectOptionsPaddle` 注释, Ace Editor 与 Offline Docs 同步; 改动页若在 api-coverage 门禁范围内则重跑门禁. 证据: 各仓库提交 hash (本地).
+- [x] (文档) `api/ocr.md`, `api/ocrOptionsType.md` (`variant` / `profile` 段), d.ts `DetectOptionsPaddle` 注释, Ace Editor 与 Offline Docs 同步; 改动页若在 api-coverage 门禁范围内则重跑门禁. 证据: 各仓库提交 hash (本地).
+  - 2026-10-30 由 paddle-ocr-v3-p5-1 完成 (同步自看板), 含 W2 与 Q20 (c): 宿主 22d06da81 (`OcrResult.extras`), bb7e2fe53 (自动选择传 `profile`), 6006aa802 (api-coverage 矩阵); 文档站 f15d21e, a51245b (生成物); d.ts 87fc1eb; Ace 2136195; Offline Docs 63648eb, 均本地未推送. 单测 `OcrResultExtrasTest` 10 项与 ocr 包其余用例共 30 项通过, 插桩 `OcrResultExtrasBundleTest` 3 / 3 (Pad 968e9f18), 设备 `tools/paddle-ocr-v3/device_check.py extras` 8 / 8. api-coverage `check.py --matrix --docs-support` failures 为空, 文档 auto-generate `--check` 与 normalize 通过; 未跑 `--verify-offline` 的 APK 门禁. 多片段合并只有单测证据, 内嵌引擎路径与 Node 桥的 `profile` 传递只有编译证据. 待维护者: 宿主 `.changelog` zh-Hans 两条 (`OcrResult.extras`, `profile` 修复) 与其他语言同步.
 
 ### P5.2 旧插件 1.1.0 发布
 
-- [ ] (发布) 维护者创建 GitHub 仓库 `AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite` 并添加 remote (维护者待办); R1-R4; 索引登记 (R5 的旧插件部分). 证据: tag, Release 链接, 索引提交 hash.
+- [x] (发布) 维护者创建 GitHub 仓库 `AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite` 并添加 remote (维护者待办); R1-R4; 索引登记 (R5 的旧插件部分). 证据: tag, Release 链接, 索引提交 hash.
+  - 2026-10-30 由 paddle-ocr-v3-p5-2 完成 (同步自看板): tag `v1.1.0` = master = d5e1e19 (轻量, versionCode 67, build 42), Release https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite/releases/tag/v1.1.0 (3 个 APK + `SHA256SUMS`, 下载复核通过, CI 两个工作流通过). 索引 7c18faa + 1aa94ae 已推送 (`release-manifests/...paddlelite/67.json`; 7c18faa 是旧哈希, 由 1aa94ae 更正), CI 机器人追加 ccfdb83. SHA-256: arm64-v8a `8bf31670...` (23C59EBF), armeabi-v7a `41305fa3...` (DEE59924), universal `ed15e937...` (09E98A28). Q14 (a) 修复 bee0ce1, 回归脚本 `tools/device/check_engine_thread.py` (d5e1e19): 修复前 65 在 XQ-AT72 与 XQ-DQ72 都于 6 次调用后崩溃; 最终包 67 两台各 100 calls 0 failed, 112 框与 65 参考相同; XQ-AT72 上 armeabi-v7a 包 40 calls 与 universal 包 20 calls 通过. GitHub email privacy 拒绝首推后, 只改了 5 笔未发布提交的邮箱, 树不变, 哈希对照 ca42783 -> ca76366, dd8e558 -> cc2208c, 688983d -> ebf6acb, 05b532a -> bee0ce1, af48bef -> d5e1e19 (P2.1 证据里的旧哈希按此对照). 其余 4 台补测见附录 F.
 
 ### P5.3 本仓库 2.0.0 发布与索引 (D29)
 
@@ -438,7 +440,7 @@ ocr.paddle(img, { useSlim: true });
 // 原有字段不变: cpuThreadNum, detLongSize, scoreThreshold, mergeLine
 ```
 
-`ocr.detect(img, { engine: "paddle", profile: "en" })` 走同一条路径. Node / Bun 经桥传同样的 options.
+`ocr.detect(img, { engine: "paddle", profile: "en" })` 走同一条路径 (宿主 bb7e2fe53 起成立; 之前自动模式 `selectForCall` 没传 `profile`, 只有 `ocr.paddle` 按它选插件). Node / Bun 经桥传同样的 options (`profile` 参与选择同样要 bb7e2fe53, Node 桥这一处只有编译证据).
 
 ---
 
@@ -486,7 +488,12 @@ ocr.paddle(img, { useSlim: true });
 | Q11 | `useCls` 缺省值 | Q1 选项 (a) 写的 "与旧 v3 行为一致" 前提不成立: 旧 v3 的 `isClassificationEnabled` 从未置 true, 实际从未跑 cls. (a) 保持缺省 true (推荐, 已先行; 契约 f38abc036 已按 true 定稿, 旋转 180 度的文字也能识别, 每次多一次 cls 推理); (b) 缺省 false 与旧 v3 实际行为一致 (改宿主契约说明与插件缺省, 约 30 分钟). 影响 P1.2, P3, P5.1 文档 | 2026-10-30 已决 (b): 插件 `PpOcrV3EngineSettings.DEFAULT_USE_CLS = false` 与 SDK `PaddleOCRConfig.useCls` 缺省 false, 宿主契约说明由 P3 改 |
 | Q12 | P3.4 向导截图怎么取 (向导加载器跳过官方索引中没有的条目, Paddle Lite 包名要到 P5.3 才登记索引) | (a) 截图移到 P5.3 索引登记后再取 (推荐, 已先行; `PluginInstallWizardLoaderTest` 5 / 5 已覆盖顺序, 分类与回退标题); (b) 现在在调试宿主上注入本地索引缓存后截图 (约 30 分钟 + 一台设备). 来源 paddle-ocr-v3-p3-host | 2026-10-30 已决 (a): 截图移交 P5.3 索引登记后再取 |
 | Q13 | 2.0.0 重新打包 `libopencv_java4.so` (1.0.6 的 4efab64 已把 OpenCV 静态链接进 `libNative.so` 并只导出 3 个 JNI 方法, 不再带这个库; 2.0.0 按 D15 沿用 v4 的 OpenCV 4.8.0 Java 模块, 每个 ABI 带一份, arm64 约 20.4 MB) | (a) 保持打包, 在 2.0.0 changelog 的 dependency 写明 (推荐, 已先行; 与 v4 相同; Q8 (a) 之后打包应用从 OpenCV 插件带入该库, 不从本插件 APK 复制, 1.0.6 要避免的同名库来源冲突不再出现); (b) 改为 JNI 前后处理并静态链接 OpenCV 核心模块 (约 2 天, 体积收益未实测); (c) Kotlin 重写前后处理, 去掉 OpenCV (约 2 - 3 天, 可与 Q8 (d) 合并). 影响 P1.4, D15, 2.0.0 changelog; 改选返工见各选项. 来源 paddle-ocr-v3-p0-p1 | 2026-10-30 已决 (a): 保持打包, 维护者看过三选项体积对比后选定 |
-| Q14 | Paddle Lite 1.1.0 在 "先识别小图再识别大图" 时崩溃 (P4.2 发现: 服务在接收调用的 binder 线程上跑引擎, 原生 det 只在第一个线程用 960 x 960 预热; 只跑过小图的线程再收到大图时 SIGSEGV (SEGV_ACCERR, `memset`, `libpaddle_light_api_shared.so` pc `0xbc800`), 该宿主进程之后的调用都报 `DeadObjectException`; XQ-AT72 与 XQ-DQ72 复现, 新进程只跑大图或一次小图后接大图不崩; `libpaddle_light_api_shared.so` 与 1.0.5 字节相同, 已发布版本可能同样受影响 (未实测); ORT 版不受影响) | (a) Lite 仓库的服务把全部引擎调用放到一个常驻线程, 1.1.0 发布前重建并在两台 arm64 上重跑复现集 (推荐, 未先行: Lite 仓库本批只读; 约 1-2 小时); (b) 照常发布, README / changelog 写已知问题 (零返工); (c) 每个新线程先做一次 960 x 960 预热 (约 1 小时, 根因是推测, 每个新线程多约 150 ms). 影响 P5.2 (1.1.0 发布), `docs/benchmark.md` 的 Lite 测法. 来源 paddle-ocr-v3-p4 | P5.2 前 |
+| Q14 | Paddle Lite 1.1.0 在 "先识别小图再识别大图" 时崩溃 (P4.2 发现: 服务在接收调用的 binder 线程上跑引擎, 原生 det 只在第一个线程用 960 x 960 预热; 只跑过小图的线程再收到大图时 SIGSEGV (SEGV_ACCERR, `memset`, `libpaddle_light_api_shared.so` pc `0xbc800`), 该宿主进程之后的调用都报 `DeadObjectException`; XQ-AT72 与 XQ-DQ72 复现, 新进程只跑大图或一次小图后接大图不崩; `libpaddle_light_api_shared.so` 与 1.0.5 字节相同, 已发布版本可能同样受影响 (未实测); ORT 版不受影响) | (a) Lite 仓库的服务把全部引擎调用放到一个常驻线程, 1.1.0 发布前重建并在两台 arm64 上重跑复现集 (推荐, 未先行: Lite 仓库本批只读; 约 1-2 小时); (b) 照常发布, README / changelog 写已知问题 (零返工); (c) 每个新线程先做一次 960 x 960 预热 (约 1 小时, 根因是推测, 每个新线程多约 150 ms). 影响 P5.2 (1.1.0 发布), `docs/benchmark.md` 的 Lite 测法. 来源 paddle-ocr-v3-p4 | 2026-10-30 已决 (a): Lite bee0ce1 (常驻线程) + d5e1e19 (回归脚本), 复现集两台 100 calls 0 failed |
+| Q15 - Q19 | 未使用 | 编号保留 | - |
+| Q20 | 脚本层 `OcrResult` 看不到结果 extras (`executionProvider`, `quad`) | (a) 保持现状, 仅日志可见 (推荐, 已先行); (b) `OcrResult` 加只读 `executionProvider` (约 2-3 小时); (c) 整个 extras 以对象暴露 (约半天). 影响 D25 在脚本层的可见性与文档. 来源 paddle-ocr-v3-p2-2-p3-5 | 2026-10-30 已决 (c), 非推荐: 宿主 22d06da81 (P5.1) |
+| Q21 - Q25 | 未使用 | 编号保留 | - |
+| Q26 | Node / Bun 的 ocr 结果是否也带 extras | (a) 暂不做 (推荐, 已先行; 矩阵 not-portable, 只有 Rhino 能读); (b) 现在做 (宿主 `toOcrResultsJson` 加字段含 `quad` 偏移, Node / Bun 声明, 矩阵与文档同步, 约 1-2 小时). 影响 P5 之后, 不阻塞发布. 来源 paddle-ocr-v3-p5-1 | 2026-10-30 已决 (b), 非推荐: 由 paddle-ocr-v3-q26 落实 |
+| Q27 | d.ts 与 Ace 本次加 `OcrResult.extras` 是否升版本号 | (a) 随下次发版一起升 (推荐, 已先行; 沿用 api-coverage "version unchanged" 惯例); (b) 现在升到 4.86.0 / 2.48.0 (约 30 分钟, 含 10 语言 changelog). 影响 d.ts 87fc1eb, Ace 2136195. 来源 paddle-ocr-v3-p5-1 | 2026-10-30 已决 (a), 已实施 |
 
 ---
 

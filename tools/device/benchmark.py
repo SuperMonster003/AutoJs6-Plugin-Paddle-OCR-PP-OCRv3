@@ -200,7 +200,7 @@ def main():
     parser.add_argument('--images', type=Path, default=DEFAULT_IMAGES, help='directory with images.json')
     parser.add_argument('--flavor', action='append', choices=sorted(FLAVORS), help='repeatable; defaults to all')
     parser.add_argument('--image', action='append', help='repeatable file name from images.json; defaults to all '
-                                                        '(Paddle Lite 1.1.0 crashes on a mix of small and large images)')
+                                                        '(Paddle Lite 1.1.0 before its release, at ebf6acb, crashed on a mix of small and large images)')
     parser.add_argument('--lite', action='store_true', help='also compare Paddle Lite 1.1.0 with zh fp32')
     parser.add_argument('--nnapi', action='store_true', help='also run the first flavor fp32 with useOpenCL true')
     parser.add_argument('--threads', type=int, default=4)

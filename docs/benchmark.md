@@ -2,18 +2,19 @@
 
 Measured on 2026-10-30 (roadmap P4.2 and P4.3) with the 2.0.0 release APKs
 (versionCode 67, `releases/v2.0.0/`) and Paddle Lite 1.1.0 from the sibling repository
-(`AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite/releases/v1.1.0/`, source revision 688983d).
+(`AutoJs6-Plugin-Paddle-OCR-PP-OCRv3-Paddle-Lite/releases/v1.1.0/`, source revision ebf6acb,
+versionCode 65, before the crash fix below).
 
 - slim (dynamic int8 rec) agrees with fp32 on 98.0% of the boxes and lowers the total rec time
   on both test devices, so `useSlim` stays.
 - ONNX Runtime fp32 and Paddle Lite 1.1.0 read the Chinese and English images identically
   (56 of 56 boxes); wall times differ by about 5%.
-- Paddle Lite 1.1.0 crashes when a service thread that has only seen small images gets a large
-  one (roadmap appendix D Q14).
+- Paddle Lite 1.1.0 crashed when a service thread that had only seen small images got a large
+  one (roadmap appendix D Q14). The published 1.1.0 (versionCode 67) has the fix.
 
 中文: slim 与 fp32 的结果一致率 98.0%, rec 总耗时在两台测试设备上都下降, `useSlim` 保留.
 ONNX Runtime fp32 与 Paddle Lite 1.1.0 对中英文图片的结果完全一致 (56 / 56 个框), 耗时相差约 5%.
-Paddle Lite 1.1.0 在 "先识别小图再识别大图" 时会崩溃, 见路线图附录 D Q14.
+Paddle Lite 1.1.0 发布前的构建在 "先识别小图再识别大图" 时会崩溃 (路线图附录 D Q14), 已发布的 1.1.0 (67) 已修复.
 
 ## Image set
 
@@ -69,8 +70,9 @@ python -I tools/device/benchmark.py --serial <serial> --nnapi --json <slim-vs-fp
 python -I tools/device/benchmark.py --serial <serial> --flavor zh --lite --image zh-settings.png --image zh-notes.png --image en-settings.png --image en-notes.png --json <lite.json>
 ```
 
-Before the Lite run, force-stop the Lite plugin (`adb shell am force-stop <package>`) so it starts
-in a fresh process (see the crash below).
+The Lite numbers below come from versionCode 65, which needed a fresh process and large images
+only (see the crash below). Force-stop the Lite plugin (`adb shell am force-stop <package>`)
+before a run to reproduce those conditions; the published 1.1.0 no longer needs it.
 
 ## slim vs fp32 (P4.3)
 
@@ -127,17 +129,22 @@ engines: zh 19 / 19 (17) and 9 / 9 (5), en 19 / 19 (19) and 9 / 9 (9). The wall 
 ONNX Runtime and 3292 ms for Lite fp32 (ONNX Runtime 5.1% slower). On XQ-DQ72 (API 33),
 `zh-settings` gave 19 / 19 equal boxes and 636 ms (ORT fp32) vs 624 ms (Lite fp32).
 
-### Paddle Lite 1.1.0 crash
+### Paddle Lite 1.1.0 crash (fixed)
 
-Lite 1.1.0 runs its engine on whichever binder thread receives the call (calls are serialized by a
-lock). The native detector warms up with one 960 x 960 input on the first thread only. When a
-thread that has only run small detector inputs later gets a large one, the process dies with
-SIGSEGV (SEGV_ACCERR) in `memset`, frame #01 at pc `0xbc800` of `libpaddle_light_api_shared.so`
-(BuildId `46c961e2...`), and the host sees `DeadObjectException` for that call and every later
-one. Reproduced on XQ-AT72 and XQ-DQ72: several calls with `paddle_ocr_test.png` (spread over
-binder threads), then a 1080 x 1500 screen. A fresh process given only large images, or a single
-small call followed by a large one, does not crash. The comparison above therefore uses large
-images in a fresh process. ONNX Runtime is not affected. `libpaddle_light_api_shared.so` in
-1.1.0 is byte-identical to the one in 1.0.5, so the published versions may crash the same way
-(not tested). The fix belongs to the Lite repository before its release (roadmap P5.2,
-appendix D Q14).
+Fixed in the published 1.1.0 (versionCode 67, Lite bee0ce1, tag d5e1e19): the service now runs
+decoding and all engine calls on one long-lived thread. The regression script
+`tools/device/check_engine_thread.py` of the Lite repository sends 6 concurrent small calls and
+4 large images with fp32 and slim for 5 rounds. Before the fix, XQ-AT72 and XQ-DQ72 both crashed
+after 6 calls; with the fix both made 100 calls with 0 failed in one process, and the 112 boxes
+equal those of the fresh-process reference. Roadmap appendix F has the other devices.
+
+Before the fix, Lite 1.1.0 (versionCode 65) ran its engine on whichever binder thread received
+the call (calls were serialized by a lock). The native detector warmed up with one 960 x 960
+input on the first thread only. When a thread that had only run small detector inputs later got
+a large one, the process died with SIGSEGV (SEGV_ACCERR) in `memset`, frame #01 at pc `0xbc800`
+of `libpaddle_light_api_shared.so` (BuildId `46c961e2...`), and the host saw
+`DeadObjectException` for that call and every later one. A fresh process given only large images,
+or a single small call followed by a large one, did not crash, so the comparison above uses large
+images in a fresh process. ONNX Runtime is not affected. `libpaddle_light_api_shared.so` is
+byte-identical to the one in 1.0.5, so the older published versions may crash the same way (not
+tested).
