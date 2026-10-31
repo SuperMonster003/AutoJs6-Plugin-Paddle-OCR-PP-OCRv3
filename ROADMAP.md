@@ -72,6 +72,7 @@ D14-D38 据第 1 节派生, 进入对应阶段前可推翻 (推翻点见各条),
 | D35 | 版本与构建号 | 本次 docs 提交 `VERSION_BUILD=38`; P1 第一笔提交把 `VERSION_NAME` 改为 `2.0.0`; versionCode 对 5 个 flavor 相同 (v4 做法), 索引清单按包名各登记一份同 versionCode. | P1.1 |
 | D36 | 16 KB 页对齐 | ONNX Runtime 1.21.1 AAR 的 `.so` 与 OpenCV 4.8.0 Java AAR 的 `.so` 已随 v4 1.0.4 四 ABI 发布且通过 v4 的对齐校验 (本仓库 `tools/16kb` 与 `release_archive.py` 的 ELF / ZIP 对齐检查沿用); P0.3 用 `tools/16kb` 复核 ONNX Runtime 4 ABI 原生库. | P0.3 |
 | D37 | Node / Bun 桥与 api-coverage | `ocr` 模块签名不变, `profile` 已经桥透传, 不改桥; api-coverage 门禁只在文档页改动时重跑 (P5.1). 2026-10-30 P5.1 修正: 桥选插件时此前没传 `profile` (同 D23), 宿主 bb7e2fe53 在 `NodeBridgeProtocol` 补上, 这一行只有编译证据; 所以 "不改桥" 不成立. Node / Bun 结果的 extras 由 Q26 (b) 另行处理. | P5.1 |
+| D39 | arabic 的文字顺序 | `inference.yml` 写 `reverse: true` (资产脚本只给 arabic 写), `ModelConfig.reverse` 让 `CTCDecoder` 走 PaddleOCR `pred_reverse` 的逻辑 (拉丁字母, 数字与 ` :*./%+-` 的连续片段保持原序, 其余字符倒序), 让 `BoxSorter` 同一行从右到左排序, 所以 `recognizeText` 的结果按阅读顺序. 宿主内嵌引擎未同步, 见 Q60. | P6.1 |
 | D38 | 许可证与第三方记录 | 新插件: ONNX Runtime MIT, OpenCV Apache-2.0, PP-OCRv3 模型 Apache-2.0 (PaddleOCR), `THIRD_PARTY_NOTICES` 段落与 README "第三方来源" 更新 (`AGENTS.md` 要求来源记录同步); 旧插件保持原记录 (Paddle-Lite Apache-2.0). | P1.4 |
 
 ---
@@ -423,7 +424,12 @@ P0 (资产脚本与模型)   P2 (旧插件新仓库)   P3.1 - P3.4 (宿主引擎
 
 ### P6.1 其余 7 语种 (D10)
 
-- [ ] (插件) flavor `latin` / `arabic` / `cyrillic` / `devanagari` / `te` / `ka` / `ta` (det 全部 Multilingual, rec `<lang>_PP-OCRv3_rec_infer.tar` 9.5-9.9 MB, 字典 `dict/<lang>_dict.txt`; 阿拉伯语 README 品牌名 FSI / PDI 包裹), 资产脚本 `PROFILES` 扩展, 索引清单 +7; 向导不登记. 证据: 同 P1 / P5.
+- [x] (插件) flavor `latin` / `arabic` / `cyrillic` / `devanagari` / `te` / `ka` / `ta` (det 全部 Multilingual, rec `<lang>_PP-OCRv3_rec_infer.tar` 9.5-9.9 MB, 字典 `dict/<lang>_dict.txt`; 阿拉伯语 README 品牌名 FSI / PDI 包裹), 资产脚本 `PROFILES` 扩展, 索引清单 +7; 向导不登记. 证据: 同 P1 / P5.
+  - 2026-10-31 完成 (paddle-ocr-v3-p6-1). 提交 6a782ce (SDK 逆序), c76d672 (7 个 flavor, 资产, 样图, 测试, CI, 10 语言文档). `prepare_ppocrv3_assets.py --profile all --slim --update-provenance`: 12 个 profile, 14 个新来源 (7 tar + 7 字典), 7 个 rec 的类别数都等于字典 + 空格 + blank, 原有条目不变; rec fp32 约 9.0 MB, slim 约 4.35 MB (48.5%).
+  - 发现: 上游解码器对 arabic 字典有 `pred_reverse`, 本 SDK 没有, 不加时文字是镜像的 (D39). 宿主内嵌引擎同样缺, 登记 Q60. Multilingual det 给单词级框, Indic 模型的连字与前置元音读得差, 登记 Q61; 7 张样图 (Pillow 无 raqm, 用 headless Edge 渲染) 的 Indic 句子避开连字, 只检验流水线.
+  - 门禁: `.python` 23 个测试, `prepush_check` 6 / 6 (12 个 flavor 单元测试, 新增 `CtcDecoderTest` 3 例), XQ-AT72 debug 插桩 7 个 flavor 各 4 例通过 (`OcrEndToEndTest` fp32 / slim / NNAPI, 最低相似度 arabic 1.00, latin 0.95, cyrillic 0.89, devanagari 1.00, te 1.00, ka 0.94, ta 0.96). CI 新增 `language-packages` 作业 (API 35 x86_64 模拟器依次跑 7 个 flavor), master c76d672 首次运行通过 (run 41172845547, 18 分钟), `build` 作业跑 12 个 flavor 的单元测试.
+  - 发布: 2.1.0, versionCode 79, 轻量 tag `v2.1.0` = c76d672, [Release](https://github.com/SuperMonster003/AutoJs6-Plugin-Paddle-OCR-PP-OCRv3/releases/tag/v2.1.0) 60 个 APK + SHA256SUMS, 共 2893 MiB; 新 flavor 实测 arm64-v8a 31.9 - 32.2 MB, armeabi-v7a 30.3 - 30.6 MB, x86 40.9 - 41.2 MB, x86_64 46.7 - 47.1 MB, universal 99.2 - 99.5 MB. SHA-256 样例: `zh-arm64-v8a-E95E44BD.apk` `bf89bf8e95ac0046...`, `arabic-arm64-v8a-B2F15A02.apk` `683cd55aa51c9bec...`, `ta-universal-2ED32D14.apk` `f0fe134c52d60e0d...`. 索引 8a90a6b, 12 份 `79.json`, 7 个图标, 线上 79 条, 7 个新包不进向导 (Q7 (a), `FEATURED_DISTRIBUTIONS` 不变; `official-repositories.json` 是仓库级列表, 不用改). 冒烟见附录 F.
+  - Lite 仓库 43dad54 (已推送, 不发版): `check_engine_thread.py` 绑定前先 WAKE, `check_device.py` 的 `recognize` 改相似度判定 (`--min-similarity` 0.8). OnePlus 上 `check_engine_thread.py` 3 / 3.
 
 ### P6.2 其他候选
 
@@ -587,6 +593,16 @@ Paddle Lite 1.1.0 (67) 补测 (P5.3, 2026-10-30, paddle-ocr-v3-p5-3): 67 已在 
 | Redmi 22120RN86C (bek749scrwv4wo8h) | 33 | zh, zhHant | 18 / 18 | 1481 / 1470 ms | 1193 / 1227 ms |
 | Xiaomi Pad 23046RP50C (968e9f18) | 35 | zh, en | 18 / 18 | 454 / 454 ms | 522 / 491 ms |
 | OnePlus OPD2413 (63751f63) | 35 | 未执行 | - | - | 每次安装都要维护者在机上确认, 这台保持 2.0.0 (67) |
+
+2.1.0 最终包冒烟 (P6.1, 2026-10-31): tag `v2.1.0` = c76d672, versionCode 79, 宿主 debug 5935, `check_device.py --cls`, 除 OnePlus 外带 `--lite 1.1.0`. 每台都装 zh 与表中新语种的 arm64 包. "新语种" 列是 fp32 / CPU 的最低相似度与温中位. x86 / x86_64 与 armeabi-v7a 只有归档校验, x86_64 另有 CI 模拟器证据.
+
+| 设备 | API | 结果 | zh fp32 CPU / NNAPI 温中位 | 新语种 | Lite fp32 / slim | 备注 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Sony XQ-AT72 (QV710AF65F) | 31 | 68 / 68 | 329 / 320 ms | latin 0.95 (402 ms), arabic 1.00 (388 ms), cyrillic 0.94 (365 ms), devanagari 1.00 (402 ms), te 1.00 (357 ms), ka 0.97 (405 ms), ta 0.98 (418 ms) | 271 / 264 ms | 12 个语种全装, 12 个 `profile` 都命中对应包 |
+| Sony XQ-DQ72 (QV770340J7) | 33 | 23 / 23 | 221 / 231 ms | latin 0.95 (367 ms), arabic 1.00 (270 ms) | 211 / 208 ms |  |
+| Sony G8441 (BH900ASK9E) | 28 | 23 / 23 | 875 / 835 ms | cyrillic 0.94 (1007 ms), devanagari 1.00 (1057 ms) | 677 / 675 ms |  |
+| Redmi 22120RN86C (bek749scrwv4wo8h) | 33 | 28 / 28 | 1463 / 1555 ms | te 1.00 (1609 ms), ka 0.97 (1802 ms), ta 0.98 (1700 ms) | 1340 / 1434 ms | 无条件调用由已装的 v4 / v5 / v6 响应 (D22); 3 个新包不用维护者操作 |
+| OnePlus OPD2413 (63751f63) | 35 | 15 / 15 | 140 / 165 ms | arabic 1.00 (253 ms) | - | 两次安装由维护者在机上确认; 这是 OnePlus 第一次跑 2.0.0 之后的包, 替代 P5.3 未执行的那一行; 没带 `--lite` |
 
 精度与速度基线 (P4.2 / P4.3, 详见 `docs/benchmark.md`; CPU 4 线程, 1 次预热 + 10 次中位; "合计" 是 11 张图各自中位之和):
 
